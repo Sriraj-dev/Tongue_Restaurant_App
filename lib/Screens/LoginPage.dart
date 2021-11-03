@@ -7,14 +7,14 @@ class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
-
+//-------------------------------------------------jashwanth-------------------
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Text(
-          'This is the LoginPage',
+          'crazy ',
           style: GoogleFonts.lato(
             fontSize: 18,
           ),
