@@ -30,6 +30,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   svg_icon: ^0.0.1
   smooth_star_rating: ^1.0.4
+  flutter_string_encryption: ^0.3.1
+  encrypt: ^5.0.1
+  flutter_secure_storage: ^4.2.1
 
 dev_dependencies:
   flutter_test:
