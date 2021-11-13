@@ -23,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
   checkUser(String text)async{
     if(text.isEmpty){
       print('Username cannot be empty');
@@ -35,16 +36,16 @@ class _LoginPageState extends State<LoginPage> {
         }
       }
     }
-
   }
   // Follow these conditions before using these functions:
   //1. username , pwd , phonenumber should not be empty.
-  signUp()async{
-    final username = usr.text;
-    final password = pwd.text;
-    final phone = phn.text;
+  signUp(String usrname,String e_mail,String phn,String pwd,bool googleUser)async{
+    final username = usrname;
+    final password = pwd;
+    final email = e_mail;
+    final phone = phn;
     print('Trying to SignUp');
-    var response = await ApiServices().registerUser(username, password, phone);
+    var response = await ApiServices().registerUser(username,email, password, phone , googleUser);
     print('recorded the response');
     if(response['status'] == 'true'){
       final encryptedPwd= Security().encrypt(password);
@@ -56,9 +57,9 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  login()async{
-    final username = usr.text;
-    final password = pwd.text;
+  Future<String> login(String usrname,String pwd)async{
+    final username = usrname;
+    final password = pwd;
 
     var response = await ApiServices().login(username, password);
     if(response['status']=='true'){
@@ -67,9 +68,11 @@ class _LoginPageState extends State<LoginPage> {
       await Storage().saveData(username, encryptedPwd);
       print(response['token']);
       token = response['token'];
+      return 'true';
     }else{
       String err = response['msg'];
       print(err);
+      return err;
     }
   }
   updatePassword(String password,String newPassword)async{

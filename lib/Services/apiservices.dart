@@ -12,12 +12,14 @@ class ApiServices{
     Map<String ,dynamic> response = json.decode(res.body);
     return response;
   }
-  Future registerUser(String username,String password,String phone)async{
+  Future registerUser(String username,String email,String password,String phone,bool googleUser)async{
     final encryptedPassword = Security().encrypt(password);
     final newUser = {
       'username': username,
       'phone': phone,
-      'password': encryptedPassword
+      'email':email,
+      'password': encryptedPassword,
+      'googleUser':googleUser
     };
     print("Encrypted password is - ${encryptedPassword.toString()}");
     print('Posting into the Url');
