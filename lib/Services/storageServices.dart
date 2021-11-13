@@ -11,8 +11,12 @@ class Storage{
 
   getData()async{
     List<String?> details = [];
-    details.add(await storage.read(key: 'username'));
-    details.add(await storage.read(key: 'password'));
+    print('details are - $details');
+    var value = await storage.read(key: 'username');
+    details.add(value);
+    value = await storage.read(key: 'password');
+    details.add(value);
+    print('details are - $details');
     return details;
   }
 
