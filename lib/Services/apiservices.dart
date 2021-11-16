@@ -6,12 +6,14 @@ import 'package:http/http.dart' as http;
 class ApiServices{
 
   final storage = new FlutterSecureStorage();
-  final baseUrl = 'https://stark-beach-59658.herokuapp.com/user/';
+  final baseUrl = 'https://stark-beach-59658.herokuapp.com/';
   Future checkUser(String text)async{
-    var res = await http.get(Uri.parse(baseUrl+'check/$text'));
+    var res = await http.get(Uri.parse(baseUrl+'user/check/$text'));
     Map<String ,dynamic> response = json.decode(res.body);
     return response;
   }
+
+
   Future registerUser(String username,String email,String password,String phone,bool googleUser)async{
     final encryptedPassword = Security().encrypt(password);
     final newUser = {
@@ -25,7 +27,7 @@ class ApiServices{
     print('Posting into the Url');
     print(username+password);
     var res = await http.post(
-      Uri.parse(baseUrl+'register'),
+      Uri.parse(baseUrl+'user/register'),
       headers: {
         "Content-Type": "application/json"
       },
@@ -41,6 +43,8 @@ class ApiServices{
     //   return response['msg'];
     // }
   }
+
+
   Future login(String username,String password)async{
     print('trying to log in');
     final encryptedPassword = Security().encrypt(password);
@@ -50,7 +54,7 @@ class ApiServices{
     };
     print('Ready to post into url');
     var res = await http.post(
-        Uri.parse(baseUrl+'login'),
+        Uri.parse(baseUrl+'user/login'),
       headers: {
           "Content-Type": "application/json"
       },
@@ -59,13 +63,9 @@ class ApiServices{
     print('recieved res');
     Map<String,dynamic> response = json.decode(res.body);
     return response;
-    // if(response['status'] == 'true'){
-    //   return response['token'];
-    // }else{
-    //   return response['msg'];
-    // }
-
   }
+
+
   Future changePassword(String token,String newPwd)async{
     final encryptedNewPwd = Security().encrypt(newPwd);
 
@@ -73,7 +73,7 @@ class ApiServices{
       'password': encryptedNewPwd
     };
     var res = await http.patch(
-        Uri.parse(baseUrl+'update'),
+        Uri.parse(baseUrl+'user/update'),
       headers: {
           "Content_Type":"application/json",
         "Authorization": token
@@ -91,9 +91,11 @@ class ApiServices{
     }
 
   }
+
+
   Future deleteAccount(String token)async{
     var res = await http.delete(
-      Uri.parse(baseUrl+'delete'),
+      Uri.parse(baseUrl+'user/delete'),
       headers: {
         "Content-Type": "application/json",
         "Authorization":token
@@ -105,6 +107,26 @@ class ApiServices{
       return true;
     }
     else return false;
+  }
+
+  Future getItems()async{
+    var res = await http.get(
+      Uri.parse(baseUrl+'tongue/items')
+    );
+    Map<String,dynamic> response = json.decode(res.body);
+    return response['itemList'];
+  }
+
+  Future checkMaintenance()async{
+    var res = await http.get(Uri.parse(baseUrl+'app/underMaintenance'));
+    Map<String,dynamic> response = json.decode(res.body);
+    return response['underMaintenance'];
+  }
+
+  Future checkUpdates()async{
+    var res = await http.get(Uri.parse(baseUrl+'app/updateAvailable'));
+    Map<String,dynamic> response = json.decode(res.body);
+    return response['updateAvailable'];
   }
 
 }
