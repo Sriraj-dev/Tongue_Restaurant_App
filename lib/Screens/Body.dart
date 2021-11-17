@@ -26,6 +26,8 @@ class _BodyState extends State<Body> {
     );
   }
 
+
+
   SingleChildScrollView categoryList() {
     return SingleChildScrollView(
         scrollDirection: Axis.horizontal,

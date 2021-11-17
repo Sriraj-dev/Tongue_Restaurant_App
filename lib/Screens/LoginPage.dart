@@ -18,12 +18,16 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('This is a Login page',
-        style:GoogleFonts.lato(
-          fontSize: 17,
-        )
-        )
+      body: Column(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(19),
+            ),
+          ),
+          Container(),
+        ],
       ),
     );
   }

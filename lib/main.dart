@@ -81,11 +81,11 @@ class _LaunchScreenState extends State<LaunchScreen> {
               child: Text('An Error Occured!'),
             );
           }else{
-            //This is the SplashScreen-->
+            //------------------------This is the SplashScreen-------------------->
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/launch_image.jpg'),
+                  image: AssetImage('assets/images/splash_img.png'),
                   fit: BoxFit.cover
                 )
               ),
