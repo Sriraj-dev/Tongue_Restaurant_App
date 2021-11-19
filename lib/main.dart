@@ -1,3 +1,4 @@
+import 'package:delivery_app/Screens/Body.dart';
 import 'package:delivery_app/Screens/LoginPage.dart';
 import 'package:delivery_app/Screens/homePage.dart';
 import 'package:delivery_app/Screens/maintenance.dart';
@@ -119,7 +120,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
         }else{
           //if the user need to login-->
           //return LoginPage();
-          return 1;
+          return 0;
         }
       }else{
         //if the app has updates available-->
