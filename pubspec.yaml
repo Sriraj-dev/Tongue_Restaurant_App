@@ -33,6 +33,7 @@ dependencies:
   flutter_string_encryption: ^0.3.1
   encrypt: ^5.0.1
   flutter_secure_storage: ^4.2.1
+  flutter_tab_indicator_styler: ^2.0.0
 
 dev_dependencies:
   flutter_test:
