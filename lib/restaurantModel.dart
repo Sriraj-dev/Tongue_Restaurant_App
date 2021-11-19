@@ -8,14 +8,17 @@ bool updateAvailable = false;
 
 initialiseCategories(){
   categories = [];
-  items.map((e) => {
-    categories.add(e.category)
+  items.forEach((e) {
+    categories.add(e['category']);
   });
 }
 
 initialiseCategoryItems(){
   categoryItems = [];
-  items.map((e) => {
-    categoryItems.add(e.items)
+  // items.map((e) => {
+  //   categoryItems.add(e.items)
+  // });
+  items.forEach((e) {
+    categoryItems.add(e['items']);
   });
 }
