@@ -85,7 +85,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/splash_img.png'),
+                  image: AssetImage('assets/images/splash.png'),
                   fit: BoxFit.cover
                 )
               ),
