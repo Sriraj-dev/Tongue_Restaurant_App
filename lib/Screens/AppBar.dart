@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 AppBar homeAppBar(BuildContext context) {
   return AppBar(
-    backgroundColor: Colors.white,
+    backgroundColor: Background_Color,
     elevation: 0,
     //menu
     leading: IconButton(
@@ -17,7 +17,7 @@ AppBar homeAppBar(BuildContext context) {
     // title
     title: new Center(
       child: Text(
-        "Ambrocia's",
+        "Tongue",
         style: TextStyle(
           fontWeight: FontWeight.bold,
           color: kTextColor,
@@ -28,8 +28,8 @@ AppBar homeAppBar(BuildContext context) {
     actions: [
       IconButton(
         icon: Icon(
-          Icons.notifications_none_outlined,
-          color: kTextColor,
+          Icons.shopping_cart,
+          color: kTextLightColor,
         ),
         onPressed: () => {},
       ),

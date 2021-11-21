@@ -1,5 +1,3 @@
-
-
 List items = [];
 List<String> categories = [];
 List categoryItems = [];
@@ -21,6 +19,6 @@ initialiseCategoryItems(){
   items.forEach((e) {
     categoryItems.add(e['items']); // list of items. [biryaniitems , chineseitems ...]
   });
-}
 
+}
 
