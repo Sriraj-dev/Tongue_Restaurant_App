@@ -28,7 +28,7 @@ AppBar homeAppBar(BuildContext context) {
     actions: [
       IconButton(
         icon: Icon(
-          Icons.shopping_cart_outlined ,
+          Icons.shopping_cart,
           color: kTextLightColor,
         ),
         onPressed: () => {},

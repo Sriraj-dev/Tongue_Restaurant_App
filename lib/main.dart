@@ -82,13 +82,29 @@ class _LaunchScreenState extends State<LaunchScreen> {
             );
           }else{
             //------------------------This is the SplashScreen-------------------->
-            return Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/splash.png'),
-                  fit: BoxFit.cover
-                )
-              ),
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 32),
+                  child: Image.asset('assets/images/title_image.png'),
+                ),
+                Image.asset('assets/images/splash.png'),
+                Expanded(child: Container(
+                  width:  MediaQuery.of(context).copyWith().size.width,
+                  color: Colors.black,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Center(
+                      child: Text(
+                        'Loading...',style:TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ) ,
+                      ),
+                    ),
+                  ),
+                )),
+              ],
             );
           }
         },
@@ -135,4 +151,13 @@ class _LaunchScreenState extends State<LaunchScreen> {
 
 
 }
-
+//TODO : search
+//TODO : user login
+//TODO : restaurant side website(includes consolidation and assigning of the delivery persons)
+//TODO : gps for the driver
+//TODO : location of the client
+//TODO : call through app
+//TODO : wishlist
+//TODO : payment gateway
+//TODO : offers
+//TODO : review and ratings

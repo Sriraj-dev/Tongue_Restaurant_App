@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Image.asset(
-                      'assets/images/tongue image assets (1).png',
+                      'assets/images/1.png',
                       height: size.height * 0.3,
                     ),
                   ],
@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Image.asset(
-                      'assets/images/tongue image assets.png',
+                      'assets/images/2.png',
                       height: size.height * 0.2,
                     ),
                   ],
@@ -83,6 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Padding(
+                  //TODO------------sign up-------------------
                   padding: const EdgeInsets.only(top: 16),
                   child: Container(
                     width: size.width * 0.8,
@@ -92,7 +93,12 @@ class _LoginPageState extends State<LoginPage> {
                           padding:
                           EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                           color: kPrimaryLightColor,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => login()),
+                            );
+                          },
                           child: Text(
                             "Signup",
                             style: TextStyle(color: Colors.black),
