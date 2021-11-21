@@ -12,10 +12,9 @@ class SearchBox extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.symmetric(horizontal: 25),
+
       decoration: BoxDecoration(
-        border: Border.all(
-          color: ksecondaryColor.withOpacity(0.32),
-        ),
+        color: Colors.white ,
         borderRadius: BorderRadius.circular(50),
       ),
       child: TextField(
@@ -26,7 +25,7 @@ class SearchBox extends StatelessWidget {
             Icons.search,
             color: kTextColor,
           ),
-          hintText: "Search Dishes",
+          hintText: "Search ",
           hintStyle: TextStyle(
             color: kTextColor.withOpacity(0.3),
           ),

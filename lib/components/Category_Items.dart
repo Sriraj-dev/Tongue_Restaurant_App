@@ -19,7 +19,7 @@ class _CategoryItemState extends State<CategoryItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.fromLTRB(16, 16, 0, 16) ,
       child: GestureDetector(
         onTap: (){
           widget.press();
@@ -35,10 +35,10 @@ class _CategoryItemState extends State<CategoryItem> {
                     : TextStyle(fontSize: 16)),
             if (widget.isActive)
               Container(
-                width: 22,
+                width: 60,
                 height: 3,
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: kPrimaryColor,
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
