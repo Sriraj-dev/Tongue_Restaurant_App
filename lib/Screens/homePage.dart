@@ -5,8 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tab_indicator_styler/flutter_tab_indicator_styler.dart';
 import 'package:delivery_app/Screens/dish.dart';
+import 'package:delivery_app/Screens/cart.dart';
+import 'package:delivery_app/Screens/wishList.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-
 
 class homePage extends StatefulWidget {
   const homePage({Key? key}) : super(key: key);
@@ -31,7 +32,6 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: Background_Color,
       appBar: PreferredSize(
         //preferredSize: Size.fromHeight(MediaQuery.of(context).size.width),
@@ -46,7 +46,6 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                   'assets/images/title_image.png',
                   height: 64,
                 ),
-
               ],
             ),
             SearchBox(
@@ -73,9 +72,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
               ),
               labelColor: kTextColor,
               labelStyle: TextStyle(
-
                   fontSize: 16, fontWeight: FontWeight.bold, color: kTextColor),
-
               unselectedLabelStyle: TextStyle(fontSize: 16),
             ),
           ],
@@ -83,7 +80,6 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
       ),
       body: TabBarView(
         controller: _tabController,
-
         children: categoryItems
             .map((e) => ListView.builder(
                   // e = biryani items list.
@@ -91,13 +87,12 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                     //This is the container of the food item-->
 
                     return GestureDetector(
-                      onTap:()
-                        {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Dish()),
-                          );
-                        },
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Dish()),
+                        );
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -109,7 +104,10 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Image.network(e[index]['image'],height: 130,),
+                              Image.network(
+                                e[index]['image'],
+                                height: 130,
+                              ),
                               // Image.asset(
                               //   'assets/images/noodles.png',
                               //   height: 100,
@@ -129,7 +127,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      '₹'+e[index]['cost'],
+                                      '₹' + e[index]['cost'],
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: kTextLightColor,
@@ -169,20 +167,38 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                 ))
             .toList(),
       ),
-        bottomNavigationBar: ConvexAppBar(
-          color: kPrimaryColor,
-          backgroundColor: Colors.white,
-          activeColor:kPrimaryColor ,
-          top: -16,
-          items: [
-            TabItem(icon: Icons.home),
-            TabItem(icon: Icons.favorite_border),
-            TabItem(icon: Icons.shopping_bag_outlined,),
-            TabItem(icon: Icons.person),
-          ],
-          initialActiveIndex: 2,//optional, default as 0
-          onTap: (int i) => print('click index=$i'),
-        )
+      bottomNavigationBar: ConvexAppBar(
+        color: kPrimaryColor,
+        backgroundColor: Colors.white,
+        activeColor: kPrimaryColor,
+        top: -16,
+        items: [
+          TabItem(icon: Icons.home),
+          TabItem(icon: Icons.favorite_border),
+          TabItem(
+            icon: Icons.shopping_bag_outlined,
+          ),
+          TabItem(icon: Icons.person),
+        ],
+        initialActiveIndex: 2, //optional, default as 0
+        onTap: (int i) => setState(
+          () {
+            if (i == 2) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => cart()),
+              );
+            }
+            else if (i == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => wish_list()),
+              );
+            }
+            else if (i == 3) {}
+          },
+        ),
+      ),
     );
   }
 }
@@ -209,9 +225,6 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
 // trailing: Text(e[index]['cost']),
 //-------------------------------------------------------------
 
-
-        
-
 //sriraj:
 //internet checking,
 //sharedPrefs(favourites)
@@ -224,5 +237,3 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
 // SignUp page,
 
 //menupage(last)
-
-
