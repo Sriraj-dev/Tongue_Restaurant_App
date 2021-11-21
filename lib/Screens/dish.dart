@@ -117,35 +117,32 @@ class _DishState extends State<Dish> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
-                      child: Center(
-                        child: Row(
-                          children: [
-                            SizedBox(width:16),
-                            Text(
-                              '₹250',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color:kPrimaryColor,
-                              ),
+                      child: Row(
+                        children: [
+                          SizedBox(width:16),
+                          Text(
+                            '₹250',
+                            style: TextStyle(
+                              fontSize: 24,
+                              color:kPrimaryColor,
                             ),
-                            SizedBox(width:16),
-                            Text(
-                              '+',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color:kPrimaryColor,
-                              ),
+                          ),
+                          SizedBox(width:16),
+                          Text(
+                            '+',
+                            style: TextStyle(
+                              fontSize: 24,
+                              color:kPrimaryColor,
                             ),
-                            SizedBox(width:16),
-                            Text(
-                              '-',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color:kPrimaryColor,
-                              ),
+                          ),
+                          Text(
+                            '-',
+                            style: TextStyle(
+                              fontSize: 24,
+                              color:kPrimaryColor,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

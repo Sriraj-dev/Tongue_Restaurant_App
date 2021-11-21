@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tab_indicator_styler/flutter_tab_indicator_styler.dart';
 import 'package:delivery_app/Screens/dish.dart';
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+
 
 class homePage extends StatefulWidget {
   const homePage({Key? key}) : super(key: key);
@@ -31,7 +33,6 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
     return Scaffold(
 
       backgroundColor: Background_Color,
-
       appBar: PreferredSize(
         //preferredSize: Size.fromHeight(MediaQuery.of(context).size.width),
         //preferredSize: appbar.preferredSize *3.5,
@@ -39,40 +40,13 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
         child: ListView(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  iconSize: 25,
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.menu_rounded,
-                    color: kTextColor,
-                  ),
-                ),
-
                 Image.asset(
                   'assets/images/title_image.png',
                   height: 64,
                 ),
-                // Text(
-                //   'Tongue',
-                //   style: TextStyle(
-                //     fontSize: 20,
-                //     fontWeight: FontWeight.bold,
-                //     color: kTextColor,
-                //   ),
-                // ),
 
-               
-
-                IconButton(
-                  iconSize: 25,
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.shopping_cart_outlined,
-                    color: kTextColor,
-                  ),
-                ),
               ],
             ),
             SearchBox(
@@ -101,7 +75,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
               labelStyle: TextStyle(
 
                   fontSize: 16, fontWeight: FontWeight.bold, color: kTextColor),
-               
+
               unselectedLabelStyle: TextStyle(fontSize: 16),
             ),
           ],
@@ -181,7 +155,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                         ? Colors.green
                                         : Colors.red,
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(2)),
+                                        BorderRadius.all(Radius.circular(4)),
                                   ),
                                 ),
                               ),
@@ -195,6 +169,20 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                 ))
             .toList(),
       ),
+        bottomNavigationBar: ConvexAppBar(
+          color: kPrimaryColor,
+          backgroundColor: Colors.white,
+          activeColor:kPrimaryColor ,
+          top: -16,
+          items: [
+            TabItem(icon: Icons.home),
+            TabItem(icon: Icons.favorite_border),
+            TabItem(icon: Icons.shopping_bag_outlined,),
+            TabItem(icon: Icons.person),
+          ],
+          initialActiveIndex: 2,//optional, default as 0
+          onTap: (int i) => print('click index=$i'),
+        )
     );
   }
 }
