@@ -120,7 +120,6 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
   }
 }
 //sriraj:
-//internet checking,
 //sharedPrefs(favourites)
 //payment last
 //fetching User information
