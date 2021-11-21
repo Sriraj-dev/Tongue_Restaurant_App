@@ -29,144 +29,20 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
   AppBar appbar = AppBar(
     title: Text('Tongue'),
   );
+  int currentIndex=0;
+  final screens=[
+    Center(child: Text('home',style:TextStyle(fontSize: 24)),),
+    Center(child: Text('favorite',style:TextStyle(fontSize: 24)),),
+    Center(child: Text('cart',style:TextStyle(fontSize: 24)),),
+    Center(child: Text('profile',style:TextStyle(fontSize: 24)),),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Background_Color,
-      appBar: PreferredSize(
-        //preferredSize: Size.fromHeight(MediaQuery.of(context).size.width),
-        //preferredSize: appbar.preferredSize *3.5,
-        preferredSize: Size.fromHeight(200),
-        child: ListView(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/images/title_image.png',
-                  height: 64,
-                ),
-              ],
-            ),
-            SearchBox(
-              onChanged: (value) {},
-            ),
-            TabBar(
-              isScrollable: true,
-              controller: _tabController,
-              tabs: categories
-                  .map((e) => Tab(
-                        text: e,
-                      ))
-                  .toList(),
-              indicatorSize: TabBarIndicatorSize.label,
-              indicator: MaterialIndicator(
-                color: kPrimaryColor,
-                height: 4,
-                topLeftRadius: 8,
-                topRightRadius: 8,
-                bottomLeftRadius: 8,
-                bottomRightRadius: 8,
-                //horizontalPadding: 10,
-                tabPosition: TabPosition.bottom,
-              ),
-              labelColor: kTextColor,
-              labelStyle: TextStyle(
-                  fontSize: 16, fontWeight: FontWeight.bold, color: kTextColor),
-              unselectedLabelStyle: TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: categoryItems
-            .map((e) => ListView.builder(
-                  // e = biryani items list.
-                  itemBuilder: (context, index) {
-                    //This is the container of the food item-->
-
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Dish()),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Image.network(
-                                e[index]['image'],
-                                height: 130,
-                              ),
-                              // Image.asset(
-                              //   'assets/images/noodles.png',
-                              //   height: 100,
-                              // ),
-                              Column(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      e[index]['itemName'],
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: kTextColor,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      '₹' + e[index]['cost'],
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: kTextLightColor,
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                    e[index]['description'],
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: kTextLightColor.withOpacity(0.5),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: 16,
-                                  height: 16,
-                                  decoration: BoxDecoration(
-                                    color: (e[index]['type'] == 'veg')
-                                        ? Colors.green
-                                        : Colors.red,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(4)),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  itemCount: e.length,
-                ))
-            .toList(),
-      ),
+      appBar:app_bar(),
+      body: screens[currentIndex],
       bottomNavigationBar: ConvexAppBar(
         color: kPrimaryColor,
         backgroundColor: Colors.white,
@@ -180,25 +56,151 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
           ),
           TabItem(icon: Icons.person),
         ],
-        initialActiveIndex: 2, //optional, default as 0
-        onTap: (int i) => setState(
-          () {
-            if (i == 2) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => cart()),
-              );
-            }
-            else if (i == 1) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => wish_list()),
-              );
-            }
-            else if (i == 3) {}
-          },
-        ),
+        initialActiveIndex: 0, //optional, default as 0
+        onTap: (int i) => setState(()=>currentIndex=i),
       ),
+    );
+  }
+
+  PreferredSize app_bar() {
+    return PreferredSize(
+      //preferredSize: Size.fromHeight(MediaQuery.of(context).size.width),
+      //preferredSize: appbar.preferredSize *3.5,
+      preferredSize: Size.fromHeight(200),
+      child: ListView(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/title_image.png',
+                height: 64,
+              ),
+            ],
+          ),
+          SearchBox(
+            onChanged: (value) {},
+          ),
+          Tab_Bar(),
+        ],
+      ),
+    );
+  }
+  TabBar Tab_Bar() {
+    return TabBar(
+            isScrollable: true,
+            controller: _tabController,
+            tabs: categories
+                .map((e) => Tab(
+                      text: e,
+                    ))
+                .toList(),
+            indicatorSize: TabBarIndicatorSize.label,
+            indicator: MaterialIndicator(
+              color: kPrimaryColor,
+              height: 4,
+              topLeftRadius: 8,
+              topRightRadius: 8,
+              bottomLeftRadius: 8,
+              bottomRightRadius: 8,
+              //horizontalPadding: 10,
+              tabPosition: TabPosition.bottom,
+            ),
+            labelColor: kTextColor,
+            labelStyle: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: kTextColor),
+            unselectedLabelStyle: TextStyle(fontSize: 16),
+          );
+  }
+  TabBarView home_body() {
+    return TabBarView(
+      controller: _tabController,
+      children: categoryItems
+          .map((e) => ListView.builder(
+                // e = biryani items list.
+                itemBuilder: (context, index) {
+                  //This is the container of the food item-->
+
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Dish()),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Image.network(
+                              e[index]['image'],
+                              height: 130,
+                            ),
+                            // Image.asset(
+                            //   'assets/images/noodles.png',
+                            //   height: 100,
+                            // ),
+                            Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    e[index]['itemName'],
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: kTextColor,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '₹' + e[index]['cost'],
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: kTextLightColor,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  e[index]['description'],
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: kTextLightColor.withOpacity(0.5),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: 16,
+                                height: 16,
+                                decoration: BoxDecoration(
+                                  color: (e[index]['type'] == 'veg')
+                                      ? Colors.green
+                                      : Colors.red,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4)),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                itemCount: e.length,
+              ))
+          .toList(),
     );
   }
 }
