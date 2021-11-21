@@ -16,7 +16,6 @@ class _BodyState extends State<Body> with TickerProviderStateMixin{
   String title = 'Biryani';
 
   late TabController _tabController;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -38,6 +37,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin{
             controller: _tabController,
           ),
         ),
+
         Expanded(
             child: TabBarView(
               controller: _tabController,

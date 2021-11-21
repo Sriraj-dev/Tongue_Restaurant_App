@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tab_indicator_styler/flutter_tab_indicator_styler.dart';
 import 'package:delivery_app/Screens/dish.dart';
+
 class homePage extends StatefulWidget {
   const homePage({Key? key}) : super(key: key);
 
@@ -28,7 +29,9 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: Background_Color,
+
       appBar: PreferredSize(
         //preferredSize: Size.fromHeight(MediaQuery.of(context).size.width),
         //preferredSize: appbar.preferredSize *3.5,
@@ -46,6 +49,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                     color: kTextColor,
                   ),
                 ),
+
                 Image.asset(
                   'assets/images/title_image.png',
                   height: 64,
@@ -58,6 +62,9 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                 //     color: kTextColor,
                 //   ),
                 // ),
+
+               
+
                 IconButton(
                   iconSize: 25,
                   onPressed: () {},
@@ -92,7 +99,9 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
               ),
               labelColor: kTextColor,
               labelStyle: TextStyle(
+
                   fontSize: 16, fontWeight: FontWeight.bold, color: kTextColor),
+               
               unselectedLabelStyle: TextStyle(fontSize: 16),
             ),
           ],
@@ -100,6 +109,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
       ),
       body: TabBarView(
         controller: _tabController,
+
         children: categoryItems
             .map((e) => ListView.builder(
                   // e = biryani items list.
@@ -211,6 +221,9 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
 // trailing: Text(e[index]['cost']),
 //-------------------------------------------------------------
 
+
+        
+
 //sriraj:
 //internet checking,
 //sharedPrefs(favourites)
@@ -221,4 +234,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
 // ItemPage ,
 // loginPage,
 // SignUp page,
+
 //menupage(last)
+
+
