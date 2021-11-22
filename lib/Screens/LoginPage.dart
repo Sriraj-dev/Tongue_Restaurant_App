@@ -16,9 +16,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController usr = new TextEditingController();
-  TextEditingController pwd = new TextEditingController();
-  TextEditingController phn = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

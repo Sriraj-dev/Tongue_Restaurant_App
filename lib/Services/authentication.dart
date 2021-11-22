@@ -46,18 +46,18 @@ class Authentication{
   }
 
 
-  Future login(String usrname,String pwd)async{
+  Future<String> login(String usrname,String pwd,bool encrypted)async{
     final username = usrname;
     final password = pwd;
 
-    var response = await ApiServices().login(username, password);
+    var response = await ApiServices().login(username, password , encrypted);
     if(response['status']=='true'){
       print(response['msg']);
       final encryptedPwd= Security().encrypt(password);
       await Storage().saveData(username, encryptedPwd);
       print(response['token']);
       token = response['token'];
-      return true;
+      return 'true';
     }else{
       String err = response['msg'];
       print(err);

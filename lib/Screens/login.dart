@@ -1,3 +1,5 @@
+import 'package:delivery_app/Services/authentication.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:flutter/painting.dart';
@@ -12,6 +14,8 @@ class login extends StatefulWidget {
 }
 
 class _loginState extends State<login> {
+  TextEditingController usr = new TextEditingController();
+  TextEditingController pwd = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -59,6 +63,7 @@ class _loginState extends State<login> {
                   ),
                   Container(
                     child: TextField(
+                      controller: usr,
                       decoration: InputDecoration(
                         hintText: " Username ",
                         border: InputBorder.none,
@@ -76,6 +81,7 @@ class _loginState extends State<login> {
                   ),
                   Container(
                     child: TextField(
+                      controller: pwd,
                       decoration: InputDecoration(
                         hintText: " Password ",
                         border: InputBorder.none,
@@ -117,11 +123,17 @@ class _loginState extends State<login> {
                         child: FlatButton(
                             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                             color: kPrimaryColor,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => homePage()),
-                              );
+                            onPressed: () async{
+                              var isLogin = await Authentication().login(usr.text,pwd.text , false);
+                              if(isLogin == 'true'){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => homePage()),
+                                );
+                              }else{
+                                showSnackBar(isLogin, context);
+                              }
+
                             },
                             child: Text(
                               "Login",
@@ -141,4 +153,17 @@ class _loginState extends State<login> {
       ),
     );
   }
+
+  void showSnackBar(String isLogin, BuildContext context) {
+     final snackBar  = SnackBar(
+      content: Text(isLogin) ,
+      backgroundColor: Colors.red,
+      padding: EdgeInsets.only(left: 15,right: 15,bottom: 20),
+      behavior: SnackBarBehavior.floating,
+    );
+    //Scaffold.of(context).showSnackBar(snackBar)
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+
 }

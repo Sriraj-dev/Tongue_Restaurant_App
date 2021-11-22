@@ -45,9 +45,9 @@ class ApiServices{
   }
 
 
-  Future login(String username,String password)async{
+  Future login(String username,String password,bool encrypted)async{
     print('trying to log in');
-    final encryptedPassword = Security().encrypt(password);
+    final encryptedPassword = (encrypted)?password:Security().encrypt(password);
     final user = {
       'username': username,
       'password': encryptedPassword
@@ -90,6 +90,25 @@ class ApiServices{
       return response['msg'];
     }
 
+  }
+
+  Future getUserInfo(String token)async{
+    var res = await http.get(
+        Uri.parse(baseUrl+'user/info'),
+      headers: {
+        "Content_Type":"application/json",
+        "Authorization": token
+      },
+    );
+    Map<String,dynamic> response = json.decode(res.body);
+    if(response['status'] == 'true'){
+      Map<String,dynamic> userInfo =  response['data'];
+      return userInfo;
+    }else{
+      print('Unable to fetch User data');
+      Map<String,dynamic> error = {'username' : ''};
+      return error;
+    }
   }
 
 
