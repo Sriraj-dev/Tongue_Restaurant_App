@@ -11,6 +11,7 @@ import 'package:delivery_app/Services/authentication.dart';
 import 'package:delivery_app/Services/storageServices.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
+import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -150,6 +151,9 @@ class _LaunchScreenState extends State<LaunchScreen> {
             //if the user is already logged in -->
             final userDetails = await Storage().getData();
             await Authentication().login(userDetails[0], userDetails[1] , true);
+            print('Im not gonna wait for this');
+            getUserInfo();
+            print('Im done');
             //return homePage();
             return 0;
           }else{

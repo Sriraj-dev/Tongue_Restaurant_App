@@ -92,6 +92,25 @@ class ApiServices{
 
   }
 
+  Future getUserInfo(String token)async{
+    var res = await http.get(
+        Uri.parse(baseUrl+'user/info'),
+      headers: {
+        "Content_Type":"application/json",
+        "Authorization": token
+      },
+    );
+    Map<String,dynamic> response = json.decode(res.body);
+    if(response['status'] == 'true'){
+      Map<String,dynamic> userInfo =  response['data'];
+      return userInfo;
+    }else{
+      print('Unable to fetch User data');
+      Map<String,dynamic> error = {'username' : ''};
+      return error;
+    }
+  }
+
 
   Future deleteAccount(String token)async{
     var res = await http.delete(
