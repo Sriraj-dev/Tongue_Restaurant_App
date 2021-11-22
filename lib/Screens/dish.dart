@@ -18,143 +18,144 @@ class _DishState extends State<Dish> {
     return Scaffold(
       backgroundColor: kPrimaryColor,
       appBar: CustomAppBar(context),
-      body: Column(
-        children: [
-          Container(
-            height: 250,
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Container(),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(50),
-                            topRight: Radius.circular(50),
-                          ),
-                          color: Background_Color,
+      body: dish_body(),
+    );
+  }
+
+  Column dish_body() {
+    return Column(
+      children: [
+        Container(
+          height: 250,
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                          topRight: Radius.circular(50),
                         ),
+                        color: Background_Color,
                       ),
-                    )
+                    ),
+                  )
+                ],
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  child: Image.asset(
+                    'assets/images/6.png',
+                    height: 200,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Container(
+            color: Background_Color,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Text(
+                    "Noodles",
+                    style: TextStyle(fontSize: 32),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(width: 16),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.timer_outlined,
+                          color: kTextLightColor,
+                        ),
+                        Text('50 min'),
+                      ],
+                    ),
+                    SizedBox(width: 16),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.star_outline_rounded,
+                          color: kTextLightColor,
+                        ),
+                        Text('4.8'),
+                      ],
+                    ),
+                    SizedBox(width: 16),
+                    Row(
+                      children: [
+                        Container(
+                          width: 16,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(4)),
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Text('non veg '),
+                      ],
+                    ),
+                    SizedBox(width: 16),
                   ],
                 ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    child: Image.asset(
-                      'assets/images/6.png',
-                      height: 200,
+                Container(
+                  decoration: BoxDecoration(
+                    color: ksecondaryColor,
+                    borderRadius: BorderRadius.all(Radius.circular(16)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      children: [
+                        SizedBox(width:16),
+                        Text(
+                          '₹250',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color:kPrimaryColor,
+                          ),
+                        ),
+                        SizedBox(width:16),
+                        Text(
+                          '+',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color:kPrimaryColor,
+                          ),
+                        ),
+                        Text(
+                          '-',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color:kPrimaryColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          Expanded(
-            child: Container(
-              color: Background_Color,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Center(
-                    child: Text(
-                      "Noodles",
-                      style: TextStyle(fontSize: 32),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(width: 16),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.timer_outlined,
-                            color: kTextLightColor,
-                          ),
-                          Text('50 min'),
-                        ],
-                      ),
-                      SizedBox(width: 16),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.star_outline_rounded,
-                            color: kTextLightColor,
-                          ),
-                          Text('4.8'),
-                        ],
-                      ),
-                      SizedBox(width: 16),
-                      Row(
-                        children: [
-                          Container(
-                            width: 16,
-                            height: 16,
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4)),
-                            ),
-                          ),
-                          SizedBox(width: 4),
-                          Text('non veg '),
-                        ],
-                      ),
-                      SizedBox(width: 16),
-                    ],
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: ksecondaryColor,
-                      borderRadius: BorderRadius.all(Radius.circular(16)),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Center(
-                        child: Row(
-                          children: [
-                            SizedBox(width:16),
-                            Text(
-                              '₹250',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color:kPrimaryColor,
-                              ),
-                            ),
-                            SizedBox(width:16),
-                            Text(
-                              '+',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color:kPrimaryColor,
-                              ),
-                            ),
-                            SizedBox(width:16),
-                            Text(
-                              '-',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color:kPrimaryColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 
