@@ -8,6 +8,7 @@ import 'package:delivery_app/Screens/dish.dart';
 import 'package:delivery_app/Screens/cart.dart';
 import 'package:delivery_app/Screens/wishList.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class homePage extends StatefulWidget {
   const homePage({Key? key}) : super(key: key);
@@ -106,34 +107,41 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(13.0),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              offset: Offset(0,0.5),
+                              blurRadius: 1,
+                              spreadRadius: 0.5,
+                            )
+                          ],
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Image.network(
-                              e[index]['image'],
-                              height: 130,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.network(
+                                e[index]['image'],
+                                height: 110,
+                              ),
                             ),
-                            // Image.asset(
-                            //   'assets/images/noodles.png',
-                            //   height: 100,
-                            // ),
                             Column(
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
                                     e[index]['itemName'],
-                                    style: TextStyle(
-                                      fontSize: 16,
+                                    style: GoogleFonts.lato(
+                                      fontSize: 17,
                                       color: kTextColor,
-                                    ),
+                                    )
                                   ),
                                 ),
                                 Padding(
@@ -148,6 +156,9 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                 ),
                                 Text(
                                   e[index]['description'],
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                  softWrap: false,
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: kTextLightColor.withOpacity(0.5),
@@ -161,11 +172,23 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                 width: 16,
                                 height: 16,
                                 decoration: BoxDecoration(
-                                  color: (e[index]['type'] == 'veg')
+                                  border: Border.all(
+                                    color: (e[index]['type'] == 'veg')
                                       ? Colors.green
-                                      : Colors.red,
+                                      : Colors.red,),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(4)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: (e[index]['type'] == 'veg')
+                                          ? Colors.green
+                                          : Colors.red,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
