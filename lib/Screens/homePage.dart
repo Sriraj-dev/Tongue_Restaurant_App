@@ -29,13 +29,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
   AppBar appbar = AppBar(
     title: Text('Tongue'),
   );
-  int currentIndex=0;
-  final screens=[
-    Center(child: Text('home',style:TextStyle(fontSize: 24)),),
-    Center(child: Text('favorite',style:TextStyle(fontSize: 24)),),
-    Center(child: Text('cart',style:TextStyle(fontSize: 24)),),
-    Center(child: Text('profile',style:TextStyle(fontSize: 24)),),
-  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,22 +37,6 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
       backgroundColor: Background_Color,
       appBar:app_bar(),
       body: home_body(),
-      bottomNavigationBar: ConvexAppBar(
-        color: kPrimaryColor,
-        backgroundColor: Colors.white,
-        activeColor: kPrimaryColor,
-        top: -16,
-        items: [
-          TabItem(icon: Icons.home),
-          TabItem(icon: Icons.favorite_border),
-          TabItem(
-            icon: Icons.shopping_bag_outlined,
-          ),
-          TabItem(icon: Icons.person),
-        ],
-        initialActiveIndex: 0, //optional, default as 0
-        onTap: (int i) => setState(()=>currentIndex=i),
-      ),
     );
   }
 
@@ -120,12 +98,11 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                 // e = biryani items list.
                 itemBuilder: (context, index) {
                   //This is the container of the food item-->
-
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Dish()),
+                        MaterialPageRoute(builder: (context) => Dish(e[index])),
                       );
                     },
                     child: Padding(
@@ -228,7 +205,6 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
 //-------------------------------------------------------------
 
 //sriraj:
-//internet checking,
 //sharedPrefs(favourites)
 //payment last
 //fetching User information
