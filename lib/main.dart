@@ -2,6 +2,7 @@ import 'package:delivery_app/Screens/Body.dart';
 import 'package:delivery_app/Screens/LoginPage.dart';
 import 'package:delivery_app/Screens/homePage.dart';
 import 'package:delivery_app/Screens/maintenance.dart';
+import 'package:delivery_app/Screens/pageManager.dart';
 import 'package:delivery_app/Screens/updateScreen.dart';
 import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/Services/authentication.dart';
@@ -67,7 +68,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
           if(snapshot.hasData){
             switch(snapshot.data){
               case 0:
-                return homePage();
+                return PageManager();
               case 1:
                 return LoginPage();
               case 2:
@@ -96,11 +97,19 @@ class _LaunchScreenState extends State<LaunchScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Center(
-                      child: Text(
-                        'Loading...',style:TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ) ,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Loading   ',style:TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ) ,
+                          ),
+                          CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        ],
                       ),
                     ),
                   ),

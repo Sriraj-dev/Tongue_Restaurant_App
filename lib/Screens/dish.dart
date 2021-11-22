@@ -6,13 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tab_indicator_styler/flutter_tab_indicator_styler.dart';
 
 class Dish extends StatefulWidget {
-  const Dish({Key? key}) : super(key: key);
+  //const Dish({Key? key}) : super(key: key);
+  var item;
+  Dish(this.item);
 
   @override
-  _DishState createState() => _DishState();
+  _DishState createState() => _DishState(item);
 }
 
 class _DishState extends State<Dish> {
+  var item;
+  _DishState(this.item);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +73,7 @@ class _DishState extends State<Dish> {
               children: [
                 Center(
                   child: Text(
-                    "Noodles",
+                    item['itemName'],
                     style: TextStyle(fontSize: 32),
                   ),
                 ),
@@ -109,7 +113,7 @@ class _DishState extends State<Dish> {
                           ),
                         ),
                         SizedBox(width: 4),
-                        Text('non veg '),
+                        Text(item['type']),
                       ],
                     ),
                     SizedBox(width: 16),
@@ -126,7 +130,7 @@ class _DishState extends State<Dish> {
                       children: [
                         SizedBox(width:16),
                         Text(
-                          '₹250',
+                          '₹'+item['cost'],
                           style: TextStyle(
                             fontSize: 24,
                             color:kPrimaryColor,
