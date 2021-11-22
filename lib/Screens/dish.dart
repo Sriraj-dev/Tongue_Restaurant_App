@@ -56,10 +56,11 @@ class _DishState extends State<Dish> {
               Align(
                 alignment: Alignment.center,
                 child: Container(
-                  child: Image.asset(
-                    'assets/images/6.png',
-                    height: 200,
-                  ),
+                  child:Image.network(item['image']),
+                  // Image.asset(
+                  //   'assets/images/6.png',
+                  //   height: 200,
+                  // ),
                 ),
               ),
             ],
@@ -73,6 +74,7 @@ class _DishState extends State<Dish> {
               children: [
                 Center(
                   child: Text(
+
                     item['itemName'],
                     style: TextStyle(fontSize: 32),
                   ),
