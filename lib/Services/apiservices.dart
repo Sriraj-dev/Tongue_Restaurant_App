@@ -45,9 +45,9 @@ class ApiServices{
   }
 
 
-  Future login(String username,String password)async{
+  Future login(String username,String password,bool encrypted)async{
     print('trying to log in');
-    final encryptedPassword = Security().encrypt(password);
+    final encryptedPassword = (encrypted)?password:Security().encrypt(password);
     final user = {
       'username': username,
       'password': encryptedPassword

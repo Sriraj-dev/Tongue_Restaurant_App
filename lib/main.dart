@@ -149,7 +149,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
           if(isLogin){
             //if the user is already logged in -->
             final userDetails = await Storage().getData();
-            await Authentication().login(userDetails[0], userDetails[1]);
+            await Authentication().login(userDetails[0], userDetails[1] , true);
             //return homePage();
             return 0;
           }else{
