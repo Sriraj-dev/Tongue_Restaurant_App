@@ -42,7 +42,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: Background_Color,
       appBar:app_bar(),
-      body: screens[currentIndex],
+      body: home_body(),
       bottomNavigationBar: ConvexAppBar(
         color: kPrimaryColor,
         backgroundColor: Colors.white,
