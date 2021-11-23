@@ -15,6 +15,7 @@ import 'package:delivery_app/restaurantModel.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocator/geolocator.dart';
 void main() async{
@@ -121,9 +122,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
                     fontSize: 20,
                   ) ,
                   ),
-                  CircularProgressIndicator(
-                    color: Colors.white,
-                  )
+
                 ],
               ),
             ),

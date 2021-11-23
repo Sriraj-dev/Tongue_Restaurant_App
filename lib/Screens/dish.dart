@@ -1,3 +1,4 @@
+import 'package:delivery_app/Screens/maintenance.dart';
 import 'package:delivery_app/components/SearchBox.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
@@ -56,10 +57,11 @@ class _DishState extends State<Dish> {
               Align(
                 alignment: Alignment.center,
                 child: Container(
-                  child: Image.asset(
-                    'assets/images/6.png',
-                    height: 200,
-                  ),
+                  child: Image.asset(item['image']),
+                  // Image.asset(
+                  //   'assets/images/6.png',
+                  //   height: 200,
+                  // ),
                 ),
               ),
             ],
@@ -74,81 +76,162 @@ class _DishState extends State<Dish> {
                 Center(
                   child: Text(
                     item['itemName'],
-                    style: TextStyle(fontSize: 32),
+                    style: TextStyle(fontSize: 32, color: kPrimaryColor),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(width: 16),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.timer_outlined,
-                          color: kTextLightColor,
-                        ),
-                        Text('50 min'),
-                      ],
-                    ),
-                    SizedBox(width: 16),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.star_outline_rounded,
-                          color: kTextLightColor,
-                        ),
-                        Text('4.8'),
-                      ],
-                    ),
-                    SizedBox(width: 16),
-                    Row(
-                      children: [
-                        Container(
-                          width: 16,
-                          height: 16,
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(4)),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(width: 16),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.timer_outlined,
+                            color: kTextLightColor,
                           ),
-                        ),
-                        SizedBox(width: 4),
-                        Text(item['type']),
-                      ],
+                          Text('50 min'),
+                        ],
+                      ),
+                      SizedBox(width: 16),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.star_outline_rounded,
+                            color: kTextLightColor,
+                          ),
+                          Text('4.8'),
+                        ],
+                      ),
+                      SizedBox(width: 16),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 16,
+                              height: 16,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: (item['type'] == 'veg')
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4)),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: (item['type'] == 'veg')
+                                        ? Colors.green
+                                        : Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 4),
+                          Text(item['type']),
+                        ],
+                      ),
+                      SizedBox(width: 16),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      '₹' + item['cost'],
+                      style: TextStyle(
+                        fontSize: 32,
+                        color: kPrimaryColor,
+                      ),
                     ),
-                    SizedBox(width: 16),
-                  ],
+                  ),
                 ),
                 Container(
-                  decoration: BoxDecoration(
-                    color: ksecondaryColor,
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
+                  alignment: Alignment.center,
+                  child: Text(
+                    item['description'],
+                    style: TextStyle(fontSize: 16),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 32),
+                  child: Container(
+                    child: Center(
+                        child: Text(
+                      'Quantity',
+                      style: TextStyle(fontSize: 20),
+                    )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Container(
+                    padding: EdgeInsets.all(0),
+                    width: 400,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: kPrimaryColor.withOpacity(0.1),
+                    ),
                     child: Row(
-                      children: [
-                        SizedBox(width:16),
-                        Text(
-                          '₹'+item['cost'],
-                          style: TextStyle(
-                            fontSize: 24,
-                            color:kPrimaryColor,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.all(0),
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.red.withOpacity(0),
+                          ),
+                          child: Icon(
+                            Icons.add,
+                            size: 100,
+                            color: ksecondaryColor,
                           ),
                         ),
-                        SizedBox(width:16),
-                        Text(
-                          '+',
-                          style: TextStyle(
-                            fontSize: 24,
-                            color:kPrimaryColor,
+                        Container(
+                            height: 100,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            child: Center(
+                              child: Text(
+                                '5',
+                                style: TextStyle(
+                                  fontSize: 64,
+                                  color: kTextColor,
+                                ),
+                              ),
+                            )),
+                        Container(
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: kPrimaryColor.withOpacity(0),
                           ),
-                        ),
-                        Text(
-                          '-',
-                          style: TextStyle(
-                            fontSize: 24,
-                            color:kPrimaryColor,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Center(
+                              child: Text(
+                                '−',
+                                style: TextStyle(
+                                  fontSize: 100,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ],

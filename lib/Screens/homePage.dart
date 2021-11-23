@@ -127,7 +127,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Image.network(
+                              child: Image.asset(
                                 e[index]['image'],
                                 height: 110,
                               ),
