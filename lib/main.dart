@@ -8,6 +8,7 @@ import 'package:delivery_app/Screens/pageManager.dart';
 import 'package:delivery_app/Screens/updateScreen.dart';
 import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/Services/authentication.dart';
+import 'package:delivery_app/Services/locationServices.dart';
 import 'package:delivery_app/Services/storageServices.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
@@ -15,6 +16,7 @@ import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:geolocator/geolocator.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   final storage = new FlutterSecureStorage();

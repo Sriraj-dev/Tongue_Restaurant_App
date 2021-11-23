@@ -5,6 +5,7 @@ import 'package:delivery_app/Screens/cart.dart';
 import 'package:delivery_app/Screens/homePage.dart';
 import 'package:delivery_app/Screens/wishList.dart';
 import 'package:delivery_app/constants.dart';
+import 'package:delivery_app/userModel.dart';
 import 'package:flutter/material.dart';
 
 class PageManager extends StatefulWidget {
@@ -28,7 +29,10 @@ class _PageManagerState extends State<PageManager> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: pages[currentIndex],
-      bottomNavigationBar: ConvexAppBar(
+      bottomNavigationBar: ConvexAppBar.badge(
+        {
+          2:userCart.length.toString()=='0'?'':userCart.length.toString(),
+        },
         color: kPrimaryColor,
         backgroundColor: Colors.white,
         activeColor: kPrimaryColor,

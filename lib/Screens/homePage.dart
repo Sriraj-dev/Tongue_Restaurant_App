@@ -103,7 +103,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Dish(e[index])),
+                        MaterialPageRoute(builder: (context) => Dish(e[index])), // map == name,cost,id,offer.
                       );
                     },
                     child: Padding(

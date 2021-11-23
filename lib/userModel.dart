@@ -1,9 +1,15 @@
 import 'package:delivery_app/Services/apiservices.dart';
+import 'package:geolocator/geolocator.dart';
 
 String token = '';
 String username = '';
 String userEmail = '';
 String userPhone = '';
+String homeAddress = '';
+late Position homeLocation ;
+// TODO: Store these lists locally;
+List userCart = [];
+List userFav = [];
 String msg = '';
 List myOrders = [];
 

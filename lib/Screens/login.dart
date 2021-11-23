@@ -1,4 +1,5 @@
 import 'package:delivery_app/Services/authentication.dart';
+import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:delivery_app/constants.dart';
@@ -126,6 +127,7 @@ class _loginState extends State<login> {
                             onPressed: () async{
                               var isLogin = await Authentication().login(usr.text,pwd.text , false);
                               if(isLogin == 'true'){
+                                getUserInfo();
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => homePage()),
@@ -154,7 +156,7 @@ class _loginState extends State<login> {
     );
   }
 
-  void showSnackBar(String isLogin, BuildContext context) {
+  void showSnackBar(String isLogin, BuildContext context) { // isLogin == usernmae is incorrect or password is incorect;
      final snackBar  = SnackBar(
       content: Text(isLogin) ,
       backgroundColor: Colors.red,
