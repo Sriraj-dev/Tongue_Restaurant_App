@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   final storage = new FlutterSecureStorage();
@@ -117,11 +118,13 @@ class _LaunchScreenState extends State<LaunchScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Loading   ',style:TextStyle(
+                    'Loading ',style:TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                   ) ,
+
                   ),
+                  JumpingText('...'),
 
                 ],
               ),

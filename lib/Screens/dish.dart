@@ -2,6 +2,7 @@ import 'package:delivery_app/Screens/maintenance.dart';
 import 'package:delivery_app/components/SearchBox.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
+import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tab_indicator_styler/flutter_tab_indicator_styler.dart';
@@ -28,6 +29,7 @@ class _DishState extends State<Dish> {
   }
 
   Column dish_body() {
+    int quantity = 0;
     return Column(
       children: [
         Container(
@@ -57,7 +59,7 @@ class _DishState extends State<Dish> {
               Align(
                 alignment: Alignment.center,
                 child: Container(
-                  child: Image.asset(item['image']),
+                  child: Image.network(item['image']),
                   // Image.asset(
                   //   'assets/images/6.png',
                   //   height: 200,
@@ -193,10 +195,17 @@ class _DishState extends State<Dish> {
                             shape: BoxShape.circle,
                             color: Colors.red.withOpacity(0),
                           ),
-                          child: Icon(
-                            Icons.add,
-                            size: 100,
-                            color: ksecondaryColor,
+                          child: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                quantity++;
+                              });
+                            },
+                            icon: Icon(
+                              Icons.add,
+                              size: 100,
+                              color: ksecondaryColor,
+                            ),
                           ),
                         ),
                         Container(
@@ -208,7 +217,7 @@ class _DishState extends State<Dish> {
                             ),
                             child: Center(
                               child: Text(
-                                '5',
+                                '' + quantity.toString(),
                                 style: TextStyle(
                                   fontSize: 64,
                                   color: kTextColor,
@@ -224,11 +233,16 @@ class _DishState extends State<Dish> {
                           ),
                           child: Align(
                             alignment: Alignment.center,
-                            child: Center(
-                              child: Text(
-                                '−',
-                                style: TextStyle(
-                                  fontSize: 100,
+                            child: GestureDetector(
+                              onTap: (){setState(() {
+                                quantity--;
+                              });},
+                              child: Center(
+                                child: Text(
+                                  '−',
+                                  style: TextStyle(
+                                    fontSize: 100,
+                                  ),
                                 ),
                               ),
                             ),
@@ -288,12 +302,25 @@ class _DishState extends State<Dish> {
                 ),
                 child: IconButton(
                   iconSize: 25,
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.favorite_border,
-                    //TODO : wish list
-                    color: Colors.black,
-                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (!userFav.contains(item))
+                        userFav.add(item);
+                      else {
+                        userFav.remove(item);
+                      }
+                    });
+
+                  },
+                  icon: (userFav.contains(item))
+                      ? Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                        )
+                      : Icon(
+                          Icons.favorite_border,
+                          color: Colors.black,
+                        ),
                 ),
               ),
             ),
