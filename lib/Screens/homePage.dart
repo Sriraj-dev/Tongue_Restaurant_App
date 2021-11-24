@@ -1,6 +1,7 @@
 import 'package:delivery_app/components/SearchBox.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
+import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tab_indicator_styler/flutter_tab_indicator_styler.dart';
@@ -31,12 +32,11 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
     title: Text('Tongue'),
   );
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Background_Color,
-      appBar:app_bar(),
+      appBar: app_bar(),
       body: home_body(),
     );
   }
@@ -65,32 +65,34 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
       ),
     );
   }
+
   TabBar Tab_Bar() {
     return TabBar(
-            isScrollable: true,
-            controller: _tabController,
-            tabs: categories
-                .map((e) => Tab(
-                      text: e,
-                    ))
-                .toList(),
-            indicatorSize: TabBarIndicatorSize.label,
-            indicator: MaterialIndicator(
-              color: kPrimaryColor,
-              height: 4,
-              topLeftRadius: 8,
-              topRightRadius: 8,
-              bottomLeftRadius: 8,
-              bottomRightRadius: 8,
-              //horizontalPadding: 10,
-              tabPosition: TabPosition.bottom,
-            ),
-            labelColor: kTextColor,
-            labelStyle: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold, color: kTextColor),
-            unselectedLabelStyle: TextStyle(fontSize: 16),
-          );
+      isScrollable: true,
+      controller: _tabController,
+      tabs: categories
+          .map((e) => Tab(
+                text: e,
+              ))
+          .toList(),
+      indicatorSize: TabBarIndicatorSize.label,
+      indicator: MaterialIndicator(
+        color: kPrimaryColor,
+        height: 4,
+        topLeftRadius: 8,
+        topRightRadius: 8,
+        bottomLeftRadius: 8,
+        bottomRightRadius: 8,
+        //horizontalPadding: 10,
+        tabPosition: TabPosition.bottom,
+      ),
+      labelColor: kTextColor,
+      labelStyle: TextStyle(
+          fontSize: 16, fontWeight: FontWeight.bold, color: kTextColor),
+      unselectedLabelStyle: TextStyle(fontSize: 16),
+    );
   }
+
   TabBarView home_body() {
     return TabBarView(
       controller: _tabController,
@@ -103,7 +105,9 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Dish(e[index])), // map == name,cost,id,offer.
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                Dish(e[index])), // map == name,cost,id,offer.
                       );
                     },
                     child: Padding(
@@ -114,7 +118,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey,
-                              offset: Offset(0,0.5),
+                              offset: Offset(0, 0.5),
                               blurRadius: 1,
                               spreadRadius: 0.5,
                             )
@@ -127,70 +131,107 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
+                              child: Image.network(
                                 e[index]['image'],
                                 height: 110,
                               ),
                             ),
                             Column(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    e[index]['itemName'],
-                                    style: GoogleFonts.lato(
-                                      fontSize: 17,
-                                      color: kTextColor,
-                                    )
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    '₹' + e[index]['cost'],
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: kTextLightColor,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(e[index]['itemName'],
+                                              style: GoogleFonts.lato(
+                                                fontSize: 17,
+                                                color: kTextColor,
+                                              )),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            '₹' + e[index]['cost'],
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: kTextLightColor,
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          e[index]['description'],
+                                          maxLines: 1,
+                                          overflow: TextOverflow.fade,
+                                          softWrap: false,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: kTextLightColor
+                                                .withOpacity(0.5),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Container(
+                                        width: 16,
+                                        height: 16,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: (e[index]['type'] == 'veg')
+                                                ? Colors.green
+                                                : Colors.red,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(4)),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: (e[index]['type'] == 'veg')
+                                                  ? Colors.green
+                                                  : Colors.red,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  e[index]['description'],
-                                  maxLines: 1,
-                                  overflow: TextOverflow.fade,
-                                  softWrap: false,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: kTextLightColor.withOpacity(0.5),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      setState(() {
+                                        if(!userCart.contains(e[index])) userCart.add(e[index]);
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      width: 120,
+                                      decoration: BoxDecoration(
+                                        color: kPrimaryColor,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'ADD',
+                                          style: TextStyle(
+                                            color: Colors.white,
+
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                width: 16,
-                                height: 16,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: (e[index]['type'] == 'veg')
-                                      ? Colors.green
-                                      : Colors.red,),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(4)),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: (e[index]['type'] == 'veg')
-                                          ? Colors.green
-                                          : Colors.red,
-                                    ),
-                                  ),
-                                ),
-                              ),
                             ),
                           ],
                         ),
