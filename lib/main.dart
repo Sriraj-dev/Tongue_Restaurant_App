@@ -89,7 +89,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
             }
           }else if(snapshot.hasError){
             return Center(
-              child: Text('An Error Occured!'),
+              child: Text('An Error Occured! ${snapshot.error}'),
             );
           }else{
             //------------------------This is the SplashScreen-------------------->
