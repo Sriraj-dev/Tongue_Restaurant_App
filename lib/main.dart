@@ -88,9 +88,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
                 return LoginPage();
             }
           }else if(snapshot.hasError){
-            return Center(
-              child: Text('An Error Occured!'),
-            );
+            return Container(child:Center(child:Text("An Error occured")));
           }else{
             //------------------------This is the SplashScreen-------------------->
             return splashScreen(context);
