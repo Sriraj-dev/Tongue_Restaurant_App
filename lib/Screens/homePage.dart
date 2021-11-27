@@ -121,163 +121,172 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(13.0),
-                      child: Container(
-                        //height: MediaQuery.of(context).size.height*0.15,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0, 0.5),
-                              blurRadius: 1,
-                              spreadRadius: 0.5,
-                            )
-                          ],
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  children: [
-                                    //itemImage
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Image.network(
-                                        e[index]['image'],
-                                        height: 100,
+                      child: Material(
+                        elevation: 20,
+                        shadowColor: kPrimaryColor.withOpacity(0.5),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        child: Container(
+                          //height: MediaQuery.of(context).size.height*0.15,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+
+                            ],
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(
+                                    children: [
+                                      //itemImage
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image.network(
+                                          e[index]['image'],
+                                          height: 100,
+                                        ),
                                       ),
-                                    ),
-                                    itemDetails(e, index),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 10,right: 4),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                      Column(
                                         children: [
+                                          itemDetails(e, index),
                                           Padding(
-                                            padding: const EdgeInsets.only(left: 10),
-                                            child: Container(
-                                              width: 16,
-                                              height: 16,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: (e[index]['type'] == 'veg')
-                                                      ? Colors.green
-                                                      : Colors.red,
+                                            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                primary: (userCart.contains(e[index]))?ksecondaryColor:kPrimaryColor,
+                                                // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                                                shape: const RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(Radius.circular(10)),
                                                 ),
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(4)),
                                               ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(2.0),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: (e[index]['type'] == 'veg')
-                                                        ? Colors.green
-                                                        : Colors.red,
+                                              onPressed: (){
+                                                setState(() {
+                                                  if (!userCart.contains(e[index]))
+                                                    userCart.add(e[index]);
+                                                  else {
+                                                    userCart.remove(e[index]);
+                                                  }
+                                                });
+                                              },
+                                              child: Center(
+                                                child: Text(
+                                                  (userCart.contains(e[index]))?'Added':'Add to Cart',
+                                                  style: GoogleFonts.lora(
+                                                    fontSize: 17,
+                                                    color: Colors.white,
                                                   ),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                          // Padding(
-                                          //   padding: const EdgeInsets.only(top: 13),
-                                          //   child: FittedBox(
-                                          //     child: ElevatedButton(
-                                          //       style: ElevatedButton.styleFrom(
-                                          //         primary: (isAdded)?ksecondaryColor:kPrimaryColor,
-                                          //         padding: EdgeInsets.symmetric(vertical: 10,horizontal: 18),
-                                          //         shape: const RoundedRectangleBorder(
-                                          //           borderRadius: BorderRadius.all(Radius.circular(10)),
-                                          //         ),
-                                          //       ),
-                                          //       onPressed: (){
-                                          //         setState(() {
-                                          //           isAdded = !isAdded;
-                                          //         });
-                                          //       },
-                                          //       child: Center(
-                                          //         child: Text(
-                                          //           (isAdded)?'Added':'ADD',
-                                          //           style: TextStyle(
-                                          //             color: Colors.white,
-                                          //           ),
-                                          //         ),
-                                          //       ),
-                                          //     ),
-                                          //   ),
-                                          // ),
+
                                         ],
                                       ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 0,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: (userCart.contains(e[index]))?ksecondaryColor:kPrimaryColor,
-                                     // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                                      ),
-                                    ),
-                                    onPressed: (){
-                                      setState(() {
-                                        if (!userCart.contains(e[index]))
-                                          userCart.add(e[index]);
-                                        else {
-                                          userCart.remove(e[index]);
-                                        }
-                                      });
-                                    },
-                                    child: Center(
-                                      child: Text(
-                                        (userCart.contains(e[index]))?'Added':'Add to Cart',
-                                        style: GoogleFonts.lora(
-                                          fontSize: 17,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
+                                    ],
                                   ),
-                                ),
-                                LikeButton(
-                                  //onTap: onLikeButtonTapped(isLiked,e[index]),
-                                  isLiked: userFav.contains(e[index]),
-                                  likeBuilder: (isLiked){
-                                    final color = isLiked? Colors.red:Colors.grey;
-                                    return Icon(Icons.favorite,color: color,size: 30,);
-                                  },
-                                  onTap: (isLiked)async{
-                                    setState(() {
-                                      if (!userFav.contains(e[index]))
-                                        userFav.add(e[index]);
-                                      else {
-                                        userFav.remove(e[index]);
-                                      }
-                                    });
-                                    return !isLiked;
-                                  },
-                                )
-                              ],
-                            ),
-                          ],
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 10,right: 4),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 10),
+                                              child: Container(
+                                                width: 16,
+                                                height: 16,
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: (e[index]['type'] == 'veg')
+                                                        ? Colors.green
+                                                        : Colors.red,
+                                                  ),
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(4)),
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(2.0),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: (e[index]['type'] == 'veg')
+                                                          ? Colors.green
+                                                          : Colors.red,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 70,),
+
+                                            LikeButton(
+                                              //onTap: onLikeButtonTapped(isLiked,e[index]),
+                                              isLiked: userFav.contains(e[index]),
+                                              likeBuilder: (isLiked){
+                                                final color = isLiked? Colors.red:Colors.grey;
+                                                return Icon(Icons.favorite,color: color,size: 30,);
+                                              },
+                                              onTap: (isLiked)async{
+                                                setState(() {
+                                                  if (!userFav.contains(e[index]))
+                                                    userFav.add(e[index]);
+                                                  else {
+                                                    userFav.remove(e[index]);
+                                                  }
+                                                });
+                                                return !isLiked;
+                                              },
+                                            )
+
+                                            // Padding(
+                                            //   padding: const EdgeInsets.only(top: 13),
+                                            //   child: FittedBox(
+                                            //     child: ElevatedButton(
+                                            //       style: ElevatedButton.styleFrom(
+                                            //         primary: (isAdded)?ksecondaryColor:kPrimaryColor,
+                                            //         padding: EdgeInsets.symmetric(vertical: 10,horizontal: 18),
+                                            //         shape: const RoundedRectangleBorder(
+                                            //           borderRadius: BorderRadius.all(Radius.circular(10)),
+                                            //         ),
+                                            //       ),
+                                            //       onPressed: (){
+                                            //         setState(() {
+                                            //           isAdded = !isAdded;
+                                            //         });
+                                            //       },
+                                            //       child: Center(
+                                            //         child: Text(
+                                            //           (isAdded)?'Added':'ADD',
+                                            //           style: TextStyle(
+                                            //             color: Colors.white,
+                                            //           ),
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //   ),
+                                            // ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                              SizedBox(height: 0,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -313,20 +322,20 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                         ),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 15),
-                                      child: Text(
-                                        e[index]['description'],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.fade,
-                                        softWrap: false,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: kTextLightColor
-                                              .withOpacity(0.5),
-                                        ),
-                                      ),
-                                    ),
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(top: 15),
+                                    //   child: Text(
+                                    //     e[index]['description'],
+                                    //     maxLines: 1,
+                                    //     overflow: TextOverflow.fade,
+                                    //     softWrap: false,
+                                    //     style: TextStyle(
+                                    //       fontSize: 16,
+                                    //       color: kTextLightColor
+                                    //           .withOpacity(0.5),
+                                    //     ),
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               );
