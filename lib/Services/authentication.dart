@@ -24,7 +24,7 @@ class Authentication{
   }
 
   // Follow these conditions before using these functions:
-  //1. username , pwd , phonenumber should not be empty.
+  //1. username , email ,pwd , phonenumber should not be empty.
   signUp(String usrname,String e_mail,String phn,String pwd,bool googleUser)async{
     final username = usrname;
     final password = pwd;

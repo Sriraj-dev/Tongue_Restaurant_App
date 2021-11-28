@@ -43,6 +43,7 @@ class LocationServices {
     Address =
         "${placeMark[0].street}, ${placeMark[0].subLocality}, ${placeMark[0].locality}, ${placeMark[0].postalCode}, ${placeMark[0].administrativeArea}";
 
+    print("My address is - $Address");
     return Address;
   }
 

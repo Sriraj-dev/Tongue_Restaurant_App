@@ -15,6 +15,7 @@ import 'package:delivery_app/restaurantModel.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocator/geolocator.dart';
@@ -144,6 +145,8 @@ class _LaunchScreenState extends State<LaunchScreen> {
         updateAvailable = await ApiServices().checkUpdates();
         if(!updateAvailable){
           // initialise the items of restaurant -->
+          Position position= await LocationServices().getCurrentPosition();
+          await LocationServices().getCurrentAddress(position);
           print('App does not have any updates = $updateAvailable');
           print('getting items from restaurant');
           items = await ApiServices().getItems();
@@ -153,8 +156,6 @@ class _LaunchScreenState extends State<LaunchScreen> {
           initialiseCategoryItems();
           if(isLogin){
             //if the user is already logged in -->
-            final userDetails = await Storage().getData();
-            await Authentication().login(userDetails[0], userDetails[1] , true);
             print('Im not gonna wait for this');
             getUserInfo();
             print('Im done');
@@ -163,7 +164,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
           }else{
             //if the user need to login-->
             //return LoginPage();
-            return 0;
+            return 1;
           }
         }else{
           //if the app has updates available-->

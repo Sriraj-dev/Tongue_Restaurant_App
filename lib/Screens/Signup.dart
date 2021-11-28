@@ -1,4 +1,7 @@
+import 'package:delivery_app/Screens/homePage.dart';
+import 'package:delivery_app/Screens/pageManager.dart';
 import 'package:delivery_app/Services/apiservices.dart';
+import 'package:delivery_app/Services/authentication.dart';
 import 'package:delivery_app/Services/securityServices.dart';
 import 'package:delivery_app/Services/storageServices.dart';
 import 'package:delivery_app/userModel.dart';
@@ -21,7 +24,10 @@ class _signupState extends State<signup> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    TextEditingController email = new TextEditingController();
+    TextEditingController phone = new TextEditingController();
+    TextEditingController usrname = new TextEditingController();
+    TextEditingController pwd = new TextEditingController();
     return Scaffold(
       backgroundColor: Background_Color,
       body: Container(
@@ -66,12 +72,16 @@ class _signupState extends State<signup> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Email address'),
-                        TextField(),
+                        TextField(
+                          controller: email,
+                        ),
                         SizedBox(
                           height: 16,
                         ),
                         Text('mobile number'),
-                        TextField(),
+                        TextField(
+                          controller: phone,
+                        ),
                         SizedBox(
                           height: 16,
                         ),
@@ -99,6 +109,17 @@ class _signupState extends State<signup> {
                         ),
                         Text('username'),
                         TextField(
+                          controller: usrname,
+                          decoration: InputDecoration(
+                          ),
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Text('Password'),
+                        TextField(
+                          controller: pwd,
+                          obscureText: true,
                           decoration: InputDecoration(
                           ),
                         ),
@@ -111,7 +132,15 @@ class _signupState extends State<signup> {
                               child: FlatButton(
                                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                                   color: kPrimaryColor,
-                                  onPressed: () {},
+                                  onPressed: () async{
+                                    print("SignUp button is tapped");
+                                    bool isSignedIn = await Authentication().signUp(usrname.text, email.text, phone.text, pwd.text, false);
+                                    print('Bool is signed in is - $isSignedIn');
+                                    if(isSignedIn){
+                                      Navigator.popUntil(context, (route) => false);
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>PageManager()));
+                                    }
+                                  },
                                   child: Text(
                                     "Signup",
                                     style: TextStyle(color: Colors.white),

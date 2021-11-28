@@ -1,3 +1,4 @@
+import 'package:delivery_app/Screens/Signup.dart';
 import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/Services/securityServices.dart';
 import 'package:delivery_app/Services/storageServices.dart';
@@ -94,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => login()),
+                              MaterialPageRoute(builder: (context) => signup()),
                             );
                           },
                           child: Text(
