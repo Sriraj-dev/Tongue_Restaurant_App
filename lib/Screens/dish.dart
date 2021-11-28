@@ -1,3 +1,4 @@
+import 'package:delivery_app/Screens/Signup.dart';
 import 'package:delivery_app/Screens/maintenance.dart';
 import 'package:delivery_app/components/SearchBox.dart';
 import 'package:delivery_app/constants.dart';
@@ -33,24 +34,38 @@ class _DishState extends State<Dish> {
     return Column(
       children: [
         Container(
-          height: 250,
+          height: 270,
           child: Stack(
             children: [
               Column(
                 children: [
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: Container(),
                   ),
                   Expanded(
                     flex: 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(50),
-                          topRight: Radius.circular(50),
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 32.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(40),
+                          ),
+                          color: Background_Color,
                         ),
-                        color: Background_Color,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Center(
+                              child: Text(
+                                item['itemName'],
+                                style: TextStyle(
+                                    fontSize: 32, color: kPrimaryColor),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   )
@@ -58,95 +73,97 @@ class _DishState extends State<Dish> {
               ),
               Align(
                 alignment: Alignment.center,
-                child: Container(
-                  child: Image.network(item['image']),
-                  // Image.asset(
-                  //   'assets/images/6.png',
-                  //   height: 200,
-                  // ),
+                child: Material(
+                  elevation: 10,
+                  shadowColor: Colors.black,
+                  color: Background_Color,
+                  borderRadius: BorderRadius.all(Radius.circular(250)),
+                  child: Container(
+                    height: 200,
+                    child: Image.network(item['image']),
+                  ),
                 ),
               ),
             ],
           ),
         ),
         Expanded(
-          child: Container(
-            color: Background_Color,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Center(
-                  child: Text(
-                    item['itemName'],
-                    style: TextStyle(fontSize: 32, color: kPrimaryColor),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(width: 16),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.timer_outlined,
-                            color: kTextLightColor,
-                          ),
-                          Text('50 min'),
-                        ],
-                      ),
-                      SizedBox(width: 16),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.star_outline_rounded,
-                            color: kTextLightColor,
-                          ),
-                          Text('4.8'),
-                        ],
-                      ),
-                      SizedBox(width: 16),
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: 16,
-                              height: 16,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: (item['type'] == 'veg')
-                                      ? Colors.green
-                                      : Colors.red,
-                                ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4)),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 32.0, bottom: 24),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Background_Color,
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(40),
+                  )),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(width: 16),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.timer_outlined,
+                              color: kTextLightColor,
+                            ),
+                            Text('50 min'),
+                          ],
+                        ),
+                        SizedBox(width: 16),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.star_outline_rounded,
+                              color: kTextLightColor,
+                            ),
+                            Text('4.8'),
+                          ],
+                        ),
+                        SizedBox(width: 16),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: 16,
+                                height: 16,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
                                     color: (item['type'] == 'veg')
                                         ? Colors.green
                                         : Colors.red,
                                   ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: (item['type'] == 'veg')
+                                          ? Colors.green
+                                          : Colors.red,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(width: 4),
-                          Text(item['type']),
-                        ],
-                      ),
-                      SizedBox(width: 16),
-                    ],
+                            SizedBox(width: 4),
+                            Text(item['type']),
+                          ],
+                        ),
+                        SizedBox(width: 16),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Container(
+                  Container(
                     alignment: Alignment.center,
                     child: Text(
                       '₹' + item['cost'],
@@ -156,106 +173,100 @@ class _DishState extends State<Dish> {
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    item['description'],
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 32),
-                  child: Container(
-                    child: Center(
-                        child: Text(
-                      'Quantity',
-                      style: TextStyle(fontSize: 20),
-                    )),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Container(
-                    padding: EdgeInsets.all(0),
-                    width: 400,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: kPrimaryColor.withOpacity(0.1),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(0),
-                          height: 100,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.red.withOpacity(0),
-                          ),
-                          child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                quantity++;
-                              });
-                            },
-                            icon: Icon(
-                              Icons.add,
-                              size: 100,
-                              color: ksecondaryColor,
-                            ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(width:16),
+                      Expanded(
+                        child: Container(
+                          child: Column(
+                            children: [
+                              Text('Dish Description',style:TextStyle(fontSize: 24,color: kTextColor)),
+                              Text(item['description'],style:TextStyle(color: kTextLightColor)),
+                            ],
                           ),
                         ),
-                        Container(
-                            height: 100,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                            child: Center(
-                              child: Text(
-                                '' + quantity.toString(),
-                                style: TextStyle(
-                                  fontSize: 64,
-                                  color: kTextColor,
-                                ),
-                              ),
-                            )),
-                        Container(
-                          height: 100,
-                          width: 100,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 32,
+                          width: 96,
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: kPrimaryColor.withOpacity(0),
+                            color: kPrimaryColor.withOpacity(0.2),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: GestureDetector(
-                              onTap: (){setState(() {
-                                quantity--;
-                              });},
-                              child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
                                 child: Text(
-                                  '−',
+                                  '-',
                                   style: TextStyle(
-                                    fontSize: 100,
+                                    color: kPrimaryColor,
+                                    fontWeight: FontWeight.bold,
+
                                   ),
                                 ),
                               ),
-                            ),
+                              SizedBox(width: 5),
+                              Container(
+                                child: Text(
+                                  '1',
+                                  style: TextStyle(
+                                    color:kPrimaryColor,
+                                      fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Container(
+                                child: Text(
+                                  '+',
+                                  style: TextStyle(
+                                    color: kPrimaryColor,
+                                    fontWeight: FontWeight.bold,
+
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: Material(
+                      elevation: 5,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(32),
+                      ),
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                        decoration: BoxDecoration(
+                            color: kPrimaryColor,
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(32),
+                                bottomRight: Radius.circular(32))),
+                        child: Text(
+                          'ADD TO CART',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -281,8 +292,16 @@ class _DishState extends State<Dish> {
                 ),
                 child: IconButton(
                   iconSize: 25,
+                  // onPressed: () {
+                  //   Navigator.pop(context);
+                  // },
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => signup(),
+                      ), // map == name,cost,id,offer.
+                    );
                   },
                   icon: Icon(
                     Icons.arrow_back_ios_outlined,
@@ -310,7 +329,6 @@ class _DishState extends State<Dish> {
                         userFav.remove(item);
                       }
                     });
-
                   },
                   icon: (userFav.contains(item))
                       ? Icon(
