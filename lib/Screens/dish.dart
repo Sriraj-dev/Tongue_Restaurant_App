@@ -222,12 +222,19 @@ class _DishState extends State<Dish> {
                               ),
                               SizedBox(width: 5),
                               Container(
-                                child: Text(
-                                  '+',
-                                  style: TextStyle(
+                                decoration: BoxDecoration(
                                     color: kPrimaryColor,
-                                    fontWeight: FontWeight.bold,
+                                  borderRadius: BorderRadius.circular(4)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 5),
+                                  child: Text(
+                                    '+',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
 
+                                    ),
                                   ),
                                 ),
                               ),
@@ -239,24 +246,35 @@ class _DishState extends State<Dish> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16.0),
-                    child: Material(
-                      elevation: 5,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(32),
-                      ),
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                        decoration: BoxDecoration(
-                            color: kPrimaryColor,
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(32),
-                                bottomRight: Radius.circular(32))),
-                        child: Text(
-                          'ADD TO CART',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                    child: GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          if (!userCart.contains(item))
+                            userCart.add(item);
+                          else {
+                            userCart.remove(item);
+                          }
+                        });
+                      },
+                      child: Material(
+                        elevation: 5,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(32),
+                        ),
+                        child: Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                          decoration: BoxDecoration(
+                              color: userCart.contains(item)?ksecondaryColor:kPrimaryColor,
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(32),
+                                  bottomRight: Radius.circular(32))),
+                          child: Text(
+                            userCart.contains(item)?'Added to cart':'ADD TO CART',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -292,17 +310,17 @@ class _DishState extends State<Dish> {
                 ),
                 child: IconButton(
                   iconSize: 25,
-                  // onPressed: () {
-                  //   Navigator.pop(context);
-                  // },
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => signup(),
-                      ), // map == name,cost,id,offer.
-                    );
+                    Navigator.pop(context);
                   },
+                  // onPressed: () {
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => signup(),
+                  //     ), // map == name,cost,id,offer.
+                  //   );
+                  // },
                   icon: Icon(
                     Icons.arrow_back_ios_outlined,
                     color: kTextColor,

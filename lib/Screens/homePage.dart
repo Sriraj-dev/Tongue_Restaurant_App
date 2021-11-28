@@ -122,16 +122,13 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                     child: Padding(
                       padding: const EdgeInsets.all(13.0),
                       child: Material(
-                        elevation: 20,
+                        elevation: 5,
                         shadowColor: kPrimaryColor.withOpacity(0.5),
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         child: Container(
                           //height: MediaQuery.of(context).size.height*0.15,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            boxShadow: [
-
-                            ],
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
                           child: Column(
@@ -224,7 +221,6 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                               ),
                                             ),
                                             SizedBox(height: 70,),
-
                                             LikeButton(
                                               //onTap: onLikeButtonTapped(isLiked,e[index]),
                                               isLiked: userFav.contains(e[index]),
