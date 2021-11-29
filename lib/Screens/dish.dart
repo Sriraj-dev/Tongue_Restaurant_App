@@ -76,7 +76,9 @@ class _DishState extends State<Dish> {
                   borderRadius: BorderRadius.all(Radius.circular(250)),
                   child: Container(
                     height: 200,
-                    child: Image.network(item['image']),
+                    child: Hero(
+                        tag: item['id'],
+                    child: Image.network(item['image'])),
                   ),
                 ),
               ),
