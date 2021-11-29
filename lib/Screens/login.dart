@@ -166,14 +166,5 @@ class _loginState extends State<login> {
     );
   }
 
-  void showSnackBar(String isLogin, BuildContext context) { // isLogin == usernmae is incorrect or password is incorect;
-     final snackBar  = SnackBar(
-      content: Text(isLogin) ,
-      backgroundColor: Colors.red,
-      padding: EdgeInsets.only(left: 15,right: 15,bottom: 20),
-      behavior: SnackBarBehavior.floating,
-    );
-    //Scaffold.of(context).showSnackBar(snackBar)
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
+
 }

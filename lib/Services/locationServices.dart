@@ -17,16 +17,15 @@ class LocationServices {
     permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
-
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         print('permissions are denied');
-        return 'Permissions are denied';
+        return 'Location Permissions are denied';
       }
     }
     if (permission == LocationPermission.deniedForever) {
       print("permissions are denied permanently");
-      return 'Permissions are permanently denied';
+      return 'Location Permissions are permanently denied';
     }
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.bestForNavigation);
@@ -38,12 +37,9 @@ class LocationServices {
   getCurrentAddress(Position position) async {
     List<Placemark> placeMark =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(placeMark);
     String Address = "";
     Address =
         "${placeMark[0].street}, ${placeMark[0].subLocality}, ${placeMark[0].locality}, ${placeMark[0].postalCode}, ${placeMark[0].administrativeArea}";
-
-    print("My address is - $Address");
     return Address;
   }
 
