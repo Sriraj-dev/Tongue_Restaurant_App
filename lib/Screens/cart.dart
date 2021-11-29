@@ -1,15 +1,9 @@
 import 'package:delivery_app/Screens/checkoutpage.dart';
-import 'package:delivery_app/components/SearchBox.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
-import 'package:flutter_tab_indicator_styler/flutter_tab_indicator_styler.dart';
-import 'package:delivery_app/Screens/dish.dart';
-import 'package:delivery_app/Screens/wishList.dart';
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class cart extends StatefulWidget {
@@ -101,6 +95,10 @@ class _cartState extends State<cart> {
               // e = biryani items list.
               itemBuilder: (context, index) {
                 //This is the container of the food item-->
+                var req = menu.firstWhere((map) {
+                  return map['id'] == e[index];
+                });
+                var item = req['item'];
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
@@ -121,7 +119,7 @@ class _cartState extends State<cart> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Image.network(
-                              e[index]['image'],
+                              item['image'],
                               height: 80,
                             ),
                           ),
@@ -130,7 +128,7 @@ class _cartState extends State<cart> {
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(e[index]['itemName'],
+                                child: Text(item['itemName'],
                                     style: GoogleFonts.lato(
                                       fontSize: 17,
                                       color: kTextColor,
@@ -141,7 +139,7 @@ class _cartState extends State<cart> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      '₹' + e[index]['cost'],
+                                      '₹' + item['cost'],
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: kTextLightColor,
@@ -197,7 +195,7 @@ class _cartState extends State<cart> {
                               height: 16,
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: (e[index]['type'] == 'veg')
+                                  color: (item['type'] == 'veg')
                                       ? Colors.green
                                       : Colors.red,
                                 ),
@@ -209,7 +207,7 @@ class _cartState extends State<cart> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: (e[index]['type'] == 'veg')
+                                    color: (item['type'] == 'veg')
                                         ? Colors.green
                                         : Colors.red,
                                   ),

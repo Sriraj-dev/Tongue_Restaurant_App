@@ -2,6 +2,7 @@ import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:like_button/like_button.dart';
 
 class Dish extends StatefulWidget {
   //const Dish({Key? key}) : super(key: key);
@@ -244,10 +245,15 @@ class _DishState extends State<Dish> {
                     child: GestureDetector(
                       onTap: (){
                         setState(() {
-                          if (!userCart.contains(item))
-                            userCart.add(item);
-                          else {
-                            userCart.remove(item);
+                          // if (!userCart.contains(item))
+                          //   userCart.add(item);
+                          // else {
+                          //   userCart.remove(item);
+                          // }
+                          if(!userCart.contains(item['id'])){
+                            addToUserCart(item['id']);
+                          }else{
+                            removeFromUserCart(item['id']);
                           }
                         });
                       },
@@ -260,12 +266,12 @@ class _DishState extends State<Dish> {
                           padding:
                               EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                           decoration: BoxDecoration(
-                              color: userCart.contains(item)?ksecondaryColor:kPrimaryColor,
+                              color: userCart.contains(item['id'])?ksecondaryColor:kPrimaryColor,
                               borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(32),
                                   bottomRight: Radius.circular(32))),
                           child: Text(
-                            userCart.contains(item)?'Added to cart':'ADD TO CART',
+                            userCart.contains(item['id'])?'Added to cart':'ADD TO CART',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -332,27 +338,52 @@ class _DishState extends State<Dish> {
                   shape: BoxShape.circle,
                   color: Colors.white,
                 ),
-                child: IconButton(
-                  iconSize: 25,
-                  onPressed: () {
-                    setState(() {
-                      if (!userFav.contains(item))
-                        userFav.add(item);
-                      else {
-                        userFav.remove(item);
-                      }
-                    });
-                  },
-                  icon: (userFav.contains(item))
-                      ? Icon(
-                          Icons.favorite,
-                          color: Colors.red,
-                        )
-                      : Icon(
-                          Icons.favorite_border,
-                          color: Colors.black,
-                        ),
+                child: Center(
+                  child: LikeButton(
+                    //onTap: onLikeButtonTapped(isLiked,e[index]),
+                    isLiked: userFav.contains(item['id']),
+                    likeBuilder: (isLiked){
+                      final color = isLiked? Colors.red:Colors.grey;
+                      return Icon(Icons.favorite,color: color,size: 25,);
+                    },
+                    onTap: (isLiked)async{
+                      setState(() {
+                        // if (!userFav.contains(e[index]))
+                        //   userFav.add(e[index]);
+                        // else {
+                        //   userFav.remove(e[index]);
+                        // }
+                        if(!userFav.contains(item['id'])){
+                          addToUserFav(item['id']);
+                        }else{
+                          removeFromUserFav(item['id']);
+                        }
+                      });
+                      return !isLiked;
+                    },
+                  ),
                 ),
+                // child: IconButton(
+                //   iconSize: 25,
+                //   onPressed: () {
+                //     setState(() {
+                //       if (!userFav.contains(item))
+                //         userFav.add(item);
+                //       else {
+                //         userFav.remove(item);
+                //       }
+                //     });
+                //   },
+                //   icon: (userFav.contains(item))
+                //       ? Icon(
+                //           Icons.favorite,
+                //           color: Colors.red,
+                //         )
+                //       : Icon(
+                //           Icons.favorite_border,
+                //           color: Colors.black,
+                //         ),
+                // ),
               ),
             ),
           ],

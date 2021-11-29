@@ -6,9 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tab_indicator_styler/flutter_tab_indicator_styler.dart';
 import 'package:delivery_app/Screens/dish.dart';
-import 'package:delivery_app/Screens/cart.dart';
-import 'package:delivery_app/Screens/wishList.dart';
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
 
@@ -46,8 +43,6 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
 
   PreferredSize app_bar() {
     return PreferredSize(
-      //preferredSize: Size.fromHeight(MediaQuery.of(context).size.width),
-      //preferredSize: appbar.preferredSize *3.5,
       preferredSize: Size.fromHeight(200),
       child: ListView(
         children: [
@@ -154,7 +149,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                             padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
                                             child: ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                primary: (userCart.contains(e[index]))?ksecondaryColor:kPrimaryColor,
+                                                primary: (userCart.contains(e[index]['id']))?ksecondaryColor:kPrimaryColor,
                                                 // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
                                                 shape: const RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -162,16 +157,17 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                               ),
                                               onPressed: (){
                                                 setState(() {
-                                                  if (!userCart.contains(e[index]))
-                                                    userCart.add(e[index]);
-                                                  else {
-                                                    userCart.remove(e[index]);
+                                                  if(!userCart.contains(e[index]['id'])){
+                                                    addToUserCart(e[index]['id']);
+                                                  }else{
+                                                    print('trying to remove');
+                                                    removeFromUserCart(e[index]['id']);
                                                   }
                                                 });
                                               },
                                               child: Center(
                                                 child: Text(
-                                                  (userCart.contains(e[index]))?'Added':'Add to Cart',
+                                                  (userCart.contains(e[index]['id']))?'Added':'Add to Cart',
                                                   style: GoogleFonts.lora(
                                                     fontSize: 17,
                                                     color: Colors.white,
@@ -223,50 +219,27 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                             SizedBox(height: 70,),
                                             LikeButton(
                                               //onTap: onLikeButtonTapped(isLiked,e[index]),
-                                              isLiked: userFav.contains(e[index]),
+                                              isLiked: userFav.contains(e[index]['id']),
                                               likeBuilder: (isLiked){
                                                 final color = isLiked? Colors.red:Colors.grey;
                                                 return Icon(Icons.favorite,color: color,size: 30,);
                                               },
                                               onTap: (isLiked)async{
                                                 setState(() {
-                                                  if (!userFav.contains(e[index]))
-                                                    userFav.add(e[index]);
-                                                  else {
-                                                    userFav.remove(e[index]);
+                                                  // if (!userFav.contains(e[index]))
+                                                  //   userFav.add(e[index]);
+                                                  // else {
+                                                  //   userFav.remove(e[index]);
+                                                  // }
+                                                  if(!userFav.contains(e[index]['id'])){
+                                                    addToUserFav(e[index]['id']);
+                                                  }else{
+                                                    removeFromUserFav(e[index]['id']);
                                                   }
                                                 });
                                                 return !isLiked;
                                               },
                                             )
-
-                                            // Padding(
-                                            //   padding: const EdgeInsets.only(top: 13),
-                                            //   child: FittedBox(
-                                            //     child: ElevatedButton(
-                                            //       style: ElevatedButton.styleFrom(
-                                            //         primary: (isAdded)?ksecondaryColor:kPrimaryColor,
-                                            //         padding: EdgeInsets.symmetric(vertical: 10,horizontal: 18),
-                                            //         shape: const RoundedRectangleBorder(
-                                            //           borderRadius: BorderRadius.all(Radius.circular(10)),
-                                            //         ),
-                                            //       ),
-                                            //       onPressed: (){
-                                            //         setState(() {
-                                            //           isAdded = !isAdded;
-                                            //         });
-                                            //       },
-                                            //       child: Center(
-                                            //         child: Text(
-                                            //           (isAdded)?'Added':'ADD',
-                                            //           style: TextStyle(
-                                            //             color: Colors.white,
-                                            //           ),
-                                            //         ),
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // ),
                                           ],
                                         ),
                                       )
@@ -318,20 +291,6 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                         ),
                                       ),
                                     ),
-                                    // Padding(
-                                    //   padding: const EdgeInsets.only(top: 15),
-                                    //   child: Text(
-                                    //     e[index]['description'],
-                                    //     maxLines: 1,
-                                    //     overflow: TextOverflow.fade,
-                                    //     softWrap: false,
-                                    //     style: TextStyle(
-                                    //       fontSize: 16,
-                                    //       color: kTextLightColor
-                                    //           .withOpacity(0.5),
-                                    //     ),
-                                    //   ),
-                                    // ),
                                   ],
                                 ),
                               );

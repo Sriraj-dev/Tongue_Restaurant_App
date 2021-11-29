@@ -153,6 +153,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
           print('got items from restaurant');
           initialiseCategories();
           initialiseCategoryItems();
+          initialiseMenu();
           if(isLogin){
             //if the user is already logged in -->
             print(value[0]);

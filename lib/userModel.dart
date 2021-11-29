@@ -26,3 +26,27 @@ getUserInfo() async {
   myOrders = userInfo['myOrders'];
  }
 }
+
+addToUserCart(var id){
+ if(!userCart.contains(id)){
+  userCart.add(id);
+ }
+}
+
+removeFromUserCart(var id){
+ if(userCart.contains(id)){
+  userCart.remove(id);
+ }
+}
+
+addToUserFav(var id){
+ if(!userFav.contains(id)){
+  userFav.add(id);
+ }
+}
+
+removeFromUserFav(var id){
+ if(userFav.contains(id)){
+  userFav.remove(id);
+ }
+}

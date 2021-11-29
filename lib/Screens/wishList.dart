@@ -31,12 +31,16 @@ class _wish_listState extends State<wish_list> {
             // e = biryani items list.
             itemBuilder: (context, index) {
               //This is the container of the food item-->
+              var req = menu.firstWhere((map) {
+                return map['id'] == e[index];
+              });
+              var item = req['item'];
               return GestureDetector(
                 onTap: (){
                  setState(() {
                    Navigator.push(
                      context,
-                     MaterialPageRoute(builder: (context) => Dish(e[index])), // map == name,cost,id,offer.
+                     MaterialPageRoute(builder: (context) => Dish(item)), // map == name,cost,id,offer.
                    );
                  });
                   },
@@ -62,7 +66,7 @@ class _wish_listState extends State<wish_list> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Image.network(
-                            e[index]['image'],
+                            item['image'],
                             height: 110,
                           ),
                         ),
@@ -71,7 +75,7 @@ class _wish_listState extends State<wish_list> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                  e[index]['itemName'],
+                                  item['itemName'],
                                   style: GoogleFonts.lato(
                                     fontSize: 17,
                                     color: kTextColor,
@@ -81,7 +85,7 @@ class _wish_listState extends State<wish_list> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                '₹' + e[index]['cost'],
+                                '₹' + item['cost'],
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: kTextLightColor,
@@ -89,7 +93,7 @@ class _wish_listState extends State<wish_list> {
                               ),
                             ),
                             Text(
-                              e[index]['description'],
+                              item['description'],
                               maxLines: 1,
                               overflow: TextOverflow.fade,
                               softWrap: false,
@@ -107,7 +111,7 @@ class _wish_listState extends State<wish_list> {
                             height: 16,
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: (e[index]['type'] == 'veg')
+                                color: (item['type'] == 'veg')
                                     ? Colors.green
                                     : Colors.red,),
                               borderRadius:
@@ -118,7 +122,7 @@ class _wish_listState extends State<wish_list> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: (e[index]['type'] == 'veg')
+                                  color: (item['type'] == 'veg')
                                       ? Colors.green
                                       : Colors.red,
                                 ),
