@@ -1,6 +1,7 @@
 import 'package:delivery_app/Screens/pageManager.dart';
 import 'package:delivery_app/Services/authentication.dart';
 import 'package:delivery_app/constants.dart';
+import 'package:delivery_app/userModel.dart';
 import 'package:flutter/material.dart';
 
 
@@ -16,6 +17,8 @@ class _SignUp2State extends State<SignUp2> {
   TextEditingController pwd = new TextEditingController();
   TextEditingController email = new TextEditingController();
   TextEditingController phone = new TextEditingController();
+
+  bool signingIn = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -119,12 +122,16 @@ class _SignUp2State extends State<SignUp2> {
                                     padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                                     color: kPrimaryColor,
                                     onPressed: () async{
-                                      print("SignUp button is tapped");
-                                      bool isSignedIn = await Authentication().signUp(usrname.text, email.text, phone.text, pwd.text, false);
-                                      print('Bool is signed in is - $isSignedIn');
-                                      if(isSignedIn){
+                                      setState(() {
+                                        signingIn = true;
+                                      });
+                                      var isSignedIn = await Authentication().signUp(usrname.text, email.text, phone.text, pwd.text, false);
+                                      if(isSignedIn == 'true'){
+                                        getUserInfo();
                                         Navigator.popUntil(context, (route) => false);
                                         Navigator.push(context, MaterialPageRoute(builder: (context)=>PageManager()));
+                                      }else{
+                                        showSnackBar(isSignedIn, context);
                                       }
                                     },
                                     child: Text(

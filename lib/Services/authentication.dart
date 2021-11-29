@@ -38,10 +38,10 @@ class Authentication{
       await Storage().saveData(username, encryptedPwd);
       token = response['token'];
       print(response['msg']);
-      return true;
+      return 'true';
     }else{
       print(response['msg']);
-      return false;
+      return response['msg'];
     }
   }
 
@@ -53,8 +53,10 @@ class Authentication{
     var response = await ApiServices().login(username, password , encrypted);
     if(response['status']=='true'){
       print(response['msg']);
-      final encryptedPwd= Security().encrypt(password);
-      await Storage().saveData(username, encryptedPwd);
+      if(encrypted == false){
+        final encryptedPwd= Security().encrypt(password);
+        await Storage().saveData(username, encryptedPwd);
+      }
       print(response['token']);
       token = response['token'];
       return 'true';

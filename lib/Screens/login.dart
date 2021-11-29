@@ -19,6 +19,8 @@ class login extends StatefulWidget {
 class _loginState extends State<login> {
   TextEditingController usr = new TextEditingController();
   TextEditingController pwd = new TextEditingController();
+
+  bool loggingIn = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -126,19 +128,26 @@ class _loginState extends State<login> {
                             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                             color: kPrimaryColor,
                             onPressed: () async{
+                              setState(() {
+                                loggingIn = true;
+                              });
                               var isLogin = await Authentication().login(usr.text,pwd.text , false);
                               if(isLogin == 'true'){
                                 getUserInfo();
+                                Navigator.popUntil(context, (route) => false);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => PageManager()),
                                 );
                               }else{
                                 showSnackBar(isLogin, context);
+                                setState(() {
+                                  loggingIn = false;
+                                });
                               }
 
                             },
-                            child: Text(
+                            child: (loggingIn)?CircularProgressIndicator():Text(
                               "Login",
                               style: TextStyle(color: Colors.white),
                             )),

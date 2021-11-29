@@ -22,11 +22,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  final storage = new FlutterSecureStorage();
   bool isLogin = false;
-  final value  = await storage.read(key: 'username');
+  final value  = await Storage().getData();
   print('value is - $value');
-  if(value!=null){
+  if(value[0]!=null){
     isLogin = true;
   }else{
     isLogin = false;
@@ -42,7 +41,7 @@ void main() async{
             bodyText2: TextStyle(color: ksecondaryColor ),
           ) ,
         ),
-        home: LaunchScreen(isLogin),
+        home: LaunchScreen(isLogin,value),
   )
   );
 }
@@ -50,14 +49,16 @@ void main() async{
 class LaunchScreen extends StatefulWidget {
   //const LaunchScreen({Key? key}) : super(key: key);
   bool isLogin;
-  LaunchScreen(this.isLogin);
+  List<String?> value;
+  LaunchScreen(this.isLogin,this.value);
   @override
-  _LaunchScreenState createState() => _LaunchScreenState(isLogin);
+  _LaunchScreenState createState() => _LaunchScreenState(isLogin,value);
 }
 
 class _LaunchScreenState extends State<LaunchScreen> {
   bool isLogin;
-  _LaunchScreenState(this.isLogin);
+  List<String?> value;
+  _LaunchScreenState(this.isLogin,this.value);
 
   late Future<int> route;
 
@@ -145,8 +146,6 @@ class _LaunchScreenState extends State<LaunchScreen> {
         updateAvailable = await ApiServices().checkUpdates();
         if(!updateAvailable){
           // initialise the items of restaurant -->
-          Position position= await LocationServices().getCurrentPosition();
-          await LocationServices().getCurrentAddress(position);
           print('App does not have any updates = $updateAvailable');
           print('getting items from restaurant');
           items = await ApiServices().getItems();
@@ -156,11 +155,16 @@ class _LaunchScreenState extends State<LaunchScreen> {
           initialiseCategoryItems();
           if(isLogin){
             //if the user is already logged in -->
-            print('Im not gonna wait for this');
-            getUserInfo();
-            print('Im done');
-            //return homePage();
-            return 0;
+            print(value[0]);
+            print(value[1]);
+            var isLogin = await Authentication().login(value[0]??'',value[1]??'', true);
+            if(isLogin == 'true'){
+              getUserInfo();
+              return 0;
+            }else{
+              showSnackBar('An error Occured!', context);
+              return 4;
+            }
           }else{
             //if the user need to login-->
             //return LoginPage();
@@ -179,6 +183,17 @@ class _LaunchScreenState extends State<LaunchScreen> {
     }else{
       return 4;
     }
+  }
+
+  void showSnackBar(String isLogin, BuildContext context) { // isLogin == usernmae is incorrect or password is incorect;
+    final snackBar  = SnackBar(
+      content: Text(isLogin) ,
+      backgroundColor: Colors.red,
+      padding: EdgeInsets.only(left: 15,right: 15,bottom: 20),
+      behavior: SnackBarBehavior.floating,
+    );
+    //Scaffold.of(context).showSnackBar(snackBar)
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   Future<bool> checkNetwork()async {
