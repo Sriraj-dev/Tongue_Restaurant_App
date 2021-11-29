@@ -1,3 +1,4 @@
+import 'package:delivery_app/Screens/pageManager.dart';
 import 'package:delivery_app/Services/authentication.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +22,6 @@ class _loginState extends State<login> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       body: Container(
         child: Stack(
@@ -131,7 +131,7 @@ class _loginState extends State<login> {
                                 getUserInfo();
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => homePage()),
+                                  MaterialPageRoute(builder: (context) => PageManager()),
                                 );
                               }else{
                                 showSnackBar(isLogin, context);
@@ -167,6 +167,4 @@ class _loginState extends State<login> {
     //Scaffold.of(context).showSnackBar(snackBar)
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
-
-
 }
