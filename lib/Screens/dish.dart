@@ -1,12 +1,7 @@
-import 'package:delivery_app/Screens/Signup.dart';
-import 'package:delivery_app/Screens/maintenance.dart';
-import 'package:delivery_app/components/SearchBox.dart';
 import 'package:delivery_app/constants.dart';
-import 'package:delivery_app/restaurantModel.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tab_indicator_styler/flutter_tab_indicator_styler.dart';
 
 class Dish extends StatefulWidget {
   //const Dish({Key? key}) : super(key: key);
