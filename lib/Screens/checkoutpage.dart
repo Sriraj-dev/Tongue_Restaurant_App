@@ -1,15 +1,7 @@
-import 'package:delivery_app/components/SearchBox.dart';
 import 'package:delivery_app/constants.dart';
-import 'package:delivery_app/restaurantModel.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
-import 'package:flutter_tab_indicator_styler/flutter_tab_indicator_styler.dart';
-import 'package:delivery_app/Screens/dish.dart';
-import 'package:delivery_app/Screens/wishList.dart';
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class checkout extends StatefulWidget {
   const checkout({Key? key}) : super(key: key);
@@ -19,6 +11,8 @@ class checkout extends StatefulWidget {
 }
 
 class _checkoutState extends State<checkout> {
+
+  List<String> address = userAddress.split(',');
   @override
   Widget build(BuildContext context) {
     List e = userCart;
@@ -66,8 +60,9 @@ class _checkoutState extends State<checkout> {
         ),
       ),
       body: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        height: MediaQuery.of(context).size.height*0.75,
+        child: ListView(
+          //crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -83,6 +78,7 @@ class _checkoutState extends State<checkout> {
                     ),
                   ),
                 ),
+                //TODO : Ask User to choose homeLocation or currentLocation.
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0, top: 16),
                   child: Text('change',
@@ -92,7 +88,6 @@ class _checkoutState extends State<checkout> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 32),
-
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -103,7 +98,7 @@ class _checkoutState extends State<checkout> {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        '1/234/6  uppal ',
+                        '${address[0]}',
                         style: TextStyle(fontSize: 20, color: Colors.black),
                       ),
                     ),
@@ -117,7 +112,7 @@ class _checkoutState extends State<checkout> {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        'near ring road ,hyderabad  ',
+                        '${address[1]},${address[2]}',
                         style: TextStyle(
                             fontSize: 15, color: Colors.black.withOpacity(0.7)),
                       ),
@@ -132,7 +127,7 @@ class _checkoutState extends State<checkout> {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        '987654321',
+                        userPhone,
                         style: TextStyle(
                             fontSize: 20, color: Colors.black.withOpacity(0.4)),
                       ),

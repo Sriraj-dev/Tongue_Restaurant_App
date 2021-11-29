@@ -7,6 +7,8 @@ String userEmail = '';
 String userPhone = '';
 String homeAddress = '';
 late Position homeLocation ;
+late Position userLocation;
+String userAddress = '';
 // TODO: Store these lists locally;
 List userCart = [];
 List userFav = [];
