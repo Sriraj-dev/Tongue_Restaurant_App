@@ -79,6 +79,7 @@ class _checkoutState extends State<checkout> {
                   ),
                 ),
                 //TODO : Ask User to choose homeLocation or currentLocation.
+                //dialogueBox
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0, top: 16),
                   child: Text('change',

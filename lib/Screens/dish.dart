@@ -247,15 +247,12 @@ class _DishState extends State<Dish> {
                     child: GestureDetector(
                       onTap: (){
                         setState(() {
-                          // if (!userCart.contains(item))
-                          //   userCart.add(item);
-                          // else {
-                          //   userCart.remove(item);
-                          // }
                           if(!userCart.contains(item['id'])){
                             addToUserCart(item['id']);
+                            saveToUserCartDb(item['id']);
                           }else{
                             removeFromUserCart(item['id']);
+                            deleteFromUserCartDb(item['id']);
                           }
                         });
                       },
@@ -357,8 +354,10 @@ class _DishState extends State<Dish> {
                         // }
                         if(!userFav.contains(item['id'])){
                           addToUserFav(item['id']);
+                          saveToUserFavDb(item['id']);
                         }else{
                           removeFromUserFav(item['id']);
+                          deleteFromUserFavDb(item['id']);
                         }
                       });
                       return !isLiked;

@@ -161,10 +161,12 @@ class _LaunchScreenState extends State<LaunchScreen> {
             var isLogin = await Authentication().login(value[0]??'',value[1]??'', true);
             if(isLogin == 'true'){
               getUserInfo();
+              await getUserFav();
+              await getUserCart();
               return 0;
             }else{
               showSnackBar('An error Occured!', context);
-              return 4;
+              return 5;
             }
           }else{
             //if the user need to login-->
