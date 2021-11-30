@@ -340,5 +340,5 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
 
 //menupage(last)
 
- //TODO :NetworkPage, MaintainencePage , checkOutBox , Cart, WishList,UserProfile
+//TODO :NetworkPage, MaintainencePage , checkOutBox , Cart, WishList,UserProfile
 //TODO: HomeLocation store, OffersMongodb, SearchBar, Quantity in cart

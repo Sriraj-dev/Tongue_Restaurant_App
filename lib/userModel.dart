@@ -83,3 +83,9 @@ getUserCart()async{
  });
  print("User cart is - $res  , $userCart");
 }
+
+getUserAddress()async{
+ var res = await DbOperations().getHomeAddress();
+ homeAddress = res;
+ print('Home address is - $homeAddress');
+}

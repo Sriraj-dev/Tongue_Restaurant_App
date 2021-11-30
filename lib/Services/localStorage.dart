@@ -10,7 +10,7 @@ class LocalDB{
   Future<Database> get database async{
     if(_database != null) return _database!;
 
-    _database = await _initDB('items.db');
+    _database = await _initDB('items2.db');
     return _database!;
   }
 
@@ -18,13 +18,14 @@ class LocalDB{
     final dbPath = await getDatabasesPath();
     final path = join(dbPath,filePath);
 
-    return await openDatabase(path, version: 1,onCreate: _createDB);
+    return await openDatabase(path, version: 2,onCreate: _createDB);
   }
 
   Future _createDB(Database db, int version)async{
     print('Creating the table');
     await db.execute('CREATE TABLE user_favItems(iid TEXT NOT NULL)');
     await db.execute('CREATE TABLE user_cartItems(iid TEXT NOT NULL)');
+    await db.execute('CREATE TABLE user_homeAddress(Address TEXT NOT NULL)');
     return db;
   }
 
