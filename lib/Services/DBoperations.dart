@@ -1,5 +1,3 @@
-
-
 import 'package:delivery_app/Services/localStorage.dart';
 
 class DbOperations{
@@ -21,5 +19,21 @@ class DbOperations{
     String tableName = isCart? 'user_cartItems' : 'user_favItems';
 
     LocalDB.instance.delete(tableName, id);
+  }
+  saveHomeAddress(String address)async{
+    String tableName = 'user_homeAddress';
+
+    Map<String,dynamic> data = {
+      'Address' : address
+    };
+    LocalDB.instance.insert(tableName, data);
+  }
+
+  getHomeAddress()async{
+    String tableName = 'user_homeAddress';
+
+    var res=await LocalDB.instance.getData(tableName);
+    print(res[0]['Address']);
+    return res[0]['Address'];
   }
 }

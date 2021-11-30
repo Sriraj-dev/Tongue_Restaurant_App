@@ -163,6 +163,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
               getUserInfo();
               await getUserFav();
               await getUserCart();
+              getUserAddress();
               return 0;
             }else{
               showSnackBar('An error Occured!', context);
