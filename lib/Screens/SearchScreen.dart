@@ -1,125 +1,88 @@
-import 'package:delivery_app/Screens/SearchScreen.dart';
-import 'package:delivery_app/components/SearchBox.dart';
+//import 'package:delivery_app/components/SearchBox.dart';
+import 'package:delivery_app/Screens/dish.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
 import 'package:delivery_app/userModel.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tab_indicator_styler/flutter_tab_indicator_styler.dart';
-import 'package:delivery_app/Screens/dish.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
 
-class homePage extends StatefulWidget {
-  const homePage({Key? key}) : super(key: key);
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SearchScreenState createState() => _SearchScreenState();
 }
 
-//-------------------------------------------------jashwanth-------------------
-class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
-  late TabController _tabController;
+class _SearchScreenState extends State<SearchScreen> {
+  TextEditingController searchText = new TextEditingController();
+  List allItems = [];
+  List searchItems = [];
+
+  initialiseAllItems() {
+    menu.forEach((e) {
+      allItems.add(e['item']);
+    });
+    searchItems = allItems;
+  }
+
+  setSearchItems(String searchText){
+    List tempList = [];
+    allItems.forEach((e) {
+      if(e['itemName'].toLowerCase().contains(searchText.toLowerCase())){
+        tempList.add(e);
+      }
+    });
+    searchItems = tempList;
+  }
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: categories.length, vsync: this);
+
+    initialiseAllItems();
   }
-
-  AppBar appbar = AppBar(
-    title: Text('Tongue'),
-  );
-
-  bool isAdded = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Background_Color,
-      appBar: app_bar(),
-      body: home_body(),
-    );
-  }
-
-  PreferredSize app_bar() {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(200),
-      child: ListView(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+      appBar: topBar(context),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/images/title_image.png',
-                height: 64,
-              ),
+              (searchText.text.isEmpty)
+                  ? Container()
+                  : Text(
+                      'Found ${searchItems.length} results',
+                      style: GoogleFonts.lora(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22),
+                    ),
+              showSearchItems(),
             ],
           ),
-          GestureDetector(
-            onTap: (){
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context)=>SearchScreen())
-              );
-            },
-            child: SearchBox(
-              onChanged: (value) {},
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 45),
-            child: Tab_Bar(),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  TabBar Tab_Bar() {
-    return TabBar(
-      isScrollable: true,
-      controller: _tabController,
-      tabs: categories
-          .map((e) => Tab(
-                text: e,
-              ))
-          .toList(),
-      labelPadding: EdgeInsets.only(right: 23),
-      indicatorSize: TabBarIndicatorSize.tab,
-      indicatorPadding: EdgeInsets.only(right: 5),
-      indicator: MaterialIndicator(
-        color: kPrimaryColor,
-        height: 4,
-        topLeftRadius: 8,
-        topRightRadius: 8,
-        bottomLeftRadius: 8,
-        bottomRightRadius: 8,
-        //horizontalPadding: 10,
-        tabPosition: TabPosition.bottom,
-        //horizontalPadding: 0,
-      ),
-      labelColor: kTextColor,
-      labelStyle: TextStyle(
-          fontSize: 16, fontWeight: FontWeight.bold, color: kTextColor),
-      unselectedLabelStyle: TextStyle(fontSize: 16),
-    );
-  }
-
-  TabBarView home_body() {
-    return TabBarView(
-      controller: _tabController,
-      children: categoryItems
-          .map((e) => ListView.builder(
-                // e = biryani items list.
+   showSearchItems() {
+    return Container(
+      height: MediaQuery.of(context).size.height*0.8,
+      child: ListView.builder(
+                itemCount: searchItems.length,
                 itemBuilder: (context, index) {
-                  //This is the container of the food item-->
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                Dish(e[index])), // map == name,cost,id,offer.
+                                Dish(searchItems[index])), // map == name,cost,id,offer.
                       );
                     },
                     child: Padding(
@@ -146,21 +109,21 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Hero(
-                                          tag: e[index]['id'],
+                                          tag: searchItems[index]['id'],
                                           child: Image.network(
-                                            e[index]['image'],
+                                            searchItems[index]['image'],
                                             height: 100,
                                           ),
                                         ),
                                       ),
                                       Column(
                                         children: [
-                                          itemDetails(e, index),
+                                          itemDetails(searchItems, index),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
                                             child: ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                primary: (userCart.contains(e[index]['id']))?ksecondaryColor:kPrimaryColor,
+                                                primary: (userCart.contains(searchItems[index]['id']))?ksecondaryColor:kPrimaryColor,
                                                 // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
                                                 shape: const RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -168,17 +131,17 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                               ),
                                               onPressed: (){
                                                 setState(() {
-                                                  if(!userCart.contains(e[index]['id'])){
-                                                    addToUserCart(e[index]['id']);
+                                                  if(!userCart.contains(searchItems[index]['id'])){
+                                                    addToUserCart(searchItems[index]['id']);
                                                   }else{
                                                     print('trying to remove');
-                                                    removeFromUserCart(e[index]['id']);
+                                                    removeFromUserCart(searchItems[index]['id']);
                                                   }
                                                 });
                                               },
                                               child: Center(
                                                 child: Text(
-                                                  (userCart.contains(e[index]['id']))?'Added':'Add to Cart',
+                                                  (userCart.contains(searchItems[index]['id']))?'Added':'Add to Cart',
                                                   style: GoogleFonts.lora(
                                                     fontSize: 17,
                                                     color: Colors.white,
@@ -207,7 +170,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                                 height: 16,
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
-                                                    color: (e[index]['type'] == 'veg')
+                                                    color: (searchItems[index]['type'] == 'veg')
                                                         ? Colors.green
                                                         : Colors.red,
                                                   ),
@@ -219,7 +182,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                                   child: Container(
                                                     decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
-                                                      color: (e[index]['type'] == 'veg')
+                                                      color: (searchItems[index]['type'] == 'veg')
                                                           ? Colors.green
                                                           : Colors.red,
                                                     ),
@@ -230,7 +193,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                             SizedBox(height: 70,),
                                             LikeButton(
                                               //onTap: onLikeButtonTapped(isLiked,e[index]),
-                                              isLiked: userFav.contains(e[index]['id']),
+                                              isLiked: userFav.contains(searchItems[index]['id']),
                                               likeBuilder: (isLiked){
                                                 final color = isLiked? Colors.red:Colors.grey;
                                                 return Icon(Icons.favorite,color: color,size: 30,);
@@ -242,10 +205,10 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                                   // else {
                                                   //   userFav.remove(e[index]);
                                                   // }
-                                                  if(!userFav.contains(e[index]['id'])){
-                                                    addToUserFav(e[index]['id']);
+                                                  if(!userFav.contains(searchItems[index]['id'])){
+                                                    addToUserFav(searchItems[index]['id']);
                                                   }else{
-                                                    removeFromUserFav(e[index]['id']);
+                                                    removeFromUserFav(searchItems[index]['id']);
                                                   }
                                                 });
                                                 return !isLiked;
@@ -271,78 +234,125 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                       ),
                     ),
                   );
-                },
-                itemCount: e.length,
-              ))
-          .toList(),
+                }),
     );
   }
 
   Padding itemDetails(e, int index) {
     return Padding(
-                                padding: const EdgeInsets.only(top: 15,bottom: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(0),
-                                      child: Text(e[index]['itemName'],
-                                          style: GoogleFonts.lato(
-                                            fontSize: 18,
-                                            color: kTextColor,
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 10),
-                                      child: Text(
-                                        '₹' + e[index]['cost'],
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: kTextLightColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
+      padding: const EdgeInsets.only(top: 15,bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(0),
+            child: Text(e[index]['itemName'],
+                style: GoogleFonts.lato(
+                  fontSize: 18,
+                  color: kTextColor,
+                )),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(
+              '₹' + e[index]['cost'],
+              style: TextStyle(
+                fontSize: 16,
+                color: kTextLightColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
 
+  PreferredSize topBar(BuildContext context) {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(250),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 32),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Material(
+                  elevation: 3,
+                  shadowColor: kPrimaryColor.withOpacity(0.5),
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                    child: Center(
+                      child: IconButton(
+                        iconSize: 25,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(
+                          Icons.arrow_back_ios_outlined,
+                          color: kTextColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              searchBox(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  searchBox() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Material(
+        elevation: 3,
+        shadowColor: kPrimaryColor.withOpacity(0.5),
+        borderRadius: BorderRadius.all(Radius.circular(50)),
+        child: Container(
+          //margin: EdgeInsets.all(10),
+          width: MediaQuery.of(context).size.width * 0.65,
+          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(50),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.shade400,
+                    blurRadius: 2,
+                    spreadRadius: 0.5)
+              ]),
+          child: TextField(
+            onChanged: (value) {
+              setState(() {
+                setSearchItems(searchText.text);
+              });
+            },
+            controller: searchText,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: "Search ",
+              hintStyle: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w500,
+                color: kTextColor.withOpacity(0.3),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
-//-------------------------------------------------------------
-// tileColor: Colors.white,
-// // leading:Container(
-// //   height: 110,
-// //   decoration: BoxDecoration(
-// //     color:Colors.blue,
-// //     borderRadius: BorderRadius.circular(20),
-// //   ),
-// //
-// // ),
-// leading: Container(
-// height: 110,
-// width: 110,
-// decoration: BoxDecoration(
-// shape: BoxShape.circle,
-// color: (e[index]['type'] == 'veg')?Colors.green:Colors.red,
-// ),
-// ),
-// title: Text(e[index]['itemName']),
-// subtitle: Text(e[index]['description']),
-// trailing: Text(e[index]['cost']),
-//-------------------------------------------------------------
-
-//sriraj:
-//sharedPrefs(favourites)
-//payment last
-//fetching User information
-// jaswanth:
-// ListTile ,
-// ItemPage ,
-// loginPage,
-// SignUp page,
-
-//menupage(last)
-
-//TODO :NetworkPage, MaintainencePage , checkOutBox , Cart, WishList,UserProfile
-//TODO : OffersMongodb
