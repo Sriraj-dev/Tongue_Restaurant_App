@@ -3,7 +3,7 @@ List<String> categories = [];
 List categoryItems = [];
 bool underMaintenance = false;
 bool updateAvailable = false;
-List<Map<String,dynamic>> menu = [];
+List<Map<String,dynamic>> menu = []; // list of maps = = {id: UniqueId , item: Item}
 
 initialiseCategories(){
   categories = [];// === > [biryani, chinese, ...]

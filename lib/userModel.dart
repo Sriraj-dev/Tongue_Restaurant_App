@@ -1,3 +1,4 @@
+import 'package:delivery_app/Services/DBoperations.dart';
 import 'package:delivery_app/Services/apiservices.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -49,4 +50,36 @@ removeFromUserFav(var id){
  if(userFav.contains(id)){
   userFav.remove(id);
  }
+}
+
+saveToUserFavDb(var id)async{
+  DbOperations().save(false, id);
+}
+
+saveToUserCartDb(var id)async{
+ DbOperations().save(true, id);
+}
+
+deleteFromUserFavDb(var id)async{
+ DbOperations().delete(false, id);
+}
+
+deleteFromUserCartDb(var id)async{
+ DbOperations().delete(true, id);
+}
+
+getUserFav()async{
+ var res = await DbOperations().getData(false);
+ res.forEach((e){
+  userFav.add(e['iid']);
+ });
+ print("User Fav is - $res  , $userFav");
+}
+
+getUserCart()async{
+ var res = await DbOperations().getData(true);
+ res.forEach((e){
+  userCart.add(e['iid']);
+ });
+ print("User cart is - $res  , $userCart");
 }
