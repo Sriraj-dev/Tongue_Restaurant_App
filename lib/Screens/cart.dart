@@ -1,4 +1,5 @@
 import 'package:delivery_app/Screens/checkoutpage.dart';
+import 'package:delivery_app/Services/BillingServices.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
 import 'package:delivery_app/userModel.dart';
@@ -14,6 +15,7 @@ class cart extends StatefulWidget {
 }
 
 class _cartState extends State<cart> {
+  num totalCost = 0;
   @override
   Widget build(BuildContext context) {
     List e = userCart;
@@ -40,7 +42,7 @@ class _cartState extends State<cart> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => checkout(),
+                    builder: (context) => checkout(totalCost),
                 ),// map == name,cost,id,offer.
               );
             },
@@ -92,12 +94,15 @@ class _cartState extends State<cart> {
               ),
             )
           : ListView.builder(
-              // e = biryani items list.
+              // e = UserCart.
               itemBuilder: (context, index) {
                 //This is the container of the food item-->
                 var req = menu.firstWhere((map) {
                   return map['id'] == e[index];
                 });
+                int quantity = billingItems.firstWhere((req) => req['id']==e[index] , orElse: (){return {'id': 0,'count':0};})['count'];
+                totalCost = Billing().calculateBill(billingItems);
+                print('Total cost is - $totalCost');
                 var item = req['item'];
                 return Padding(
                   padding:
@@ -158,11 +163,18 @@ class _cartState extends State<cart> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            child: Container(
-                                              child: Text('-'),
+                                          GestureDetector(
+                                            onTap:(){
+                                              setState(() {
+                                                changeCount(item['id'], false);
+                                              });
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 8.0),
+                                              child: Container(
+                                                child: Text('-'),
+                                              ),
                                             ),
                                           ),
                                           Padding(
@@ -170,14 +182,21 @@ class _cartState extends State<cart> {
                                                 horizontal: 8.0),
                                             child: Container(
                                               //TODO quantity
-                                              child: Text('1'),
+                                              child: Text(quantity.toString()),
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            child: Container(
-                                              child: Text('+'),
+                                          GestureDetector(
+                                            onTap:(){
+                                              setState(() {
+                                                changeCount(item['id'], true);
+                                              });
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 8.0),
+                                              child: Container(
+                                                child: Text('+'),
+                                              ),
                                             ),
                                           ),
                                         ],

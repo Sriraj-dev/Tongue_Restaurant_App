@@ -4,14 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class checkout extends StatefulWidget {
-  const checkout({Key? key}) : super(key: key);
-
+  //const checkout({Key? key}) : super(key: key);
+  num bill;
+  checkout(this.bill);
   @override
-  _checkoutState createState() => _checkoutState();
+  _checkoutState createState() => _checkoutState(bill);
 }
 
 class _checkoutState extends State<checkout> {
-
+  num bill;
+  _checkoutState(this.bill);
   List<String> address = userAddress.split(',');
   @override
   Widget build(BuildContext context) {
@@ -228,7 +230,7 @@ class _checkoutState extends State<checkout> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Text( '₹ ' +'1500 ' ,style: TextStyle(
+                      child: Text( '₹ ' +bill.toString() ,style: TextStyle(
                           fontSize: 15, color: Colors.black),),
                     ),
 
@@ -248,12 +250,12 @@ class _checkoutState extends State<checkout> {
           borderRadius: BorderRadius.circular(30),
           child: GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => checkout(),
-                ), // map == name,cost,id,offer.
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => checkout(),
+              //   ), // map == name,cost,id,offer.
+              // );
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 105, vertical: 20),

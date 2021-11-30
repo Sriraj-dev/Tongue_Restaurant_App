@@ -26,7 +26,7 @@ class _DishState extends State<Dish> {
   }
 
   Column dish_body() {
-    int quantity = 0;
+    int quantity = billingItems.firstWhere((e) => e['id']==item['id'] , orElse: (){return {'id': 0,'count':0};})['count'];
     return Column(
       children: [
         Container(
@@ -198,20 +198,28 @@ class _DishState extends State<Dish> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Container(
-                                child: Text(
-                                  '-',
-                                  style: TextStyle(
-                                    color: kPrimaryColor,
-                                    fontWeight: FontWeight.bold,
+                              GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    changeCount(item['id'], false);
+                                  });
+                                },
+                                child: Container(
+                                  child: Text(
+                                    '-',
+                                    style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontWeight: FontWeight.bold,
 
+                                    ),
                                   ),
                                 ),
+
                               ),
                               SizedBox(width: 5),
                               Container(
                                 child: Text(
-                                  '1',
+                                  quantity.toString(),
                                   style: TextStyle(
                                     color:kPrimaryColor,
                                       fontWeight: FontWeight.bold,
@@ -219,19 +227,25 @@ class _DishState extends State<Dish> {
                                 ),
                               ),
                               SizedBox(width: 5),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: kPrimaryColor,
-                                  borderRadius: BorderRadius.circular(4)
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 5),
-                                  child: Text(
-                                    '+',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-
+                              GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    changeCount(item['id'], true);
+                                  });
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: kPrimaryColor,
+                                    borderRadius: BorderRadius.circular(4)
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 5),
+                                    child: Text(
+                                      '+',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -249,10 +263,8 @@ class _DishState extends State<Dish> {
                         setState(() {
                           if(!userCart.contains(item['id'])){
                             addToUserCart(item['id']);
-                            saveToUserCartDb(item['id']);
                           }else{
                             removeFromUserCart(item['id']);
-                            deleteFromUserCartDb(item['id']);
                           }
                         });
                       },
@@ -313,14 +325,6 @@ class _DishState extends State<Dish> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  // onPressed: () {
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => signup(),
-                  //     ), // map == name,cost,id,offer.
-                  //   );
-                  // },
                   icon: Icon(
                     Icons.arrow_back_ios_outlined,
                     color: kTextColor,
@@ -347,44 +351,16 @@ class _DishState extends State<Dish> {
                     },
                     onTap: (isLiked)async{
                       setState(() {
-                        // if (!userFav.contains(e[index]))
-                        //   userFav.add(e[index]);
-                        // else {
-                        //   userFav.remove(e[index]);
-                        // }
                         if(!userFav.contains(item['id'])){
                           addToUserFav(item['id']);
-                          saveToUserFavDb(item['id']);
                         }else{
                           removeFromUserFav(item['id']);
-                          deleteFromUserFavDb(item['id']);
                         }
                       });
                       return !isLiked;
                     },
                   ),
                 ),
-                // child: IconButton(
-                //   iconSize: 25,
-                //   onPressed: () {
-                //     setState(() {
-                //       if (!userFav.contains(item))
-                //         userFav.add(item);
-                //       else {
-                //         userFav.remove(item);
-                //       }
-                //     });
-                //   },
-                //   icon: (userFav.contains(item))
-                //       ? Icon(
-                //           Icons.favorite,
-                //           color: Colors.red,
-                //         )
-                //       : Icon(
-                //           Icons.favorite_border,
-                //           color: Colors.black,
-                //         ),
-                // ),
               ),
             ),
           ],
