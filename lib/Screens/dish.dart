@@ -303,8 +303,6 @@ class _DishState extends State<Dish> {
 
   PreferredSize CustomAppBar(BuildContext context) {
     return PreferredSize(
-      //preferredSize: Size.fromHeight(MediaQuery.of(context).size.width),
-      //preferredSize: appbar.preferredSize *3.5,
       preferredSize: Size.fromHeight(250),
       child: Padding(
         padding: const EdgeInsets.only(top: 32),
