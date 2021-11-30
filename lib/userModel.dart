@@ -13,6 +13,7 @@ String userAddress = '';
 // TODO: Store these lists locally;
 List userCart = [];
 List userFav = [];
+List<Map<String,dynamic>> billingItems = [];// List of Maps where Map = {id:ItemUniqueId  ,count: Count}
 String msg = '';
 List myOrders = [];
 
@@ -29,14 +30,40 @@ getUserInfo() async {
 }
 
 addToUserCart(var id){
+ Map<String,dynamic> cartItem = {
+  'id': id,
+  'count': 1
+ };
  if(!userCart.contains(id)){
   userCart.add(id);
+  billingItems.add(cartItem);
  }
+ saveToUserCartDb(id);
 }
 
 removeFromUserCart(var id){
  if(userCart.contains(id)){
   userCart.remove(id);
+  billingItems.removeWhere((e) {
+   return e['id']==id;
+  });
+ }
+ deleteFromUserCartDb(id);
+}
+
+changeCount(var id ,bool isIncreased){
+ if(userCart.contains(id)){
+  final index = billingItems.indexWhere((e){
+   return e['id'] == id;
+  });
+  billingItems[index]['count'] += (isIncreased)?1:-1;
+  if(billingItems[index]['count'] ==0){
+   removeFromUserCart(id);
+  }
+ }else{
+  if(isIncreased){
+   addToUserCart(id);
+  }
  }
 }
 
@@ -44,12 +71,14 @@ addToUserFav(var id){
  if(!userFav.contains(id)){
   userFav.add(id);
  }
+ saveToUserFavDb(id);
 }
 
 removeFromUserFav(var id){
  if(userFav.contains(id)){
   userFav.remove(id);
  }
+ deleteFromUserFavDb(id);
 }
 
 saveToUserFavDb(var id)async{
@@ -71,7 +100,8 @@ deleteFromUserCartDb(var id)async{
 getUserFav()async{
  var res = await DbOperations().getData(false);
  res.forEach((e){
-  userFav.add(e['iid']);
+  //userFav.add(e['iid']);
+  addToUserFav(e['iid']);
  });
  print("User Fav is - $res  , $userFav");
 }
@@ -79,7 +109,7 @@ getUserFav()async{
 getUserCart()async{
  var res = await DbOperations().getData(true);
  res.forEach((e){
-  userCart.add(e['iid']);
+  addToUserCart(e['iid']);
  });
  print("User cart is - $res  , $userCart");
 }

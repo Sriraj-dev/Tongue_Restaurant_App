@@ -162,11 +162,9 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                                 setState(() {
                                                   if(!userCart.contains(e[index]['id'])){
                                                     addToUserCart(e[index]['id']);
-                                                    saveToUserCartDb(e[index]['id']);
                                                   }else{
                                                     print('trying to remove');
                                                     removeFromUserCart(e[index]['id']);
-                                                    deleteFromUserCartDb(e[index]['id']);
                                                   }
                                                 });
                                               },
@@ -238,10 +236,8 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                                   // }
                                                   if(!userFav.contains(e[index]['id'])){
                                                     addToUserFav(e[index]['id']);
-                                                    saveToUserFavDb(e[index]['id']);
                                                   }else{
                                                     removeFromUserFav(e[index]['id']);
-                                                    deleteFromUserFavDb(e[index]['id']);
                                                   }
                                                 });
                                                 return !isLiked;
@@ -341,4 +337,4 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
 //menupage(last)
 
 //TODO :NetworkPage, MaintainencePage , checkOutBox , Cart, WishList,UserProfile
-//TODO: HomeLocation store, OffersMongodb, SearchBar, Quantity in cart
+//TODO : OffersMongodb, SearchBar, Quantity in cart
