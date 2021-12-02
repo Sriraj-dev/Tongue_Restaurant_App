@@ -131,7 +131,7 @@ class _SignUp2State extends State<SignUp2> {
                                         Navigator.popUntil(context, (route) => false);
                                         Navigator.push(context, MaterialPageRoute(builder: (context)=>PageManager()));
                                       }else{
-                                        showSnackBar(isSignedIn, context);
+                                        showSnackBar(isSignedIn, context,Colors.red);
                                       }
                                     },
                                     child: Text(

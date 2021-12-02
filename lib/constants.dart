@@ -8,10 +8,10 @@ const kTextLightColor = Color(0xFF6A727D);
 const Background_Color = Color(0xFFF2F2F2);
 
 
-void showSnackBar(String isLogin, BuildContext context) { // isLogin == usernmae is incorrect or password is incorect;
+void showSnackBar(String isLogin, BuildContext context,Color color) { // isLogin == usernmae is incorrect or password is incorect;
   final snackBar  = SnackBar(
     content: Text(isLogin) ,
-    backgroundColor: Colors.red,
+    backgroundColor: color,
     padding: EdgeInsets.only(left: 15,right: 15,bottom: 20),
     behavior: SnackBarBehavior.floating,
   );
