@@ -28,9 +28,9 @@ class _PageManagerState extends State<PageManager> {
       userLocation = position;
       userAddress = await LocationServices().getCurrentAddress(position);
       DbOperations().saveHomeAddress(userAddress);
-      print(userAddress);
+      print('Current address is - $userAddress');
     }catch(e){
-      showSnackBar('Unable to access location!', context);
+      showSnackBar('Unable to access location!', context,Colors.red);
     }
   }
   @override

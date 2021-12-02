@@ -52,7 +52,6 @@ class Authentication{
 
     var response = await ApiServices().login(username, password , encrypted);
     if(response['status']=='true'){
-      print(response['msg']);
       if(encrypted == false){
         final encryptedPwd= Security().encrypt(password);
         await Storage().saveData(username, encryptedPwd);

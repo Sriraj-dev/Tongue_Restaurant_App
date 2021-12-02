@@ -99,23 +99,35 @@ deleteFromUserCartDb(var id)async{
 
 getUserFav()async{
  var res = await DbOperations().getData(false);
+ var i =0;
  res.forEach((e){
   //userFav.add(e['iid']);
-  addToUserFav(e['iid']);
+  i++;
+  if(!userFav.contains(e['iid'])){
+   userFav.add(e['iid']);
+  }
  });
- print("User Fav is - $res  , $userFav");
+ print('No.of times loop - $i');
 }
 
 getUserCart()async{
  var res = await DbOperations().getData(true);
+ int j=0;
  res.forEach((e){
-  addToUserCart(e['iid']);
+  Map<String,dynamic> cartItem = {
+   'id': e['iid'],
+   'count': 1
+  };
+  if(!userCart.contains(e['iid'])){
+   userCart.add(e['iid']);
+   billingItems.add(cartItem);
+  }
  });
- print("User cart is - $res  , $userCart");
+ print('no.of time cart loop - $j');
 }
 
 getUserAddress()async{
  var res = await DbOperations().getHomeAddress();
+ //print('No.of addresses = ${res.length}');
  homeAddress = res;
- print('Home address is - $homeAddress');
 }
