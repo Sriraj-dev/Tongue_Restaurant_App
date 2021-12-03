@@ -1,7 +1,10 @@
+import 'package:delivery_app/Screens/trackingScreen.dart';
+import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class checkout extends StatefulWidget {
   //const checkout({Key? key}) : super(key: key);
@@ -15,6 +18,7 @@ class _checkoutState extends State<checkout> {
   num bill;
   _checkoutState(this.bill);
   List<String> address = userAddress.split(',');
+  Position deliveryPosition = userLocation;
   @override
   Widget build(BuildContext context) {
     List e = userCart;
@@ -249,13 +253,32 @@ class _checkoutState extends State<checkout> {
           elevation: 10,
           borderRadius: BorderRadius.circular(30),
           child: GestureDetector(
-            onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => checkout(),
-              //   ), // map == name,cost,id,offer.
-              // );
+            onTap: () async{
+              //TODO: payment.
+              //AfterPayment:
+              Map<String,dynamic> orderDetails ={
+                'customerName' : username,
+                'customerPhone': userPhone,
+                'customerAddress': userAddress,
+                'latitude': deliveryPosition.latitude.toString(),
+                'longitude':deliveryPosition.longitude.toString(),
+                'orderItems':billingItems,
+                'amountPaid':bill.toString(),
+                'branchId':"61a9b1c56a629f43c19616c0",
+                'accepted':false
+              };
+              var res = await ApiServices().placeOrder(orderDetails);
+              if(res!= 'false'){
+                showSnackBar('Order placed!', context, Colors.green);
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context)=>TrackingPage(res))
+                );
+                //TODO: clear User cart from Database;
+              }else{
+                showSnackBar('Failed to place Order', context, Colors.red);
+                Navigator.pop(context);
+              }
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 105, vertical: 20),

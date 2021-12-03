@@ -148,6 +148,7 @@ class ApiServices{
     return response['updateAvailable'];
   }
 
+
   Future getBranches(String cityName)async{
     Map<String,dynamic> data = {
       "cityName": cityName
@@ -162,6 +163,26 @@ class ApiServices{
 
     var result = json.decode(res.body);
     return result['branches'];
+  }
+
+
+  Future placeOrder(Map<String,dynamic> orderDetails)async{
+    print('Trying to place Order');
+    var res = await http.post(
+        Uri.parse(baseUrl +'tongue/currentOrders/add'),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: json.encode(orderDetails)
+    );
+
+    var result = json.decode(res.body);
+    if(result['status']){
+      print('Order Id is - ${result['orderId']}');
+      return result['orderId'];
+    }else{
+      return 'false';
+    }
   }
 
 }

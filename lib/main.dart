@@ -149,15 +149,12 @@ class _LaunchScreenState extends State<LaunchScreen> {
           print('App does not have any updates = $updateAvailable');
           print('getting items from restaurant');
           items = await ApiServices().getItems();
-          print(items.length);
           print('got items from restaurant');
           initialiseCategories();
           initialiseCategoryItems();
           initialiseMenu();
           if(isLogin){
             //if the user is already logged in -->
-            print(value[0]);
-            print(value[1]);
             var isLogin = await Authentication().login(value[0]??'',value[1]??'', true);
             if(isLogin == 'true'){
               getUserInfo();
