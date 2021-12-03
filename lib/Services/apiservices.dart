@@ -148,4 +148,20 @@ class ApiServices{
     return response['updateAvailable'];
   }
 
+  Future getBranches(String cityName)async{
+    Map<String,dynamic> data = {
+      "cityName": cityName
+    };
+    var res = await http.post(
+        Uri.parse(baseUrl+'tongue/branches'),
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: json.encode(data)
+    );
+
+    var result = json.decode(res.body);
+    return result['branches'];
+  }
+
 }
