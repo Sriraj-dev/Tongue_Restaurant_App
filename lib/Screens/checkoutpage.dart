@@ -263,7 +263,8 @@ class _checkoutState extends State<checkout> {
                 'latitude': deliveryPosition.latitude.toString(),
                 'longitude':deliveryPosition.longitude.toString(),
                 'orderItems':billingItems,
-                'amountPaid':bill.toString()
+                'amountPaid':bill.toString(),
+                'accepted':false
               };
               var res = await ApiServices().placeOrder(orderDetails);
               if(res!= 'false'){
