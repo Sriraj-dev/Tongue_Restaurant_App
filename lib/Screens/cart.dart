@@ -5,6 +5,7 @@ import 'package:delivery_app/restaurantModel.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class cart extends StatefulWidget {
@@ -77,11 +78,8 @@ class _cartState extends State<cart> {
                   SizedBox(
                     height: 64,
                   ),
-                  Icon(
-                    Icons.shopping_cart_outlined,
-                    color: kTextLightColor,
-                    size: 250,
-                  ),
+
+                  Lottie.asset('assets/shopping.json'),
                   Center(
                     child: Text(
                       "Cart  is empty",

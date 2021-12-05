@@ -13,6 +13,7 @@ import 'package:delivery_app/Services/storageServices.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
 import 'package:delivery_app/userModel.dart';
+import 'package:lottie/lottie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -110,10 +111,10 @@ class _LaunchScreenState extends State<LaunchScreen> {
           padding: const EdgeInsets.only(top: 32),
           child: Image.asset('assets/images/title_image.png'),
         ),
-        Image.asset('assets/images/splash.png'),
+        Lottie.asset('assets/preparing_food.json'),
         Expanded(child: Container(
           width:  MediaQuery.of(context).copyWith().size.width,
-          color: Colors.black,
+          color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Center(
