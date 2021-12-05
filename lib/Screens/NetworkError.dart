@@ -14,7 +14,7 @@ class _NetworkErrorState extends State<NetworkError> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Lottie.asset('assets/network.json'),
             Text(
