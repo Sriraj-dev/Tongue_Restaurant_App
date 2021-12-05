@@ -160,8 +160,9 @@ class _LaunchScreenState extends State<LaunchScreen> {
           items = await ApiServices().getItems();
           print('got items from restaurant');
           setState(() {
-            loadingValue = 0.8;
+            loadingValue = 0.75;
           });
+          await getUserLocation();
           initialiseCategories();
           initialiseCategoryItems();
           initialiseMenu();

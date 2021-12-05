@@ -1,4 +1,6 @@
 import 'package:delivery_app/Screens/SearchScreen.dart';
+import 'package:delivery_app/Services/DBoperations.dart';
+import 'package:delivery_app/Services/locationServices.dart';
 import 'package:delivery_app/components/SearchBox.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tab_indicator_styler/flutter_tab_indicator_styler.dart';
 import 'package:delivery_app/Screens/dish.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
 
@@ -20,7 +23,6 @@ class homePage extends StatefulWidget {
 //-------------------------------------------------jashwanth-------------------
 class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
   late TabController _tabController;
-
   @override
   void initState() {
     super.initState();
@@ -43,51 +45,55 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
   }
 
   PreferredSize app_bar() {
-    List<String> address = userAddress.split(',');
     return PreferredSize(
       preferredSize: Size.fromHeight(200),
       child: ListView(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 120,
-                height: 48,
-                decoration: BoxDecoration(
-                  color:Colors.white,
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(20),bottomRight: Radius.circular(20)),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 120,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color:Colors.white,
+                    borderRadius: BorderRadius.only(topRight: Radius.circular(20),bottomRight: Radius.circular(20)),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.location_on,
+                        color: kPrimaryColor,
+                      ),
+                     Text(
+                       '${userAddress.split(',')[0]}',
+                       style: TextStyle(
+                         fontWeight: FontWeight.w500
+                       ),
+                     ),
+                    ],
+                  ),
                 ),
-                child: Row(
+                Image.asset(
+                  'assets/images/title_image.png',
+                  height: 50,
+                ),
+                Row(
                   children: [
-                    Icon(
-                      Icons.location_on,
-                      color: kPrimaryColor,
+                    Image.asset(
+                      'assets/images/offers_icon.png',
+                      height: 32,
                     ),
-                    Text('${address[1]}'),
-
-
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: Text('OFFERS',style: TextStyle(fontWeight: FontWeight.bold),),
+                    ),
                   ],
                 ),
-              ),
-              Image.asset(
-                'assets/images/title_image.png',
-                height: 64,
-              ),
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/images/offers_icon.png',
-                    height: 32,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16),
-                    child: Text('OFFERS'),
-                  ),
-
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
           GestureDetector(
             onTap: (){

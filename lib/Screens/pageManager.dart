@@ -22,22 +22,10 @@ class _PageManagerState extends State<PageManager> {
   int currentIndex = 0;
   final pages = [homePage(), wish_list(), cart(), ProfileScreen()];
 
-  void getUserLocation()async{
-    try{
-      Position position = await LocationServices().getCurrentPosition();
-      userLocation = position;
-      userAddress = await LocationServices().getCurrentAddress(position);
-      DbOperations().saveHomeAddress(userAddress);
-      print('Current address is - $userAddress');
-    }catch(e){
-      showSnackBar('Unable to access location!', context,Colors.red);
-    }
-  }
+
   @override
   void initState() {
     super.initState();
-
-    getUserLocation();
   }
 
   @override

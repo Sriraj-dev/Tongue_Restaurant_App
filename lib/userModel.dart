@@ -1,5 +1,7 @@
 import 'package:delivery_app/Services/DBoperations.dart';
 import 'package:delivery_app/Services/apiservices.dart';
+import 'package:delivery_app/Services/locationServices.dart';
+import 'package:delivery_app/constants.dart';
 import 'package:geolocator/geolocator.dart';
 
 String token = '';
@@ -16,6 +18,21 @@ List userFav = [];
 List<Map<String,dynamic>> billingItems = [];// List of Maps where Map = {id:ItemUniqueId  ,count: Count}
 String msg = '';
 List myOrders = [];
+
+Future<int> getUserLocation()async{
+ try{
+  Position position = await LocationServices().getCurrentPosition();
+  userLocation = position;
+  userAddress = await LocationServices().getCurrentAddress(position);
+  DbOperations().saveHomeAddress(userAddress);
+  print('Current address is - $userAddress');
+  return 1;
+ }catch(e){
+  //showSnackBar('Unable to access location!', context,Colors.red);
+  userAddress = 'AccessLocation';
+  return 0;
+ }
+}
 
 getUserInfo() async {
  print('getting User info');
