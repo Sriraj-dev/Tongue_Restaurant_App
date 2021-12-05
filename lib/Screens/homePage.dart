@@ -34,7 +34,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
   );
 
   bool isAdded = false;
-
+  String displayAddress = userAddress.split(',')[0];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,12 +67,18 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                         Icons.location_on,
                         color: kPrimaryColor,
                       ),
+                      (displayAddress.length<=12)?
                      Text(
-                       '${userAddress.split(',')[0]}',
+                       '$displayAddress',
                        style: TextStyle(
                          fontWeight: FontWeight.w500
                        ),
-                     ),
+                     ):Text(
+                        '${displayAddress.substring(0,10)}..',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500
+                        ),
+                      ),
                     ],
                   ),
                 ),
