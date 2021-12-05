@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 class NetworkError extends StatefulWidget {
   const NetworkError({Key? key}) : super(key: key);
@@ -13,11 +14,16 @@ class _NetworkErrorState extends State<NetworkError> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(
-          'No Internet',
-          style: GoogleFonts.lato(
-            fontSize: 17
-          ),
+        child: Column(
+          children: [
+            Lottie.asset('assets/network.json'),
+            Text(
+              'No Internet',
+              style: GoogleFonts.lato(
+                fontSize: 20,
+              ),
+            ),
+          ],
         ),
       ),
     );
