@@ -43,16 +43,49 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
   }
 
   PreferredSize app_bar() {
+    List<String> address = userAddress.split(',');
     return PreferredSize(
       preferredSize: Size.fromHeight(200),
       child: ListView(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Container(
+                width: 120,
+                height: 48,
+                decoration: BoxDecoration(
+                  color:Colors.white,
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(20),bottomRight: Radius.circular(20)),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.location_on,
+                      color: kPrimaryColor,
+                    ),
+                    Text('${address[1]}'),
+
+
+                  ],
+                ),
+              ),
               Image.asset(
                 'assets/images/title_image.png',
                 height: 64,
+              ),
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/images/offers_icon.png',
+                    height: 32,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16),
+                    child: Text('OFFERS'),
+                  ),
+
+                ],
               ),
             ],
           ),
