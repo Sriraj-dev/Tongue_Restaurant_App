@@ -68,6 +68,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
     super.initState();
     route = loadApp();
   }
+  var loadingValue = 0.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,19 +117,18 @@ class _LaunchScreenState extends State<LaunchScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Loading ',style:TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ) ,
-
-                  ),
-                  JumpingText('...'),
-
-                ],
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                child: LiquidLinearProgressIndicator(
+                  value: loadingValue, // Defaults to 0.5.
+                  valueColor: AlwaysStoppedAnimation(kPrimaryColor), // Defaults to the current Theme's accentColor.
+                  backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
+                  borderColor: ksecondaryColor,
+                  borderWidth: 5.0,
+                  borderRadius: 12.0,
+                  direction: Axis.horizontal, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.horizontal.
+                  center: Text("Loading..."),
+                ),
               ),
             ),
           ),
@@ -140,16 +140,28 @@ class _LaunchScreenState extends State<LaunchScreen> {
     //check the internet availability-->
     final network = await checkNetwork();
     if(network){
+      setState(() {
+        loadingValue = 0.15;
+      });
       underMaintenance = await ApiServices().checkMaintenance();
       if(!underMaintenance){
+        setState(() {
+          loadingValue = 0.35;
+        });
         print('App is not under maintenance = $underMaintenance');
         updateAvailable = await ApiServices().checkUpdates();
         if(!updateAvailable){
+          setState(() {
+            loadingValue = 0.5;
+          });
           // initialise the items of restaurant -->
           print('App does not have any updates = $updateAvailable');
           print('getting items from restaurant');
           items = await ApiServices().getItems();
           print('got items from restaurant');
+          setState(() {
+            loadingValue = 0.8;
+          });
           initialiseCategories();
           initialiseCategoryItems();
           initialiseMenu();
@@ -160,28 +172,46 @@ class _LaunchScreenState extends State<LaunchScreen> {
               getUserInfo();
               await getUserFav();
               await getUserCart();
+              setState(() {
+                loadingValue = 1;
+              });
               getUserAddress();
               return 0;
             }else{
+              setState(() {
+                loadingValue = 1;
+              });
               showSnackBar('An error Occured!', context);
               return 5;
             }
           }else{
             //if the user need to login-->
             //return LoginPage();
+            setState(() {
+              loadingValue = 1;
+            });
             return 1;
           }
         }else{
           //if the app has updates available-->
           //return UpdateScreen();
+          setState(() {
+            loadingValue = 1;
+          });
           return 2;
         }
       }else{
         //if the app is under maintenance-->
         //return MaintenanceScreen();
+        setState(() {
+          loadingValue = 1;
+        });
         return 3;
       }
     }else{
+      setState(() {
+        loadingValue = 1;
+      });
       return 4;
     }
   }
