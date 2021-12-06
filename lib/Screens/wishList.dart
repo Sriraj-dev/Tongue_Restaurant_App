@@ -24,9 +24,19 @@ class _wish_listState extends State<wish_list> {
   Widget build(BuildContext context) {
     List e = userFav;
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Background_Color,
+        title: Text('Favourites',
+          style: GoogleFonts.arvo(
+            color: ksecondaryColor
+          ),
+        ),
+        centerTitle: true,
+      ),
         backgroundColor: Background_Color,
         body: Padding(
-          padding: const EdgeInsets.only(top: 32),
+          padding: const EdgeInsets.only(top: 32,left: 10,right: 10),
           child: (e.length == 0)
               ? Container(
                   child: Center(
