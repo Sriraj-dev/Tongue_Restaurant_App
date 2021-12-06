@@ -202,7 +202,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                         children: [
                                           itemDetails(e, index),
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+                                            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 0),
                                             child: ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                 primary: (userCart.contains(e[index]['id']))?ksecondaryColor:kPrimaryColor,
