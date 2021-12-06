@@ -158,7 +158,7 @@ class _cartState extends State<cart> {
                                             GestureDetector(
                                               onTap: (){
                                                 setState(() {
-                                                  changeCount(item['id'], true);
+                                                  changeCount(item['id'], false);
                                                 });
                                               },
                                               child: Container(
