@@ -106,8 +106,9 @@ class _cartState extends State<cart> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
                   child: Material(
+
                     elevation: 10,
-                    color: kPrimaryColor.withOpacity(0.1),
+                    color: kPrimaryColor.withOpacity(1),
                     borderRadius: BorderRadius.circular(30),
                     child: Container(
                       height: 80,
@@ -130,7 +131,7 @@ class _cartState extends State<cart> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.only(top:8.0),
                                 child: Text(item['itemName'],
                                     style: GoogleFonts.lato(
                                       fontSize: 17,
@@ -140,66 +141,90 @@ class _cartState extends State<cart> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(0.0),
+                                      child: Container(
+                                        height: 28,
+                                        width: 84,
+                                        decoration: BoxDecoration(
+                                          color: kPrimaryColor.withOpacity(0.2),
+                                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: (){
+                                                setState(() {
+                                                  changeCount(item['id'], true);
+                                                });
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    color: kPrimaryColor.withOpacity(0.5),
+                                                    borderRadius: BorderRadius.circular(4)
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 6),
+                                                  child: Text(
+                                                    '-',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Container(
+                                              child: Text(
+                                                quantity.toString(),
+                                                style: TextStyle(
+                                                  color:kPrimaryColor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 5),
+                                            GestureDetector(
+                                              onTap: (){
+                                                setState(() {
+                                                  changeCount(item['id'], true);
+                                                });
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    color: kPrimaryColor,
+                                                    borderRadius: BorderRadius.circular(4)
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 5),
+                                                  child: Text(
+                                                    '+',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width:45),
                                     Text(
-                                      '₹' + item['cost'],
+                                      '₹' + (int.parse(item['cost'])*quantity).toString(),
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: kTextLightColor,
                                       ),
                                     ),
-                                    SizedBox(width: 64),
-                                    Container(
-                                      height: 24,
-                                      width: 72,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(12)),
-                                        color: kPrimaryColor,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          GestureDetector(
-                                            onTap:(){
-                                              setState(() {
-                                                changeCount(item['id'], false);
-                                              });
-                                            },
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0),
-                                              child: Container(
-                                                child: Text('-'),
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            child: Container(
-                                              //TODO quantity
-                                              child: Text(quantity.toString()),
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap:(){
-                                              setState(() {
-                                                changeCount(item['id'], true);
-                                              });
-                                            },
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0),
-                                              child: Container(
-                                                child: Text('+'),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+
                                   ],
                                 ),
                               ),
