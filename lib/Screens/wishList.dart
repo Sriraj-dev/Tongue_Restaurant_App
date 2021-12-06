@@ -24,9 +24,19 @@ class _wish_listState extends State<wish_list> {
   Widget build(BuildContext context) {
     List e = userFav;
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Background_Color,
+        title: Text('Favourites',
+          style: GoogleFonts.arvo(
+            color: ksecondaryColor
+          ),
+        ),
+        centerTitle: true,
+      ),
         backgroundColor: Background_Color,
         body: Padding(
-          padding: const EdgeInsets.only(top: 32),
+          padding: const EdgeInsets.only(top: 32,left: 10,right: 10),
           child: (e.length == 0)
               ? Container(
                   child: Center(
@@ -97,7 +107,7 @@ class _wish_listState extends State<wish_list> {
                                         )),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.only(top:6.0),
                                     child: Text(
                                       '₹' + item['cost'],
                                       style: TextStyle(
@@ -106,14 +116,32 @@ class _wish_listState extends State<wish_list> {
                                       ),
                                     ),
                                   ),
-                                  Text(
-                                    item['description'],
-                                    maxLines: 1,
-                                    overflow: TextOverflow.fade,
-                                    softWrap: false,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: kTextLightColor.withOpacity(0.5),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: (userCart.contains(item['id']))?ksecondaryColor:kPrimaryColor,
+                                      // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                                      ),
+                                    ),
+                                    onPressed: (){
+                                      setState(() {
+                                        if(!userCart.contains(item['id'])){
+                                          addToUserCart(item['id']);
+                                        }else{
+                                          print('trying to remove');
+                                          removeFromUserCart(item['id']);
+                                        }
+                                      });
+                                    },
+                                    child: Center(
+                                      child: Text(
+                                        (userCart.contains(item['id']))?'Added':'Add to Cart',
+                                        style: GoogleFonts.lora(
+                                          fontSize: 17,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],

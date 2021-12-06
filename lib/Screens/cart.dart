@@ -139,7 +139,7 @@ class _cartState extends State<cart> {
                                     )),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(0.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -175,6 +175,7 @@ class _cartState extends State<cart> {
                                                       fontWeight: FontWeight.bold,
                                                     ),
                                                   ),
+                                
                                                 ),
                                               ),
                                             ),
@@ -188,6 +189,7 @@ class _cartState extends State<cart> {
                                                 ),
                                               ),
                                             ),
+
                                             SizedBox(width: 5),
                                             GestureDetector(
                                               onTap: (){
@@ -209,6 +211,7 @@ class _cartState extends State<cart> {
                                                       fontWeight: FontWeight.bold,
                                                     ),
                                                   ),
+
                                                 ),
                                               ),
                                             ),
