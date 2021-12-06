@@ -2,8 +2,13 @@ import 'package:delivery_app/Screens/trackingScreen.dart';
 import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/userModel.dart';
+import 'package:delivery_app/Services/BillingServices.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import 'package:geolocator/geolocator.dart';
 
 class checkout extends StatefulWidget {
@@ -204,17 +209,70 @@ class _checkoutState extends State<checkout> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                child: Text(
-                  'Order Summary ',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 16),
+                  child: Text(
+                    'Order Summary',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+
+                    ),
                   ),
                 ),
-              ),
+                //TODO : show order list
+                //dialogueBox
+                GestureDetector(
+                  onTap: (){
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context){
+                          return Dialog(
+                          child:Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Container(
+                              child: Column(crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                                    children: [
+                                      Text('Dish',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.black),),
+                                      Text('Quantity',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.black),),
+                                      Text('Amount',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.black),),
+
+                                    ],
+                                  ),
+                                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                                    children: [
+                                      Text('Chicken biryani'),
+                                      Text('5'),
+                                      Text('1000'),
+
+                                    ],
+                                  ),
+                                  Text('hi'),
+                                  Text('hi'),
+                                  Text('hi'),
+                                ],
+                              ),
+
+                            ),
+                          ),
+                          );
+                        }
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16.0, top: 16),
+                    child: Text('View order',
+                        style: TextStyle(fontSize: 20, color: kPrimaryColor)),
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 32),
@@ -301,3 +359,4 @@ class _checkoutState extends State<checkout> {
     );
   }
 }
+
