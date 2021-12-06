@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class TrackingPage extends StatefulWidget {
   //const TrackingPage({Key? key}) : super(key: key);
@@ -14,13 +15,22 @@ class _TrackingPageState extends State<TrackingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text(
-          orderId,
-          style: TextStyle(
-            fontSize: 20
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Lottie.asset(
+            'assets/67225-delivery-food-interaction.json',
           ),
-        ),
+          Center(
+            child: Text(
+              orderId,
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

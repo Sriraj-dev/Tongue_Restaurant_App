@@ -91,10 +91,65 @@ class _checkoutState extends State<checkout> {
                 ),
                 //TODO : Ask User to choose homeLocation or currentLocation.
                 //dialogueBox
-                Padding(
-                  padding: const EdgeInsets.only(right: 16.0, top: 16),
-                  child: Text('change',
-                      style: TextStyle(fontSize: 20, color: kPrimaryColor)),
+                GestureDetector(
+                  onTap: (){
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context){
+                          return Dialog(
+                            child: Container(
+                              height: 130,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Row(mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Icon(Icons.check_box_outline_blank ),
+                                        SizedBox(width:48),
+                                        Text(
+                                          'Home ',
+                                          style: TextStyle(
+                                              fontSize: 20, color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                                    child: Container(
+                                      height: 1,
+                                      color: kPrimaryColor,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Row(mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Icon(Icons.check_box_outline_blank ),
+                                        SizedBox(width:48),
+                                        Text(
+                                          'Current Location ',
+                                          style: TextStyle(
+                                              fontSize: 20, color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16.0, top: 16),
+                    child: Text('change',
+                        style: TextStyle(fontSize: 20, color: kPrimaryColor)),
+                  ),
                 ),
               ],
             ),

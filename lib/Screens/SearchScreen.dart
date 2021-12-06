@@ -6,6 +6,7 @@ import 'package:delivery_app/userModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
+import 'package:lottie/lottie.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -26,10 +27,10 @@ class _SearchScreenState extends State<SearchScreen> {
     searchItems = allItems;
   }
 
-  setSearchItems(String searchText){
+  setSearchItems(String searchText) {
     List tempList = [];
     allItems.forEach((e) {
-      if(e['itemName'].toLowerCase().contains(searchText.toLowerCase())){
+      if (e['itemName'].toLowerCase().contains(searchText.toLowerCase())) {
         tempList.add(e);
       }
     });
@@ -59,8 +60,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   : Text(
                       'Found ${searchItems.length} results',
                       style: GoogleFonts.lora(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22),
+                          fontWeight: FontWeight.bold, fontSize: 22),
                     ),
               showSearchItems(),
             ],
@@ -70,177 +70,216 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-   showSearchItems() {
+  showSearchItems() {
     return Container(
-      height: MediaQuery.of(context).size.height*0.8,
-      child: ListView.builder(
-                itemCount: searchItems.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                Dish(searchItems[index])), // map == name,cost,id,offer.
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(13.0),
-                      child: Material(
-                        elevation: 5,
-                        shadowColor: kPrimaryColor.withOpacity(0.5),
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        child: Container(
-                          //height: MediaQuery.of(context).size.height*0.15,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Row(
-                                    children: [
-                                      //itemImage
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Hero(
-                                          tag: searchItems[index]['id'],
-                                          child: Image.network(
-                                            searchItems[index]['image'],
-                                            height: 100,
-                                          ),
+      height: MediaQuery.of(context).size.height * 0.8,
+      child: (searchItems.isEmpty)
+          ? Container(
+              child: Lottie.asset(
+                'assets/search.json',
+              ),
+            )
+          : ListView.builder(
+              itemCount: searchItems.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Dish(searchItems[
+                              index])), // map == name,cost,id,offer.
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(13.0),
+                    child: Material(
+                      elevation: 5,
+                      shadowColor: kPrimaryColor.withOpacity(0.5),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      child: Container(
+                        //height: MediaQuery.of(context).size.height*0.15,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  children: [
+                                    //itemImage
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Hero(
+                                        tag: searchItems[index]['id'],
+                                        child: Image.network(
+                                          searchItems[index]['image'],
+                                          height: 100,
                                         ),
                                       ),
-                                      Column(
-                                        children: [
-                                          itemDetails(searchItems, index),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
-                                            child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                primary: (userCart.contains(searchItems[index]['id']))?ksecondaryColor:kPrimaryColor,
-                                                // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
-                                                shape: const RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                                                ),
+                                    ),
+                                    Column(
+                                      children: [
+                                        itemDetails(searchItems, index),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5, vertical: 5),
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              primary: (userCart.contains(
+                                                      searchItems[index]['id']))
+                                                  ? ksecondaryColor
+                                                  : kPrimaryColor,
+                                              // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10)),
                                               ),
-                                              onPressed: (){
-                                                setState(() {
-                                                  if(!userCart.contains(searchItems[index]['id'])){
-                                                    addToUserCart(searchItems[index]['id']);
-                                                  }else{
-                                                    print('trying to remove');
-                                                    removeFromUserCart(searchItems[index]['id']);
-                                                  }
-                                                });
-                                              },
-                                              child: Center(
-                                                child: Text(
-                                                  (userCart.contains(searchItems[index]['id']))?'Added':'Add to Cart',
-                                                  style: GoogleFonts.lora(
-                                                    fontSize: 17,
-                                                    color: Colors.white,
-                                                  ),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                if (!userCart.contains(
+                                                    searchItems[index]['id'])) {
+                                                  addToUserCart(
+                                                      searchItems[index]['id']);
+                                                } else {
+                                                  print('trying to remove');
+                                                  removeFromUserCart(
+                                                      searchItems[index]['id']);
+                                                }
+                                              });
+                                            },
+                                            child: Center(
+                                              child: Text(
+                                                (userCart.contains(
+                                                        searchItems[index]
+                                                            ['id']))
+                                                    ? 'Added'
+                                                    : 'Add to Cart',
+                                                style: GoogleFonts.lora(
+                                                  fontSize: 17,
+                                                  color: Colors.white,
                                                 ),
                                               ),
                                             ),
                                           ),
-
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 10,right: 4),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 10),
-                                              child: Container(
-                                                width: 16,
-                                                height: 16,
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                    color: (searchItems[index]['type'] == 'veg')
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 10, right: 4),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: Container(
+                                              width: 16,
+                                              height: 16,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: (searchItems[index]
+                                                              ['type'] ==
+                                                          'veg')
+                                                      ? Colors.green
+                                                      : Colors.red,
+                                                ),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(4)),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(2.0),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: (searchItems[index]
+                                                                ['type'] ==
+                                                            'veg')
                                                         ? Colors.green
                                                         : Colors.red,
                                                   ),
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(4)),
-                                                ),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(2.0),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: (searchItems[index]['type'] == 'veg')
-                                                          ? Colors.green
-                                                          : Colors.red,
-                                                    ),
-                                                  ),
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(height: 70,),
-                                            LikeButton(
-                                              //onTap: onLikeButtonTapped(isLiked,e[index]),
-                                              isLiked: userFav.contains(searchItems[index]['id']),
-                                              likeBuilder: (isLiked){
-                                                final color = isLiked? Colors.red:Colors.grey;
-                                                return Icon(Icons.favorite,color: color,size: 30,);
-                                              },
-                                              onTap: (isLiked)async{
-                                                setState(() {
-                                                  // if (!userFav.contains(e[index]))
-                                                  //   userFav.add(e[index]);
-                                                  // else {
-                                                  //   userFav.remove(e[index]);
-                                                  // }
-                                                  if(!userFav.contains(searchItems[index]['id'])){
-                                                    addToUserFav(searchItems[index]['id']);
-                                                  }else{
-                                                    removeFromUserFav(searchItems[index]['id']);
-                                                  }
-                                                });
-                                                return !isLiked;
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                              SizedBox(height: 0,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-
-                                ],
-                              ),
-                            ],
-                          ),
+                                          ),
+                                          SizedBox(
+                                            height: 70,
+                                          ),
+                                          LikeButton(
+                                            //onTap: onLikeButtonTapped(isLiked,e[index]),
+                                            isLiked: userFav.contains(
+                                                searchItems[index]['id']),
+                                            likeBuilder: (isLiked) {
+                                              final color = isLiked
+                                                  ? Colors.red
+                                                  : Colors.grey;
+                                              return Icon(
+                                                Icons.favorite,
+                                                color: color,
+                                                size: 30,
+                                              );
+                                            },
+                                            onTap: (isLiked) async {
+                                              setState(() {
+                                                // if (!userFav.contains(e[index]))
+                                                //   userFav.add(e[index]);
+                                                // else {
+                                                //   userFav.remove(e[index]);
+                                                // }
+                                                if (!userFav.contains(
+                                                    searchItems[index]['id'])) {
+                                                  addToUserFav(
+                                                      searchItems[index]['id']);
+                                                } else {
+                                                  removeFromUserFav(
+                                                      searchItems[index]['id']);
+                                                }
+                                              });
+                                              return !isLiked;
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 0,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [],
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  );
-                }),
+                  ),
+                );
+              }),
     );
   }
 
   Padding itemDetails(e, int index) {
     return Padding(
-      padding: const EdgeInsets.only(top: 15,bottom: 10),
+      padding: const EdgeInsets.only(top: 15, bottom: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -266,7 +305,6 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
-
 
   PreferredSize topBar(BuildContext context) {
     return PreferredSize(

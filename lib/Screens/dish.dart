@@ -205,16 +205,21 @@ class _DishState extends State<Dish> {
                                   });
                                 },
                                 child: Container(
-                                  child: Text(
-                                    '-',
-                                    style: TextStyle(
+                                  decoration: BoxDecoration(
                                       color: kPrimaryColor,
-                                      fontWeight: FontWeight.bold,
-
+                                      borderRadius: BorderRadius.circular(4)
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 7),
+                                    child: Text(
+                                      '-',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
-
                               ),
                               SizedBox(width: 5),
                               Container(
