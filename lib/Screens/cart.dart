@@ -138,7 +138,7 @@ class _cartState extends State<cart> {
                                     )),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(0.0),
                                 child: Row(
                                   children: [
                                     Text(
@@ -150,8 +150,8 @@ class _cartState extends State<cart> {
                                     ),
                                     SizedBox(width: 64),
                                     Container(
-                                      height: 24,
-                                      width: 72,
+                                      height: 32,
+                                      width: 96,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(12)),
@@ -169,9 +169,13 @@ class _cartState extends State<cart> {
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0),
+                                                  horizontal: 0.0),
                                               child: Container(
-                                                child: Text('-'),
+
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text('-',style: TextStyle(fontSize: 24),),
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -191,9 +195,12 @@ class _cartState extends State<cart> {
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0),
+                                                  horizontal: 0.0),
                                               child: Container(
-                                                child: Text('+'),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text('+'),
+                                                ),
                                               ),
                                             ),
                                           ),
