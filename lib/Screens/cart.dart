@@ -138,6 +138,7 @@ class _cartState extends State<cart> {
                                       color: kTextColor,
                                     )),
                               ),
+                              SizedBox(height: 6,),
                               Padding(
                                 padding: const EdgeInsets.all(0.0),
                                 child: Row(
