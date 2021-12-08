@@ -142,7 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         width: 16,
                       ),
-                      Icon(Icons.support_agent_rounded),
+                      Icon(Icons.help_outline_outlined),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
@@ -183,7 +183,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         width: 16,
                       ),
-                      Icon(Icons.support_agent_rounded),
+                      Icon(Icons.group_add_outlined),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
@@ -224,7 +224,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         width: 16,
                       ),
-                      Icon(Icons.support_agent_rounded),
+                      Icon(Icons.power_settings_new_rounded ),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
