@@ -55,4 +55,9 @@ class LocalDB{
     await db.rawDelete('DELETE FROM $tableName WHERE iid = ?',[id]);
   }
 
+  clearTable(String tableName)async{
+    final db = await instance.database;
+
+    await db.rawDelete('DELETE FROM $tableName');
+  }
 }
