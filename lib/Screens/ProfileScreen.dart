@@ -1,7 +1,11 @@
+import 'package:delivery_app/Services/DBoperations.dart';
+import 'package:delivery_app/Services/localStorage.dart';
+import 'package:delivery_app/Services/storageServices.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
@@ -217,36 +221,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
               decoration: BoxDecoration(
                   color: kPrimaryColor.withOpacity(0.06),
                   borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Icon(Icons.power_settings_new_rounded ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          'Logout',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: kPrimaryColor.withOpacity(0.4),
-                              fontSize: 18),
+              child: InkWell(
+                onTap: (){
+                  //logOutCurrentUser();
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 16,
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Icon(Icons.navigate_next_rounded),
-                      SizedBox(
-                        width: 16,
-                      ),
-                    ],
-                  ),
-                ],
+                        Icon(Icons.power_settings_new_rounded ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            'Logout',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor.withOpacity(0.4),
+                                fontSize: 18),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(Icons.navigate_next_rounded),
+                        SizedBox(
+                          width: 16,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -254,4 +263,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
+  // void logOutCurrentUser() async{
+  //   await Storage().deleteData();
+  //   await DbOperations().clearDataBase();
+  //   await LocalDB.instance.close();
+  //   Navigator.of(context).popUntil((route) => false);
+  //   Phoenix.rebirth(context);
+  //   //Navigator.push(context, route)
+  // }
 }

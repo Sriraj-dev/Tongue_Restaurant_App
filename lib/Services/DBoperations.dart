@@ -20,6 +20,15 @@ class DbOperations{
 
     LocalDB.instance.delete(tableName, id);
   }
+  clearDataBase()async{
+    String tableName = 'user_cartItems';
+
+    await LocalDB.instance.clearTable(tableName);
+    tableName = 'user_favItems';
+    await LocalDB.instance.clearTable(tableName);
+    tableName = 'user_homeAddress';
+    await LocalDB.instance.clearTable(tableName);
+  }
   saveHomeAddress(String address)async{
     String tableName = 'user_homeAddress';
 
