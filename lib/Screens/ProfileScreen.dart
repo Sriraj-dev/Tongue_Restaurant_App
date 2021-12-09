@@ -20,20 +20,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: Background_Color,
 
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
             height: 30,
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0,top: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                //TODO order history
-                Icon(Icons.history,size: 40,color: kPrimaryColor.withOpacity(0.5),),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(right: 16.0,top: 16),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.end,
+          //     children: [
+          //       //TODO order history
+          //       Icon(Icons.history,size: 40,color: kPrimaryColor.withOpacity(0.5),),
+          //     ],
+          //   ),
+          // ),
           Center(
             child: Container(
               child: Lottie.asset(
@@ -98,31 +99,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           //TODO address overflow condition
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
             child: Container(
-
-              height: 100,
+             // height: 100,
               decoration: BoxDecoration(
                   color: kPrimaryColor.withOpacity(0.03),
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          userAddress,
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                          maxLines: 3,
+                  SizedBox(width: 10,),
+                  Icon(Icons.home),
+                  SizedBox(width: 15,),
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.7,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 5),
+                      child: Text(
+                        userAddress.substring(0,(userAddress.length>125)?125:userAddress.length),
+                        style: TextStyle(
+                          fontSize: 18,
                         ),
+                        //maxLines: 3,
                       ),
-                    ],
+                    ),
                   ),
-                  // Icon(Icons.edit_location_alt )
+                  Icon(Icons.change_circle_rounded)
                 ],
               ),
             ),
@@ -183,11 +184,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         width: 16,
                       ),
-                      Icon(Icons.group_add_outlined),
+                      Icon(Icons.history),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
-                          'Refer and Earn',
+                          'My Orders',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: kPrimaryColor.withOpacity(0.4),
@@ -254,11 +255,3 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-//
-// (username == '')
-// ? Text('Username not found')
-// : Text('User found = $username',
-// style: GoogleFonts.lato(
-// fontSize: 17,
-// ),
-// ),
