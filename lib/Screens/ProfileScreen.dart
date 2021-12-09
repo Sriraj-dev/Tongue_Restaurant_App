@@ -1,7 +1,11 @@
+import 'package:delivery_app/Services/DBoperations.dart';
+import 'package:delivery_app/Services/localStorage.dart';
+import 'package:delivery_app/Services/storageServices.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
@@ -20,10 +24,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: Background_Color,
 
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            height: 50,
+            height: 30,
           ),
+          // Padding(
+          //   padding: const EdgeInsets.only(right: 16.0,top: 16),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.end,
+          //     children: [
+          //       //TODO order history
+          //       Icon(Icons.history,size: 40,color: kPrimaryColor.withOpacity(0.5),),
+          //     ],
+          //   ),
+          // ),
           Center(
             child: Container(
               child: Lottie.asset(
@@ -88,32 +103,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           //TODO address overflow condition
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
             child: Container(
-
-              height: 100,
+              // height: 100,
               decoration: BoxDecoration(
                   color: kPrimaryColor.withOpacity(0.03),
                   borderRadius: BorderRadius.all(Radius.circular(20))),
-              child:  Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
-                  Expanded(
+                  SizedBox(width: 10,),
+                  Icon(Icons.home),
+                  SizedBox(width: 15,),
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.7,
                     child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Container(
-                        child: Column(
-                          children: [
-                            Text(userAddress,style:TextStyle(color: kTextLightColor,fontSize: 20)),
-                          ],
+                      padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 5),
+                      child: Text(
+                        userAddress.substring(0,(userAddress.length>125)?125:userAddress.length),
+                        style: TextStyle(
+                          fontSize: 18,
                         ),
+                        //maxLines: 3,
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.edit_location_alt_outlined),
-                  )
+                  Icon(Icons.change_circle_rounded)
                 ],
               ),
             ),
@@ -174,7 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         width: 16,
                       ),
-              Icon(Icons.history),
+                      Icon(Icons.history),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
@@ -207,36 +221,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
               decoration: BoxDecoration(
                   color: kPrimaryColor.withOpacity(0.06),
                   borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Icon(Icons.power_settings_new_rounded ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          'Logout',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: kPrimaryColor.withOpacity(0.4),
-                              fontSize: 18),
+              child: InkWell(
+                onTap: (){
+                  //logOutCurrentUser();
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 16,
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Icon(Icons.navigate_next_rounded),
-                      SizedBox(
-                        width: 16,
-                      ),
-                    ],
-                  ),
-                ],
+                        Icon(Icons.power_settings_new_rounded ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            'Logout',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor.withOpacity(0.4),
+                                fontSize: 18),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(Icons.navigate_next_rounded),
+                        SizedBox(
+                          width: 16,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -244,12 +263,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
+// void logOutCurrentUser() async{
+//   await Storage().deleteData();
+//   await DbOperations().clearDataBase();
+//   await LocalDB.instance.close();
+//   Navigator.of(context).popUntil((route) => false);
+//   Phoenix.rebirth(context);
+//   //Navigator.push(context, route)
+// }
 }
-//
-// (username == '')
-// ? Text('Username not found')
-// : Text('User found = $username',
-// style: GoogleFonts.lato(
-// fontSize: 17,
-// ),
-// ),
