@@ -105,6 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
             child: Container(
+
              // height: 100,
               decoration: BoxDecoration(
                   color: kPrimaryColor.withOpacity(0.03),
