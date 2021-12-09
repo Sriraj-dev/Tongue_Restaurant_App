@@ -105,7 +105,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
             child: Container(
-              // height: 100,
+
+             // height: 100,
               decoration: BoxDecoration(
                   color: kPrimaryColor.withOpacity(0.03),
                   borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -264,12 +265,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-// void logOutCurrentUser() async{
-//   await Storage().deleteData();
-//   await DbOperations().clearDataBase();
-//   await LocalDB.instance.close();
-//   Navigator.of(context).popUntil((route) => false);
-//   Phoenix.rebirth(context);
-//   //Navigator.push(context, route)
-// }
+  // void logOutCurrentUser() async{
+  //   await Storage().deleteData();
+  //   await DbOperations().clearDataBase();
+  //   await LocalDB.instance.close();
+  //   Navigator.of(context).popUntil((route) => false);
+  //   Phoenix.rebirth(context);
+  //   //Navigator.push(context, route)
+  // }
 }

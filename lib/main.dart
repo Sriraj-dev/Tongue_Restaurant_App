@@ -13,6 +13,7 @@ import 'package:delivery_app/Services/storageServices.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
 import 'package:delivery_app/userModel.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,46 +24,33 @@ import 'package:geolocator/geolocator.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  bool isLogin = false;
-  final value  = await Storage().getData();
-  print('value is - $value');
-  if(value[0]!=null){
-    isLogin = true;
-  }else{
-    isLogin = false;
-  }
   runApp(
-      MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: kPrimaryColor ,
-          scaffoldBackgroundColor: Colors.white ,
-          textTheme: TextTheme(
-          bodyText1: TextStyle(color: ksecondaryColor ),
-            bodyText2: TextStyle(color: ksecondaryColor ),
-          ) ,
-        ),
-        home: LaunchScreen(isLogin,value),
-  )
+      Phoenix(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: kPrimaryColor ,
+            scaffoldBackgroundColor: Colors.white ,
+            textTheme: TextTheme(
+            bodyText1: TextStyle(color: ksecondaryColor ),
+              bodyText2: TextStyle(color: ksecondaryColor ),
+            ) ,
+          ),
+          home: LaunchScreen(),
+  ),
+      )
   );
 }
 
 class LaunchScreen extends StatefulWidget {
   //const LaunchScreen({Key? key}) : super(key: key);
-  bool isLogin;
-  List<String?> value;
-  LaunchScreen(this.isLogin,this.value);
   @override
-  _LaunchScreenState createState() => _LaunchScreenState(isLogin,value);
+  _LaunchScreenState createState() => _LaunchScreenState();
 }
 
 class _LaunchScreenState extends State<LaunchScreen> {
-  bool isLogin;
-  List<String?> value;
-  _LaunchScreenState(this.isLogin,this.value);
 
   late Future<int> route;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -144,6 +132,14 @@ class _LaunchScreenState extends State<LaunchScreen> {
       setState(() {
         loadingValue = 0.15;
       });
+      bool isLogin = false;
+      final value  = await Storage().getData();
+      print('value is - $value');
+      if(value[0]!=null){
+        isLogin = true;
+      }else{
+        isLogin = false;
+      }
       underMaintenance = await ApiServices().checkMaintenance();
       if(!underMaintenance){
         setState(() {
