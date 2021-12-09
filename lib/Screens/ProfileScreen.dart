@@ -22,17 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Column(
         children: [
           SizedBox(
-            height: 30,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0,top: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                //TODO order history
-                Icon(Icons.history,size: 40,color: kPrimaryColor.withOpacity(0.5),),
-              ],
-            ),
+            height: 50,
           ),
           Center(
             child: Container(
@@ -105,24 +95,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
               decoration: BoxDecoration(
                   color: kPrimaryColor.withOpacity(0.03),
                   borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child:  Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          userAddress,
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                          maxLines: 3,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Text(userAddress,style:TextStyle(color: kTextLightColor,fontSize: 20)),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                  // Icon(Icons.edit_location_alt )
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.edit_location_alt_outlined),
+                  )
                 ],
               ),
             ),
@@ -183,11 +174,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         width: 16,
                       ),
-                      Icon(Icons.group_add_outlined),
+              Icon(Icons.history),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
-                          'Refer and Earn',
+                          'My Orders',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: kPrimaryColor.withOpacity(0.4),
