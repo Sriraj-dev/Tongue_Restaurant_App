@@ -32,7 +32,7 @@ class _cartState extends State<cart> {
         ),
       ),
       body: example(e),
-      floatingActionButton: (!e.isEmpty)?
+      floatingActionButton: (e.isEmpty)?Container():
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Column(mainAxisAlignment: MainAxisAlignment.end,
@@ -90,7 +90,7 @@ class _cartState extends State<cart> {
             ),
           ],
         ),
-      ):Container()
+      )
     );
   }
 
