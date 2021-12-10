@@ -32,7 +32,8 @@ class _cartState extends State<cart> {
         ),
       ),
       body: example(e),
-      floatingActionButton: Padding(
+      floatingActionButton: (!e.isEmpty)?
+      Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Column(mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -50,8 +51,8 @@ class _cartState extends State<cart> {
 
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(20))
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(20))
 
                 ),
 
@@ -66,7 +67,7 @@ class _cartState extends State<cart> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => checkout(totalCost),
+                      builder: (context) => checkout(totalCost),
                     ),// map == name,cost,id,offer.
                   );
                 },
@@ -89,7 +90,7 @@ class _cartState extends State<cart> {
             ),
           ],
         ),
-      ),
+      ):Container()
     );
   }
 

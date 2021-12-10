@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:delivery_app/Screens/my_orders.dart';
 
 // username , email , phone , address
 class ProfileScreen extends StatefulWidget {
@@ -180,44 +181,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-          //TODO refer and earn
+          //TODO my orders
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
-            child: Container(
-              height: 48,
-              decoration: BoxDecoration(
-                  color: kPrimaryColor.withOpacity(0.06),
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Icon(Icons.history),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          'My Orders',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: kPrimaryColor.withOpacity(0.4),
-                              fontSize: 18),
+            child: GestureDetector(
+              onTap: (){Navigator.push(context,
+                  MaterialPageRoute(builder: (context)=> order_history())
+              );
+              },
+              child: Container(
+                height: 48,
+                decoration: BoxDecoration(
+                    color: kPrimaryColor.withOpacity(0.06),
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 16,
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Icon(Icons.navigate_next_rounded),
-                      SizedBox(
-                        width: 16,
-                      ),
-                    ],
-                  ),
-                ],
+                        Icon(Icons.history),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            'My Orders',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor.withOpacity(0.4),
+                                fontSize: 18),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(Icons.navigate_next_rounded),
+                        SizedBox(
+                          width: 16,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
