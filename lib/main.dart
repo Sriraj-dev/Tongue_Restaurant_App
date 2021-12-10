@@ -234,13 +234,11 @@ class _LaunchScreenState extends State<LaunchScreen> {
 
 
 }
-//TODO : search
-//TODO : user login
-//TODO : restaurant side website(includes consolidation and assigning of the delivery persons)
+
+
+
 //TODO : gps for the driver
 //TODO : location of the client
-//TODO : call through app
-//TODO : wishlist
 //TODO : payment gateway
 //TODO : offers
 //TODO : review and ratings
