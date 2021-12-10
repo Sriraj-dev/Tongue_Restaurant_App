@@ -50,7 +50,7 @@ class _cartState extends State<cart> {
 
                 ),
                 decoration: BoxDecoration(
-                  color: kPrimaryColor.withOpacity(0.2),
+                  color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(20))
 
                 ),

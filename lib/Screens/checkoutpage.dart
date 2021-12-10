@@ -124,48 +124,6 @@ class _checkoutState extends State<checkout> {
                                       title: Text('Current'),
                                       onChanged: (value) =>
                                           setState(() => this.value = value!)),
-                                  // Padding(
-                                  //   padding: const EdgeInsets.all(16.0),
-                                  //   child: Row(
-                                  //     mainAxisAlignment:
-                                  //         MainAxisAlignment.start,
-                                  //     children: [
-                                  //       Icon(Icons.check_box_outline_blank),
-                                  //       SizedBox(width: 48),
-                                  //       Text(
-                                  //         'Home ',
-                                  //         style: TextStyle(
-                                  //             fontSize: 20,
-                                  //             color: Colors.black),
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                  // Padding(
-                                  //   padding: const EdgeInsets.symmetric(
-                                  //       horizontal: 32.0),
-                                  //   child: Container(
-                                  //     height: 1,
-                                  //     color: kPrimaryColor,
-                                  //   ),
-                                  // ),
-                                  // Padding(
-                                  //   padding: const EdgeInsets.all(16.0),
-                                  //   child: Row(
-                                  //     mainAxisAlignment:
-                                  //         MainAxisAlignment.start,
-                                  //     children: [
-                                  //       Icon(Icons.check_box_outline_blank),
-                                  //       SizedBox(width: 48),
-                                  //       Text(
-                                  //         'Current Location ',
-                                  //         style: TextStyle(
-                                  //             fontSize: 20,
-                                  //             color: Colors.black),
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                             ),
@@ -340,28 +298,55 @@ class _checkoutState extends State<checkout> {
     );
   }
 
-  ListView total_order(List<dynamic> e) {
-    return ListView.builder(
-        itemCount: e.length,
-        itemBuilder: (context, index) {
-          var req = menu.firstWhere((map) {
-            return map['id'] == e[index];
-          });
-          var item = req['item'];
-          return Container(
-            height: 35,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(width:100,child: Text(item['itemName'])),
-                  Container(width:50,child: Text(getCount(e[index]).toString())),
-                  Container(width:50,child: Text(item['cost'])),
-                ],
-              ),
-            ),
-          );
-        });
+  Column total_order(List<dynamic> e) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(width:100,child: Text('Dish',style:TextStyle(fontWeight:FontWeight.bold ,color:Colors.black))),
+              Container(width:60,child: Text('quantity',style:TextStyle(fontWeight:FontWeight.bold,color:Colors.black))),
+              Container(width:50,child: Text('Amount',style:TextStyle(fontWeight:FontWeight.bold,color:Colors.black))),
+            ],
+          ),
+        ),
+        Container(
+          height: 135,
+          child: ListView.builder(
+              itemCount: e.length,
+              itemBuilder: (context, index) {
+                var req = menu.firstWhere((map) {
+                  return map['id'] == e[index];
+                });
+                var item = req['item'];
+                return Container(
+                  height: 35,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(width:100,child: Text(item['itemName'],style:TextStyle(color:Colors.black))),
+                        Container(width:50,child: Text(getCount(e[index]).toString(),style:TextStyle(color:Colors.black))),
+                        Container(width:50,child: Text('₹ '+item['cost'],style:TextStyle(color:Colors.black))),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(width:150,child: Text('Delivery charges',style:TextStyle(fontWeight:FontWeight.bold ,color:Colors.black))),
+              Container(width:50,child: Text('₹ 20',style:TextStyle(fontWeight:FontWeight.bold,color:Colors.black))),
+            ],
+          ),
+        ),
+
+      ],
+    );
   }
 }
 //
