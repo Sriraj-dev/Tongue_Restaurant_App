@@ -92,6 +92,22 @@ class ApiServices{
 
   }
 
+  Future changePhone(String token,String newPhone)async{
+    Map<String,dynamic> data = {
+      'phone': newPhone
+    };
+    var res = await http.patch(
+      Uri.parse(baseUrl+'user/updatePhone'),
+      headers: {
+        "Content_Type":"application/json",
+        "Authorization": token
+      },
+      body: json.encode(data)
+    );
+    var result = json.decode(res.body);
+    return result['status'];
+  }
+
   Future getUserInfo(String token)async{
     var res = await http.get(
         Uri.parse(baseUrl+'user/info'),
@@ -185,4 +201,64 @@ class ApiServices{
     }
   }
 
+  Future addToMyOrders(String orderId,String branchId,String token)async{
+    Map<String,dynamic> orderDetails = {
+      'orderId': orderId,
+      'branchId':branchId
+    };
+    Map<String,dynamic> data = {
+      'orderDetails': orderDetails
+    };
+    var res = await http.patch(
+        Uri.parse(baseUrl+ 'user/addToMyOrders'),
+      headers: {
+        "Content_Type":"application/json",
+        "Authorization": token
+      },
+      body: json.encode(data)
+    );
+
+    var result = json.decode(res.body);
+    if(result['status']){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  Future getMyOrders(String token)async{
+    var res = await http.get(
+        Uri.parse(baseUrl+'user/getMyOrders'),
+      headers: {
+        "Content_Type":"application/json",
+        "Authorization": token
+      },
+    );
+    var result = json.decode(res.body);
+    if(result['status']){
+      return result['myOrders'];
+    }else{
+      return false;
+    }
+  }
+
+  Future getOrderDetails(String orderId,String branchId)async{
+    Map<String,dynamic> data= {
+      'orderId':orderId,
+      'branchId':branchId
+    };
+    var res = await http.post(
+        Uri.parse(baseUrl+'tongue/currentOrders/navigate'),
+      headers: {
+        "Content_Type":"application/json"
+      },
+      body: json.encode(data)
+    );
+    var result  = json.decode(res.body);
+    if(result['status']){
+      return result['order'];
+    }else{
+      return result['msg'];
+    }
+  }
 }
