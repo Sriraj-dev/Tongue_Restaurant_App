@@ -3,6 +3,7 @@ import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:delivery_app/Services/BillingServices.dart';
+import 'package:delivery_app/restaurantModel.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,58 +21,65 @@ class checkout extends StatefulWidget {
 }
 
 class _checkoutState extends State<checkout> {
+
   num bill;
   _checkoutState(this.bill);
   List<String> address = userAddress.split(',');
   Position deliveryPosition = userLocation;
+  bool value = true;
+
   @override
   Widget build(BuildContext context) {
     List e = userCart;
+
     return Scaffold(
       backgroundColor: Background_Color,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 48.0, left: 16),
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                ),
-                child: IconButton(
-                  iconSize: 25,
-                  // onPressed: () {
-                  //   Navigator.pop(context);
-                  // },
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios_outlined,
-                    color: kTextColor,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 48.0, left: 16),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                  child: IconButton(
+                    iconSize: 25,
+                    // onPressed: () {
+                    //   Navigator.pop(context);
+                    // },
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios_outlined,
+                      color: kTextColor,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 64, top: 48),
-              child: Text(
-                'CHECKOUT',
-                style: TextStyle(
-                    fontSize: 24,
-                    color: kPrimaryColor,
-                    fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.only(left: 64, top: 48),
+                child: Text(
+                  'CHECKOUT',
+                  style: TextStyle(
+                      fontSize: 24,
+                      color: kPrimaryColor,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       body: Container(
-        height: MediaQuery.of(context).size.height*0.75,
+        height: MediaQuery.of(context).size.height * 0.75,
         child: ListView(
           //crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -85,65 +93,84 @@ class _checkoutState extends State<checkout> {
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.black,
-
                     ),
                   ),
                 ),
                 //TODO : Ask User to choose homeLocation or currentLocation.
                 //dialogueBox
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     showDialog(
                         context: context,
-                        builder: (BuildContext context){
+                        builder: (BuildContext context) {
                           return Dialog(
                             child: Container(
                               height: 130,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              child: ListView(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Row(mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Icon(Icons.check_box_outline_blank ),
-                                        SizedBox(width:48),
-                                        Text(
-                                          'Home ',
-                                          style: TextStyle(
-                                              fontSize: 20, color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                                    child: Container(
-                                      height: 1,
-                                      color: kPrimaryColor,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Row(mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Icon(Icons.check_box_outline_blank ),
-                                        SizedBox(width:48),
-                                        Text(
-                                          'Current Location ',
-                                          style: TextStyle(
-                                              fontSize: 20, color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
+                                  CheckboxListTile(
+                                      activeColor: kPrimaryColor,
+                                      controlAffinity:
+                                          ListTileControlAffinity.leading,
+                                      value: value,
+                                      title: Text('Home'),
+                                      onChanged: (value) =>
+                                          setState(() => this.value = value!)),
+                                  CheckboxListTile(
+                                      activeColor: kPrimaryColor,
+                                      controlAffinity:
+                                          ListTileControlAffinity.leading,
+                                      value: !value,
+                                      title: Text('Current'),
+                                      onChanged: (value) =>
+                                          setState(() => this.value = value!)),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.all(16.0),
+                                  //   child: Row(
+                                  //     mainAxisAlignment:
+                                  //         MainAxisAlignment.start,
+                                  //     children: [
+                                  //       Icon(Icons.check_box_outline_blank),
+                                  //       SizedBox(width: 48),
+                                  //       Text(
+                                  //         'Home ',
+                                  //         style: TextStyle(
+                                  //             fontSize: 20,
+                                  //             color: Colors.black),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.symmetric(
+                                  //       horizontal: 32.0),
+                                  //   child: Container(
+                                  //     height: 1,
+                                  //     color: kPrimaryColor,
+                                  //   ),
+                                  // ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.all(16.0),
+                                  //   child: Row(
+                                  //     mainAxisAlignment:
+                                  //         MainAxisAlignment.start,
+                                  //     children: [
+                                  //       Icon(Icons.check_box_outline_blank),
+                                  //       SizedBox(width: 48),
+                                  //       Text(
+                                  //         'Current Location ',
+                                  //         style: TextStyle(
+                                  //             fontSize: 20,
+                                  //             color: Colors.black),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),
                           );
-                        }
-                    );
+                        });
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 16.0, top: 16),
@@ -154,7 +181,8 @@ class _checkoutState extends State<checkout> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 32),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 32),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -204,10 +232,10 @@ class _checkoutState extends State<checkout> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(12.0),
               child: Container(
                 child: Text(
-                  'Delivery Method',
+                  'Order Summary',
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.black,
@@ -216,121 +244,20 @@ class _checkoutState extends State<checkout> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 32),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 32),
               child: Container(
+                height: 200,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(Icons.check_box_outline_blank ),
-                          SizedBox(width:48),
-                          Text(
-                            'Door Delivery ',
-                            style: TextStyle(
-                                fontSize: 20, color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                      child: Container(
-                        height: 1,
-                        color: kPrimaryColor,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(Icons.check_box_outline_blank ),
-                          SizedBox(width:48),
-                          Text(
-                            'Take Away ',
-                            style: TextStyle(
-                                fontSize: 20, color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                  ],
-                ),
+                child: total_order(e),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, top: 16),
-                  child: Text(
-                    'Order Summary',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-
-                    ),
-                  ),
-                ),
-                //TODO : show order list
-                //dialogueBox
-                GestureDetector(
-                  onTap: (){
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context){
-                          return Dialog(
-                          child:Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Container(
-                              child: Column(crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                                    children: [
-                                      Text('Dish',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.black),),
-                                      Text('Quantity',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.black),),
-                                      Text('Amount',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.black),),
-
-                                    ],
-                                  ),
-                                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                                    children: [
-                                      Text('Chicken biryani'),
-                                      Text('5'),
-                                      Text('1000'),
-
-                                    ],
-                                  ),
-                                  Text('hi'),
-                                  Text('hi'),
-                                  Text('hi'),
-                                ],
-                              ),
-
-                            ),
-                          ),
-                          );
-                        }
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 16.0, top: 16),
-                    child: Text('View order',
-                        style: TextStyle(fontSize: 20, color: kPrimaryColor)),
-                  ),
-                ),
-              ],
-            ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 32),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 32),
               child: Container(
                 height: 64,
                 decoration: BoxDecoration(
@@ -342,21 +269,22 @@ class _checkoutState extends State<checkout> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Text('Total Bill ' ,style: TextStyle(
-                          fontSize: 15, color: Colors.black),),
+                      child: Text(
+                        'Total Bill ',
+                        style: TextStyle(fontSize: 15, color: Colors.black),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Text( '₹ ' +bill.toString() ,style: TextStyle(
-                          fontSize: 15, color: Colors.black),),
+                      child: Text(
+                        '₹ ' + bill.toString(),
+                        style: TextStyle(fontSize: 15, color: Colors.black),
+                      ),
                     ),
-
                   ],
                 ),
               ),
             ),
-
-
           ],
         ),
       ),
@@ -366,29 +294,27 @@ class _checkoutState extends State<checkout> {
           elevation: 10,
           borderRadius: BorderRadius.circular(30),
           child: GestureDetector(
-            onTap: () async{
+            onTap: () async {
               //TODO: payment.
               //AfterPayment:
-              Map<String,dynamic> orderDetails ={
-                'customerName' : username,
+              Map<String, dynamic> orderDetails = {
+                'customerName': username,
                 'customerPhone': userPhone,
                 'customerAddress': userAddress,
                 'latitude': deliveryPosition.latitude.toString(),
-                'longitude':deliveryPosition.longitude.toString(),
-                'orderItems':billingItems,
-                'amountPaid':bill.toString(),
-                'branchId':"61a9b1c56a629f43c19616c0",
-                'accepted':false
+                'longitude': deliveryPosition.longitude.toString(),
+                'orderItems': billingItems,
+                'amountPaid': bill.toString(),
+                'branchId': "61a9b1c56a629f43c19616c0",
+                'accepted': false
               };
               var res = await ApiServices().placeOrder(orderDetails);
-              if(res!= 'false'){
+              if (res != 'false') {
                 showSnackBar('Order placed!', context, Colors.green);
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context)=>TrackingPage(res))
-                );
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => TrackingPage(res)));
                 //TODO: clear User cart from Database;
-              }else{
+              } else {
                 showSnackBar('Failed to place Order', context, Colors.red);
                 Navigator.pop(context);
               }
@@ -413,5 +339,52 @@ class _checkoutState extends State<checkout> {
       ),
     );
   }
-}
 
+  ListView total_order(List<dynamic> e) {
+    return ListView.builder(
+        itemCount: e.length,
+        itemBuilder: (context, index) {
+          var req = menu.firstWhere((map) {
+            return map['id'] == e[index];
+          });
+          var item = req['item'];
+          return Container(
+            height: 35,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(width:100,child: Text(item['itemName'])),
+                  Container(width:50,child: Text(getCount(e[index]).toString())),
+                  Container(width:50,child: Text(item['cost'])),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+}
+//
+// Row(
+// mainAxisAlignment: MainAxisAlignment.spaceBetween,
+// children: [
+// Padding(
+// padding: const EdgeInsets.all(8.0),
+// child: Text(
+// 'Dish',
+// style: TextStyle(color: Colors.black, fontSize: 18),
+// ),
+// ),
+// Text(
+// 'Quantity',
+// style: TextStyle(color: Colors.black, fontSize: 18),
+// ),
+// Padding(
+// padding: const EdgeInsets.all(8.0),
+// child: Text(
+// 'Amount',
+// style: TextStyle(color: Colors.black, fontSize: 18),
+// ),
+// )
+// ],
+// ),

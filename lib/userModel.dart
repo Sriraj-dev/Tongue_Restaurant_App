@@ -83,6 +83,15 @@ changeCount(var id ,bool isIncreased){
   }
  }
 }
+getCount(var id)
+{
+ if(userCart.contains(id)){
+  final index = billingItems.indexWhere((e){
+   return e['id'] == id;
+  });
+  return billingItems[index]['count'] ;
+ }
+}
 
 addToUserFav(var id){
  if(!userFav.contains(id)){
