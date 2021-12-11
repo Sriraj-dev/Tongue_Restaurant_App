@@ -7,6 +7,7 @@ import 'package:im_stepper/main.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:lottie/lottie.dart';
 import 'package:delivery_app/Screens/preparing_food.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TrackingPage extends StatefulWidget {
   //const TrackingPage({Key? key}) : super(key: key);
@@ -114,136 +115,136 @@ class _TrackingPageState extends State<TrackingPage> {
               ],
             ),
             Divider(),
-            Expanded(
-              child: Container(
-                child: ListView(
-                  children:[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('OrderId:$orderId',
-                                style: GoogleFonts.lato(
-                                    fontSize: 16,
-                                    color: kTextColor,
-                                  fontWeight: FontWeight.w600
-                                ),
+            Container(
+              height: size.height*0.38,
+              child: ListView(
+                children:[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('OrderId:$orderId',
+                              style: GoogleFonts.lato(
+                                  fontSize: 16,
+                                  color: kTextColor,
+                                fontWeight: FontWeight.w600
                               ),
-                            ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10,),
+                        Text('Delivery Address:',
+                          style: GoogleFonts.lato(
+                            fontSize: 16,
+                            color: kTextColor
                           ),
-                          SizedBox(height: 10,),
-                          Text('Delivery Address:',
-                            style: GoogleFonts.lato(
+                        ),
+                        Text(userAddress+'.',
+                          style: GoogleFonts.lato(
+                            color: kTextLightColor,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            letterSpacing: 0.5
+                          ),
+                        ),
+                        SizedBox(height: 15,),
+                        Text('Your Order:',
+                          style: GoogleFonts.lato(
                               fontSize: 16,
                               color: kTextColor
-                            ),
                           ),
-                          Text(userAddress+'.',
-                            style: GoogleFonts.lato(
+                        ),
+                        Text(generateYourOrder(),
+                          style: GoogleFonts.lato(
                               color: kTextLightColor,
                               fontWeight: FontWeight.w500,
                               fontSize: 15,
                               letterSpacing: 0.5
-                            ),
                           ),
-                          SizedBox(height: 15,),
-                          Text('Your Order:',
-                            style: GoogleFonts.lato(
-                                fontSize: 16,
-                                color: kTextColor
+                        ),
+                        SizedBox(height: 20,),
+                        Material(
+                          elevation: 5,
+                            borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: kPrimaryColor,
+                              borderRadius: BorderRadius.circular(20)
                             ),
-                          ),
-                          Text(generateYourOrder(),
-                            style: GoogleFonts.lato(
-                                color: kTextLightColor,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15,
-                                letterSpacing: 0.5
-                            ),
-                          ),
-                          SizedBox(height: 20,),
-                          Material(
-                            elevation: 5,
-                              borderRadius: BorderRadius.circular(20),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: kPrimaryColor,
-                                borderRadius: BorderRadius.circular(20)
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10,top: 10),
-                                    child: Text('DeliveryPartner:',
-                                      style: GoogleFonts.lato(
-                                          fontSize: 16,
-                                          color: Colors.white
-                                      ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10,top: 10),
+                                  child: Text('DeliveryPartner:',
+                                    style: GoogleFonts.lato(
+                                        fontSize: 16,
+                                        color: Colors.white
                                     ),
                                   ),
-                                  (assigned)?Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 5),
-                                    child: Text('We will Assign a deliveryPartner soon to you address',
-                                      style: GoogleFonts.lato(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 15,
-                                          letterSpacing: 1
-                                      ),
+                                ),
+                                (assigned)?Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+                                  child: Text('We will Assign a deliveryPartner soon to you address',
+                                    style: GoogleFonts.lato(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15,
+                                        letterSpacing: 1
                                     ),
-                                  ):Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Icon(Icons.delivery_dining_rounded,color: Colors.white,),
-                                        SizedBox(width: 20,),
-                                        Container(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text('Mahender',
-                                                style: GoogleFonts.lato(
-                                                    fontSize: 16,
-                                                    color: Colors.white
-                                                ),
+                                  ),
+                                ):Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Icon(Icons.delivery_dining_rounded,color: Colors.white,),
+                                      SizedBox(width: 20,),
+                                      Container(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text('Mahender',
+                                              style: GoogleFonts.lato(
+                                                  fontSize: 16,
+                                                  color: Colors.white
                                               ),
-                                              SizedBox(height: 0,),
-                                              Row(
-                                                //mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Text('8008053826',
-                                                      style: GoogleFonts.lato(
-                                                          color: Colors.white,
-                                                          fontWeight: FontWeight.w500,
-                                                          fontSize: 15,
-                                                          letterSpacing: 1
-                                                      )),
-                                                  //TODO: Call the driver
-                                                  IconButton(onPressed: (){}, icon: Icon(Icons.call,color: Colors.white,))
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
+                                            ),
+                                            SizedBox(height: 0,),
+                                            Row(
+                                              //mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text('8008053826',
+                                                    style: GoogleFonts.lato(
+                                                        color: Colors.white,
+                                                        fontWeight: FontWeight.w500,
+                                                        fontSize: 15,
+                                                        letterSpacing: 1
+                                                    )),
+                                                //TODO: Call the driver
+                                                IconButton(onPressed: (){
+                                                  launch("tel://9618111780}");
+                                                }, icon: Icon(Icons.call,color: Colors.white,))
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
                           ),
-
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ]
-                ),
+                  ),
+                ]
               ),
             )
           ],
@@ -274,42 +275,6 @@ class _TrackingPageState extends State<TrackingPage> {
           ),
         ),
       ),
-      // body: Column(
-      //   mainAxisAlignment: MainAxisAlignment.center,
-      //   crossAxisAlignment: CrossAxisAlignment.center,
-      //   children: [
-      //     Lottie.asset(
-      //       'assets/waiting.json',
-      //       // 'assets/67225-delivery-food-interaction.json',
-      //     ),
-      //     Center(
-      //       child: Text(
-      //         'Waiting for confirmation',
-      //         // orderId,
-      //         style: TextStyle(
-      //           fontSize: 20,
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
-      // floatingActionButton: GestureDetector(
-      //   onTap: () {
-      //     Navigator.push(context,
-      //         MaterialPageRoute(builder: (context) => preparing_food_())
-      //     );
-      //   },
-      //   child: Container(
-      //     height: 50,
-      //     width: 50,
-      //     decoration: BoxDecoration(
-      //       color: kPrimaryColor,
-      //       borderRadius: BorderRadius.all(Radius.circular(25))
-      //     ),
-      //     child: Icon(Icons.navigate_next_rounded,color: Colors.white,),
-      //
-      //   ),
-      // ),
     );
   }
 }
