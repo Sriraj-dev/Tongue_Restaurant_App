@@ -12,6 +12,7 @@ import 'package:delivery_app/Screens/dish.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
+import 'package:delivery_app/Screens/offers.dart';
 
 class homePage extends StatefulWidget {
   const homePage({Key? key}) : super(key: key);
@@ -86,17 +87,23 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                   'assets/images/title_image.png',
                   height: 50,
                 ),
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/offers_icon.png',
-                      height: 32,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: Text('OFFERS',style: TextStyle(fontWeight: FontWeight.bold),),
-                    ),
-                  ],
+                GestureDetector(
+                  onTap: (){Navigator.push(context,
+                      MaterialPageRoute(builder: (context)=> Offers())
+                  );
+                  },
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/offers_icon.png',
+                        height: 32,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: Text('OFFERS',style: TextStyle(fontWeight: FontWeight.bold),),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

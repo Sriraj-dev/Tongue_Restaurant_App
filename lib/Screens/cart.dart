@@ -32,39 +32,65 @@ class _cartState extends State<cart> {
         ),
       ),
       body: example(e),
-      floatingActionButton: Padding(
+      floatingActionButton: (e.isEmpty)?Container():
+      Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Material(
-          elevation: 10,
-          borderRadius: BorderRadius.circular(30),
+        child: Column(mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right :16.0),
+              child: Container(
+                width: 300,
+                height: 40,
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text('Total Bill ',style: TextStyle(color: kPrimaryColor),),
+                    Text('₹ '+totalCost.toString(),style: TextStyle(color: kPrimaryColor),),
+                  ],
 
-          child: GestureDetector(
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => checkout(totalCost),
-                ),// map == name,cost,id,offer.
-              );
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 85, vertical: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: kPrimaryColor,
+                ),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(20))
+
+                ),
+
               ),
-              child: Text(
-                'COMPLETE ORDER ',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+            ),
+            Material(
+              elevation: 10,
+              borderRadius: BorderRadius.circular(30),
+
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => checkout(totalCost),
+                    ),// map == name,cost,id,offer.
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 95, vertical: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: kPrimaryColor,
+                  ),
+                  child: Text(
+                    'COMPLETE ORDER ',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
-      ),
+      )
     );
   }
 
