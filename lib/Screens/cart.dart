@@ -53,9 +53,7 @@ class _cartState extends State<cart> {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(20))
-
                 ),
-
               ),
             ),
             Material(
