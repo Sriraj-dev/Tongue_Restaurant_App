@@ -128,7 +128,7 @@ class _cartState extends State<cart> {
                 totalCost = Billing().calculateBill(billingItems);
                 print('Total cost is - $totalCost');
                 var item = req['item'];
-                return Padding(
+                return (item['isAvailable']==true)?Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
                   child: Material(
@@ -291,7 +291,8 @@ class _cartState extends State<cart> {
                       ),
                     ),
                   ),
-                );
+                )
+                    :Container();
               },
               itemCount: e.length,
             ),

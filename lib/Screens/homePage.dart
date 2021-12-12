@@ -59,8 +59,10 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                   width: 120,
                   height: 48,
                   decoration: BoxDecoration(
-                    color:Colors.white,
-                    borderRadius: BorderRadius.only(topRight: Radius.circular(20),bottomRight: Radius.circular(20)),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        bottomRight: Radius.circular(20)),
                   ),
                   child: Row(
                     children: [
@@ -68,18 +70,15 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                         Icons.location_on,
                         color: kPrimaryColor,
                       ),
-                      (displayAddress.length<=12)?
-                     Text(
-                       '$displayAddress',
-                       style: TextStyle(
-                         fontWeight: FontWeight.w500
-                       ),
-                     ):Text(
-                        '${displayAddress.substring(0,10)}..',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500
-                        ),
-                      ),
+                      (displayAddress.length <= 12)
+                          ? Text(
+                              '$displayAddress',
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            )
+                          : Text(
+                              '${displayAddress.substring(0, 10)}..',
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            ),
                     ],
                   ),
                 ),
@@ -88,9 +87,9 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                   height: 50,
                 ),
                 GestureDetector(
-                  onTap: (){Navigator.push(context,
-                      MaterialPageRoute(builder: (context)=> Offers())
-                  );
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Offers()));
                   },
                   child: Row(
                     children: [
@@ -100,7 +99,10 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 16),
-                        child: Text('OFFERS',style: TextStyle(fontWeight: FontWeight.bold),),
+                        child: Text(
+                          'OFFERS',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
@@ -109,10 +111,9 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
             ),
           ),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               Navigator.push(context,
-                MaterialPageRoute(builder: (context)=>SearchScreen())
-              );
+                  MaterialPageRoute(builder: (context) => SearchScreen()));
             },
             child: SearchBox(
               onChanged: (value) {},
@@ -189,7 +190,8 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                           child: Column(
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Row(
@@ -198,48 +200,81 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Hero(
-                                          tag: e[index]['id'],
-                                          child: Image.network(
-                                            e[index]['image'],
-                                            height: 100,
-                                          ),
-                                        ),
+                                            tag: e[index]['id'],
+                                            child: (e[index]['isAvailable'] == true)
+                                                ? Image.network(
+                                                    e[index]['image'],
+                                                    height: 100,
+                                                  )
+                                                : Container(
+                                              decoration:BoxDecoration(
+                                                borderRadius: BorderRadius.all(Radius.circular(50)),
+                                              ),
+                                                  child: Container(
+                                                    foregroundDecoration: BoxDecoration(
+                                                      color: Colors.grey,
+                                                      backgroundBlendMode: BlendMode.saturation,
+                                                    ),
+                                                    child: Image.network(
+                                                      e[index]['image'],
+                                                      height: 100,
+                                                    ),
+                                                  ),
+                                                )),
                                       ),
                                       Column(
                                         children: [
                                           itemDetails(e, index),
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 0),
-                                            child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                primary: (userCart.contains(e[index]['id']))?ksecondaryColor:kPrimaryColor,
-                                                // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
-                                                shape: const RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                                                ),
-                                              ),
-                                              onPressed: (){
-                                                setState(() {
-                                                  if(!userCart.contains(e[index]['id'])){
-                                                    addToUserCart(e[index]['id']);
-                                                  }else{
-                                                    print('trying to remove');
-                                                    removeFromUserCart(e[index]['id']);
-                                                  }
-                                                });
-                                              },
-                                              child: Center(
-                                                child: Text(
-                                                  (userCart.contains(e[index]['id']))?'Added':'Add to Cart',
-                                                  style: GoogleFonts.lora(
-                                                    fontSize: 17,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 0),
+                                            child: (e[index]['isAvailable'] ==
+                                                    true)
+                                                ? ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary: (userCart
+                                                              .contains(e[index]
+                                                                  ['id']))
+                                                          ? ksecondaryColor
+                                                          : kPrimaryColor,
+                                                      // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                                                      shape:
+                                                          const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    10)),
+                                                      ),
+                                                    ),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        if (!userCart.contains(
+                                                            e[index]['id'])) {
+                                                          addToUserCart(
+                                                              e[index]['id']);
+                                                        } else {
+                                                          print(
+                                                              'trying to remove');
+                                                          removeFromUserCart(
+                                                              e[index]['id']);
+                                                        }
+                                                      });
+                                                    },
+                                                    child: Center(
+                                                        child: Text(
+                                                      (userCart.contains(
+                                                              e[index]['id']))
+                                                          ? 'Added'
+                                                          : 'Add to Cart',
+                                                      style: GoogleFonts.lora(
+                                                        fontSize: 17,
+                                                        color: Colors.white,
+                                                      ),
+                                                    )),
+                                                  )
+                                                : Container(child:Text('Currectly Unavailable'),),
                                           ),
-
                                         ],
                                       ),
                                     ],
@@ -247,31 +282,40 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                   Row(
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 10,right: 4),
+                                        padding: const EdgeInsets.only(
+                                            top: 10, right: 4),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.only(left: 10),
+                                              padding: const EdgeInsets.only(
+                                                  left: 10),
                                               child: Container(
                                                 width: 16,
                                                 height: 16,
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
-                                                    color: (e[index]['type'] == 'veg')
+                                                    color: (e[index]['type'] ==
+                                                            'veg')
                                                         ? Colors.green
                                                         : Colors.red,
                                                   ),
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(4)),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(4)),
                                                 ),
                                                 child: Padding(
-                                                  padding: const EdgeInsets.all(2.0),
+                                                  padding:
+                                                      const EdgeInsets.all(2.0),
                                                   child: Container(
                                                     decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
-                                                      color: (e[index]['type'] == 'veg')
+                                                      color: (e[index]
+                                                                  ['type'] ==
+                                                              'veg')
                                                           ? Colors.green
                                                           : Colors.red,
                                                     ),
@@ -279,25 +323,37 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(height: 70,),
+                                            SizedBox(
+                                              height: 70,
+                                            ),
                                             LikeButton(
                                               //onTap: onLikeButtonTapped(isLiked,e[index]),
-                                              isLiked: userFav.contains(e[index]['id']),
-                                              likeBuilder: (isLiked){
-                                                final color = isLiked? Colors.red:Colors.grey;
-                                                return Icon(Icons.favorite,color: color,size: 30,);
+                                              isLiked: userFav
+                                                  .contains(e[index]['id']),
+                                              likeBuilder: (isLiked) {
+                                                final color = isLiked
+                                                    ? Colors.red
+                                                    : Colors.grey;
+                                                return Icon(
+                                                  Icons.favorite,
+                                                  color: color,
+                                                  size: 30,
+                                                );
                                               },
-                                              onTap: (isLiked)async{
+                                              onTap: (isLiked) async {
                                                 setState(() {
                                                   // if (!userFav.contains(e[index]))
                                                   //   userFav.add(e[index]);
                                                   // else {
                                                   //   userFav.remove(e[index]);
                                                   // }
-                                                  if(!userFav.contains(e[index]['id'])){
-                                                    addToUserFav(e[index]['id']);
-                                                  }else{
-                                                    removeFromUserFav(e[index]['id']);
+                                                  if (!userFav.contains(
+                                                      e[index]['id'])) {
+                                                    addToUserFav(
+                                                        e[index]['id']);
+                                                  } else {
+                                                    removeFromUserFav(
+                                                        e[index]['id']);
                                                   }
                                                 });
                                                 return !isLiked;
@@ -310,12 +366,13 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                   )
                                 ],
                               ),
-                              SizedBox(height: 0,),
+                              SizedBox(
+                                height: 0,
+                              ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-
-                                ],
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [],
                               ),
                             ],
                           ),
@@ -332,34 +389,32 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
 
   Padding itemDetails(e, int index) {
     return Padding(
-                                padding: const EdgeInsets.only(top: 15,bottom: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(0),
-                                      child: Text(e[index]['itemName'],
-                                          style: GoogleFonts.lato(
-                                            fontSize: 18,
-                                            color: kTextColor,
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 10),
-                                      child: Text(
-                                        '₹' + e[index]['cost'],
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: kTextLightColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
+      padding: const EdgeInsets.only(top: 15, bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(0),
+            child: Text(e[index]['itemName'],
+                style: GoogleFonts.lato(
+                  fontSize: 18,
+                  color: kTextColor,
+                )),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(
+              '₹' + e[index]['cost'],
+              style: TextStyle(
+                fontSize: 16,
+                color: kTextLightColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
-
-
 }
 //-------------------------------------------------------------
 // tileColor: Colors.white,
