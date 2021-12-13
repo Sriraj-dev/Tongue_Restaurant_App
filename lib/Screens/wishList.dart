@@ -72,108 +72,124 @@ class _wish_listState extends State<wish_list> {
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: 110,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  offset: Offset(0, 0.5),
-                                  blurRadius: 1,
-                                  spreadRadius: 0.5,
+                        child: Material(
+                          elevation: 5,
+                          shadowColor: kPrimaryColor.withOpacity(0.5),
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          child: Container(
+                            height: 110,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
                                 ),
-                              ]),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.network(
-                                  item['image'],
-                                  height: 110,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: (item['isAvailable'] == true)?Container(
+                                    child: Image.network(
+                                      item['image'],
+                                      height: 110,
+                                    ),
+                                  ):Container(
+                                    foregroundDecoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      backgroundBlendMode: BlendMode.saturation,
+                                    ),
+                                    child: Image.network(
+                                      item['image'],
+                                      height: 110,
+                                    ),
+                                  )
                                 ),
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(item['itemName'],
-                                        style: GoogleFonts.lato(
-                                          fontSize: 17,
-                                          color: kTextColor,
-                                        )),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top:6.0),
-                                    child: Text(
-                                      '₹' + item['cost'],
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: kTextLightColor,
-                                      ),
+                                Column(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(item['itemName'],
+                                          style: GoogleFonts.lato(
+                                            fontSize: 17,
+                                            color: kTextColor,
+                                          )),
                                     ),
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: (userCart.contains(item['id']))?ksecondaryColor:kPrimaryColor,
-                                      // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                                      ),
-                                    ),
-                                    onPressed: (){
-                                      setState(() {
-                                        if(!userCart.contains(item['id'])){
-                                          addToUserCart(item['id']);
-                                        }else{
-                                          print('trying to remove');
-                                          removeFromUserCart(item['id']);
-                                        }
-                                      });
-                                    },
-                                    child: Center(
+                                    Padding(
+                                      padding: const EdgeInsets.only(top:6.0),
                                       child: Text(
-                                        (userCart.contains(item['id']))?'Added':'Add to Cart',
-                                        style: GoogleFonts.lora(
-                                          fontSize: 17,
-                                          color: Colors.white,
+                                        '₹' + item['cost'],
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: kTextLightColor,
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: 16,
-                                  height: 16,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: (item['type'] == 'veg')
-                                          ? Colors.green
-                                          : Colors.red,
-                                    ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(4)),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
+                                    (item['isAvailable']==true)
+                                        ? ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: (userCart.contains(item['id']))?ksecondaryColor:kPrimaryColor,
+                                        // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                                        ),
+                                      ),
+                                      onPressed: (){
+                                        setState(() {
+                                          if(!userCart.contains(item['id'])){
+                                            addToUserCart(item['id']);
+                                          }else{
+                                            print('trying to remove');
+                                            removeFromUserCart(item['id']);
+                                          }
+                                        });
+                                      },
+                                      child: Center(
+                                        child: Text(
+                                          (userCart.contains(item['id']))?'Added':'Add to Cart',
+                                          style: GoogleFonts.lora(
+                                            fontSize: 17,
+                                            color: Colors.white,
+                                          ),
+                                        )
+
+
+                                      ),
+                                    )
+                                        :Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(child: Text('Currently Unavailable')),
+                                        )
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    width: 16,
+                                    height: 16,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
                                         color: (item['type'] == 'veg')
                                             ? Colors.green
                                             : Colors.red,
                                       ),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(4)),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: (item['type'] == 'veg')
+                                              ? Colors.green
+                                              : Colors.red,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
