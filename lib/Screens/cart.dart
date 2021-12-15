@@ -128,6 +128,9 @@ class _cartState extends State<cart> {
                 totalCost = Billing().calculateBill(billingItems);
                 print('Total cost is - $totalCost');
                 var item = req['item'];
+                if(!item['isAvailable']){
+                  //TODO: Remove from user cart.
+                }
                 return (item['isAvailable']==true)?Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),

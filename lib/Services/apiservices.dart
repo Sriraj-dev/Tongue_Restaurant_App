@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:delivery_app/Services/securityServices.dart';
 import 'package:delivery_app/Services/storageServices.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -191,7 +192,7 @@ class ApiServices{
       },
       body: json.encode(orderDetails)
     );
-
+    print(json.encode(orderDetails));
     var result = json.decode(res.body);
     if(result['status']){
       print('Order Id is - ${result['orderId']}');
@@ -243,22 +244,23 @@ class ApiServices{
   }
 
   Future getOrderDetails(String orderId,String branchId)async{
-    Map<String,dynamic> data= {
+    print('getting Order Details for $orderId , $branchId');
+    final orderData=
+    {
       'orderId':orderId,
       'branchId':branchId
     };
+    print('Order data is -  $orderData');
     var res = await http.post(
-        Uri.parse(baseUrl+'tongue/currentOrders/navigate'),
+        Uri.parse('https://stark-beach-59658.herokuapp.com/tongue/currentOrders/navigate'),
       headers: {
-        "Content_Type":"application/json"
+       // "Content_Type":"application/json"
       },
-      body: json.encode(data)
+      body: json.encode(orderData)
     );
-    var result  = json.decode(res.body);
-    if(result['status']){
-      return result['order'];
-    }else{
-      return result['msg'];
-    }
+    print(json.encode(orderData));
+    print(res.body);
+    var result = json.decode(res.body);
+    return result;
   }
 }
