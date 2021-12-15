@@ -27,11 +27,10 @@ class _checkoutState extends State<checkout> {
   List<String> address = userAddress.split(',');
   Position deliveryPosition = userLocation;
   bool value = true;
-
+  bool placingOrder = false;
   @override
   Widget build(BuildContext context) {
     List e = userCart;
-
     return Scaffold(
       backgroundColor: Background_Color,
       appBar: PreferredSize(
@@ -255,6 +254,9 @@ class _checkoutState extends State<checkout> {
             onTap: () async {
               //TODO: payment.
               //AfterPayment:
+              setState(() {
+                placingOrder = true;
+              });
               Map<String, dynamic> orderDetails = {
                 'customerName': username,
                 'customerPhone': userPhone,
@@ -268,9 +270,10 @@ class _checkoutState extends State<checkout> {
               };
               var res = await ApiServices().placeOrder(orderDetails);
               if (res != 'false') {
+                await ApiServices().addToMyOrders(res, "61a9b1c56a629f43c19616c0", token);
                 showSnackBar('Order placed!', context, Colors.green);
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => TrackingPage(res)));
+                    MaterialPageRoute(builder: (context) => TrackingPage(res,"61a9b1c56a629f43c19616c0")));
                 //TODO: clear User cart from Database;
               } else {
                 showSnackBar('Failed to place Order', context, Colors.red);
@@ -283,7 +286,7 @@ class _checkoutState extends State<checkout> {
                 borderRadius: BorderRadius.circular(30),
                 color: kPrimaryColor,
               ),
-              child: Text(
+              child: (placingOrder)?CircularProgressIndicator():Text(
                 'PLACE ORDER ',
                 style: TextStyle(
                   fontSize: 16,
