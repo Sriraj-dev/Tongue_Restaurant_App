@@ -38,11 +38,6 @@ class ApiServices{
     Map<String,dynamic> response = json.decode(res.body);
     print(response['status']);
     return response;
-    // if(response['status'] == 'true'){
-    //   return response['token'];
-    // }else{
-    //   return response['msg'];
-    // }
   }
 
 
@@ -221,8 +216,10 @@ class ApiServices{
 
     var result = json.decode(res.body);
     if(result['status']){
+      print('added to myOrders');
       return true;
     }else{
+      print('error in adding to myOrders');
       return false;
     }
   }
@@ -243,20 +240,14 @@ class ApiServices{
     }
   }
 
-  Future getOrderDetails(String orderId,String branchId)async{
-    print('getting Order Details for $orderId , $branchId');
-    final orderData=
-    {
-      'orderId':orderId,
-      'branchId':branchId
-    };
+  Future getOrderDetails(Map<String,dynamic> orderData)async{
     print('Order data is -  $orderData');
     var res = await http.post(
         Uri.parse('https://stark-beach-59658.herokuapp.com/tongue/currentOrders/navigate'),
-      headers: {
-       // "Content_Type":"application/json"
-      },
-      body: json.encode(orderData)
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: json.encode(orderData)
     );
     print(json.encode(orderData));
     print(res.body);

@@ -30,7 +30,7 @@ class _TrackingPageState extends State<TrackingPage> {
   int activeStep = 0;
   final controller = StreamController<Map<String,dynamic>>();
 
-  generateYourOrder(List<Map<String,dynamic>> orderItems){
+  generateYourOrder(var orderItems){
     String yourOrder = '';
     orderItems.forEach((map){
       var req = menu.firstWhere((element) => element['id']==map['id']);
@@ -68,7 +68,7 @@ class _TrackingPageState extends State<TrackingPage> {
       ),
 
       backgroundColor: Background_Color,
-      body: StreamBuilder<Object>(
+      body: StreamBuilder<Map<String,dynamic>>(
         stream: getOrderDetails(),
         builder: (context, snapshot) {
           switch(snapshot.connectionState){
@@ -328,7 +328,11 @@ class _TrackingPageState extends State<TrackingPage> {
   Future<Map<String,dynamic>> getDetails()async{
     print("orderId is $orderId");
     print("branchId is $branchId");
-    var result =await ApiServices().getOrderDetails(orderId, branchId);
+    Map<String, dynamic> orderData = {
+      'orderId': orderId,
+      'branchId': branchId
+    };
+    var result =await ApiServices().getOrderDetails(orderData);
     print("result is - ${result}");
     if(result['status']){
       return result['order'];
