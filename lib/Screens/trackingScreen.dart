@@ -57,7 +57,9 @@ class _TrackingPageState extends State<TrackingPage> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded),
-          onPressed: (){},
+          onPressed: (){
+            Navigator.of(context).pop();
+          },
           color: kTextColor,
         ),
         title: Text('Order details',
@@ -136,7 +138,8 @@ class _TrackingPageState extends State<TrackingPage> {
                                       ),
                                     ),
                                     SizedBox(height: size.height*0.06+34,),
-                                    Text('Out for delivery',
+                                    Text(
+                                      (orderDetails['delivered'])?'Order Delivered':'Out for delivery',
                                       style: GoogleFonts.lato(
                                         fontWeight: (activeStep==2)?FontWeight.w600:FontWeight.w400,
                                         color: (activeStep==2)?kPrimaryColor:ksecondaryColor,

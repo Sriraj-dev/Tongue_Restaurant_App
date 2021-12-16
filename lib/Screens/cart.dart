@@ -18,6 +18,7 @@ class cart extends StatefulWidget {
 
 class _cartState extends State<cart> {
   num totalCost = 0;
+  bool reloaded = false;
   @override
   Widget build(BuildContext context) {
     List e = userCart;
@@ -123,7 +124,7 @@ class _cartState extends State<cart> {
               ),
             )
           : FutureBuilder(
-            future: reloadMenuItems(),
+            future: (reloaded)?null:reloadMenuItems(),
             builder: (context, snapshot) {
               //This is the loading Screen.
               if(snapshot.connectionState==ConnectionState.waiting){
@@ -329,8 +330,9 @@ class _cartState extends State<cart> {
     await initialiseCategories();
     await initialiseCategoryItems();
     await initialiseMenu();
+    reloaded = true;
   }
 }
 
 
-//TODO: remove totalCost, edit LoadingScreen;
+//TODO: remove totalBill above completeOrder, edit LoadingScreen;

@@ -270,7 +270,14 @@ class _checkoutState extends State<checkout> {
               };
               var res = await ApiServices().placeOrder(orderDetails);
               if (res != 'false') {
-                await ApiServices().addToMyOrders(res, "61a9b1c56a629f43c19616c0", token);
+                Map<String,dynamic> orderDetails = {
+                  'orderId': res,
+                  'branchId':"61a9b1c56a629f43c19616c0"
+                };
+                Map<String,dynamic> data = {
+                  'orderDetails': orderDetails
+                };
+                await ApiServices().addToMyOrders(data ,token);
                 showSnackBar('Order placed!', context, Colors.green);
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => TrackingPage(res,"61a9b1c56a629f43c19616c0")));
@@ -352,27 +359,4 @@ class _checkoutState extends State<checkout> {
     );
   }
 }
-//
-// Row(
-// mainAxisAlignment: MainAxisAlignment.spaceBetween,
-// children: [
-// Padding(
-// padding: const EdgeInsets.all(8.0),
-// child: Text(
-// 'Dish',
-// style: TextStyle(color: Colors.black, fontSize: 18),
-// ),
-// ),
-// Text(
-// 'Quantity',
-// style: TextStyle(color: Colors.black, fontSize: 18),
-// ),
-// Padding(
-// padding: const EdgeInsets.all(8.0),
-// child: Text(
-// 'Amount',
-// style: TextStyle(color: Colors.black, fontSize: 18),
-// ),
-// )
-// ],
-// ),
+//TODO: Add the - (Apply Offer) button.
