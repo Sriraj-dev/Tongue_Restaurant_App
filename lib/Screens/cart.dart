@@ -1,5 +1,6 @@
 import 'package:delivery_app/Screens/checkoutpage.dart';
 import 'package:delivery_app/Services/BillingServices.dart';
+import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
 import 'package:delivery_app/userModel.dart';
@@ -31,7 +32,10 @@ class _cartState extends State<cart> {
           ),
         ),
       ),
-      body: example(e),
+      body: Container(
+        height: MediaQuery.of(context).size.height*0.7,
+          child: example(e)
+      ),
       floatingActionButton: (e.isEmpty)?Container():
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -46,7 +50,8 @@ class _cartState extends State<cart> {
                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text('Total Bill ',style: TextStyle(color: kPrimaryColor),),
-                    Text('₹ '+totalCost.toString(),style: TextStyle(color: kPrimaryColor),),
+                    Text('₹ '+totalCost.toString(),
+                      style: TextStyle(color: kPrimaryColor),),
                   ],
 
                 ),
@@ -117,188 +122,215 @@ class _cartState extends State<cart> {
                 ],
               ),
             )
-          : ListView.builder(
-              // e = UserCart.
-              itemBuilder: (context, index) {
-                //This is the container of the food item-->
-                var req = menu.firstWhere((map) {
-                  return map['id'] == e[index];
-                });
-                int quantity = billingItems.firstWhere((req) => req['id']==e[index] , orElse: (){return {'id': 0,'count':0};})['count'];
-                totalCost = Billing().calculateBill(billingItems);
-                print('Total cost is - $totalCost');
-                var item = req['item'];
-                if(!item['isAvailable']){
-                  //TODO: Remove from user cart.
-                }
-                return (item['isAvailable']==true)?Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
-                  child: Material(
+          : FutureBuilder(
+            future: reloadMenuItems(),
+            builder: (context, snapshot) {
+              //This is the loading Screen.
+              if(snapshot.connectionState==ConnectionState.waiting){
+                return loadingScreen();
+              }
+              return ListView.builder(
+                  // e = UserCart.
+                  itemBuilder: (context, index) {
+                    //This is the container of the food item-->
+                    var req = menu.firstWhere((map) {
+                      return map['id'] == e[index];
+                    });
+                    int quantity = billingItems.firstWhere((req) => req['id']==e[index] , orElse: (){return {'id': 0,'count':0};})['count'];
+                    var item = req['item'];
+                    if(!item['isAvailable']){
+                      //TODO: Remove from user cart.
 
-                    elevation: 10,
-                    color: kPrimaryColor.withOpacity(1),
-                    borderRadius: BorderRadius.circular(30),
-                    child: Container(
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
+                        removeFromUserCart(req['id']);
+
+                    }
+                    totalCost = Billing().calculateBill(billingItems);
+                    print('Total cost is - $totalCost');
+                    return (item['isAvailable']==true)?Padding(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
+                      child: Material(
+                        elevation: 10,
+                        color: kPrimaryColor.withOpacity(1),
                         borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.network(
-                              item['image'],
-                              height: 80,
-                            ),
+                        child: Container(
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30),
                           ),
-                          Column(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Padding(
-                                padding: const EdgeInsets.only(top:8.0),
-                                child: Text(item['itemName'],
-                                    style: GoogleFonts.lato(
-                                      fontSize: 17,
-                                      color: kTextColor,
-                                    )),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.network(
+                                  item['image'],
+                                  height: 80,
+                                ),
                               ),
-                              SizedBox(height: 6,),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(top:8.0),
+                                    child: Text(item['itemName'],
+                                        style: GoogleFonts.lato(
+                                          fontSize: 17,
+                                          color: kTextColor,
+                                        )),
+                                  ),
+                                  SizedBox(height: 6,),
+                                  Padding(
+                                    padding: const EdgeInsets.all(0.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(0.0),
+                                          child: Container(
+                                            height: 28,
+                                            width: 84,
+                                            decoration: BoxDecoration(
+                                              color: kPrimaryColor.withOpacity(0.2),
+                                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: (){
+                                                    setState(() {
+                                                      changeCount(item['id'], false);
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        color: kPrimaryColor.withOpacity(0.5),
+                                                        borderRadius: BorderRadius.circular(4)
+                                                    ),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 6),
+                                                      child: Text(
+                                                        '-',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 5),
+                                                Container(
+                                                  child: Text(
+                                                    quantity.toString(),
+                                                    style: TextStyle(
+                                                      color:kPrimaryColor,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+
+                                                SizedBox(width: 5),
+                                                GestureDetector(
+                                                  onTap: (){
+                                                    setState(() {
+                                                      changeCount(item['id'], true);
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        color: kPrimaryColor,
+                                                        borderRadius: BorderRadius.circular(4)
+                                                    ),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 5),
+                                                      child: Text(
+                                                        '+',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width:45),
+                                        Text(
+                                          '₹' + (int.parse(item['cost'])*quantity).toString(),
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: kTextLightColor,
+                                          ),
+                                        ),
+
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                               Padding(
-                                padding: const EdgeInsets.all(0.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(0.0),
-                                      child: Container(
-                                        height: 28,
-                                        width: 84,
-                                        decoration: BoxDecoration(
-                                          color: kPrimaryColor.withOpacity(0.2),
-                                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: (){
-                                                setState(() {
-                                                  changeCount(item['id'], false);
-                                                });
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    color: kPrimaryColor.withOpacity(0.5),
-                                                    borderRadius: BorderRadius.circular(4)
-                                                ),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 6),
-                                                  child: Text(
-                                                    '-',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight: FontWeight.bold,
-                                                    ),
-                                                  ),
-                                
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(width: 5),
-                                            Container(
-                                              child: Text(
-                                                quantity.toString(),
-                                                style: TextStyle(
-                                                  color:kPrimaryColor,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-
-                                            SizedBox(width: 5),
-                                            GestureDetector(
-                                              onTap: (){
-                                                setState(() {
-                                                  changeCount(item['id'], true);
-                                                });
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    color: kPrimaryColor,
-                                                    borderRadius: BorderRadius.circular(4)
-                                                ),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 5),
-                                                  child: Text(
-                                                    '+',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight: FontWeight.bold,
-                                                    ),
-                                                  ),
-
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                padding: const EdgeInsets.only(right: 16, top: 8),
+                                child: Container(
+                                  width: 16,
+                                  height: 16,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: (item['type'] == 'veg')
+                                          ? Colors.green
+                                          : Colors.red,
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(4)),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: (item['type'] == 'veg')
+                                            ? Colors.green
+                                            : Colors.red,
                                       ),
                                     ),
-                                    SizedBox(width:45),
-                                    Text(
-                                      '₹' + (int.parse(item['cost'])*quantity).toString(),
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: kTextLightColor,
-                                      ),
-                                    ),
-
-                                  ],
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 16, top: 8),
-                            child: Container(
-                              width: 16,
-                              height: 16,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: (item['type'] == 'veg')
-                                      ? Colors.green
-                                      : Colors.red,
-                                ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4)),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: (item['type'] == 'veg')
-                                        ? Colors.green
-                                        : Colors.red,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                )
-                    :Container();
-              },
-              itemCount: e.length,
-            ),
+                    )
+                        :Container();
+                  },
+                  itemCount: e.length,
+                );
+            }
+          ),
     );
   }
+
+   loadingScreen() {
+    return Center(
+                child: CircularProgressIndicator(),
+              );
+  }
+
+  reloadMenuItems()async {
+    items = await ApiServices().getItems();
+    await initialiseCategories();
+    await initialiseCategoryItems();
+    await initialiseMenu();
+  }
 }
+
+
+//TODO: remove totalCost, edit LoadingScreen;

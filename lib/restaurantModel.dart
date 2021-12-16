@@ -23,6 +23,7 @@ initialiseCategoryItems(){
 }
 
 initialiseMenu(){
+  menu = [];
   categoryItems.forEach((e) {
     e.forEach((item){
       menu.add({

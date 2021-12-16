@@ -38,29 +38,36 @@ class _PageManagerState extends State<PageManager> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: pages[currentIndex],
-      bottomNavigationBar: ConvexAppBar.badge(
-        {
-          2:userCart.length.toString()=='0'?'':userCart.length.toString(),
-        },
-        color: kPrimaryColor,
-        backgroundColor: Colors.white,
-        activeColor: kPrimaryColor,
-        top: -16,
-        items: [
-          TabItem(icon: Icons.home),
-          TabItem(icon: Icons.favorite_border),
-          TabItem(icon:Icons.shopping_bag_outlined,
+      bottomNavigationBar: StreamBuilder<int>(
+        stream: cartCount.stream,
+        builder: (context, snapshot) {
+          String count = userCart.length.toString()=='0'?'':userCart.length.toString();
+          return ConvexAppBar.badge(
+            {
+              //2:userCart.length.toString()=='0'?'':userCart.length.toString(),
+              2:snapshot.data.toString()??count
+            },
+            color: kPrimaryColor,
+            backgroundColor: Colors.white,
+            activeColor: kPrimaryColor,
+            top: -16,
+            items: [
+              TabItem(icon: Icons.home),
+              TabItem(icon: Icons.favorite_border),
+              TabItem(icon:Icons.shopping_bag_outlined,
 
-             ),
-          TabItem(icon: Icons.person),
-        ],
-        initialActiveIndex: 0, //optional, default as 0
-        onTap: (int i) {
-          //3
-          setState(() {
-            currentIndex = i;
-          });
-        },
+                 ),
+              TabItem(icon: Icons.person),
+            ],
+            initialActiveIndex: 0, //optional, default as 0
+            onTap: (int i) {
+              //3
+              setState(() {
+                currentIndex = i;
+              });
+            },
+          );
+        }
       ),
     );
   }

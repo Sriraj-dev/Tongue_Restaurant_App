@@ -254,4 +254,24 @@ class ApiServices{
     var result = json.decode(res.body);
     return result;
   }
+
+  Future getDeliveryPartnerDetails(Map<String,dynamic> data)async{
+    var res = await http.post(
+      Uri.parse(baseUrl+'tongue/deliveryPartners/profile'),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: json.encode(data)
+    );
+    if(res.statusCode ==200){
+      var result = json.decode(res.body);
+      return result['partnerDetails'];
+    }
+    else{
+      print('Error in getting deliveryPartner details');
+      return {
+        'Name':"",
+      };
+    }
+  }
 }
