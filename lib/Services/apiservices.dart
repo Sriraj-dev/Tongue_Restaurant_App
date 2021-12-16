@@ -197,24 +197,18 @@ class ApiServices{
     }
   }
 
-  Future addToMyOrders(String orderId,String branchId,String token)async{
-    Map<String,dynamic> orderDetails = {
-      'orderId': orderId,
-      'branchId':branchId
-    };
-    Map<String,dynamic> data = {
-      'orderDetails': orderDetails
-    };
+  Future addToMyOrders(Map<String,dynamic> data,String token)async{
     var res = await http.patch(
         Uri.parse(baseUrl+ 'user/addToMyOrders'),
       headers: {
-        "Content_Type":"application/json",
+        "Content-Type":"application/json",
         "Authorization": token
       },
       body: json.encode(data)
     );
-
+    print(json.encode(data));
     var result = json.decode(res.body);
+    print(result);
     if(result['status']){
       print('added to myOrders');
       return true;
@@ -233,6 +227,7 @@ class ApiServices{
       },
     );
     var result = json.decode(res.body);
+    return result;
     if(result['status']){
       return result['myOrders'];
     }else{
