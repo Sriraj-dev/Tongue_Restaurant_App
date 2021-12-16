@@ -28,8 +28,8 @@ class _TrackingPageState extends State<TrackingPage> {
   bool outForDelivery = false;
   bool delivered = false;
   int activeStep = 0;
-  final controller = StreamController<Map<String,dynamic>>();
-
+  Map<String,dynamic> partnerDetails = {};
+  StreamController<bool> isAssigned = new StreamController();
   generateYourOrder(var orderItems){
     String yourOrder = '';
     orderItems.forEach((map){
@@ -44,8 +44,8 @@ class _TrackingPageState extends State<TrackingPage> {
   @override
   void dispose() {
     // TODO: implement dispose
-    controller.close();
     super.dispose();
+    isAssigned.close();
   }
 
   @override
@@ -86,6 +86,7 @@ class _TrackingPageState extends State<TrackingPage> {
                   }else{
                     accepted = orderDetails['accepted'];
                     assigned = orderDetails['assigned'];
+                    isAssigned.sink.add(assigned);
                     outForDelivery = orderDetails['outForDelivery'];
                     delivered = orderDetails['delivered'];
                     activeStep = 0;
@@ -230,46 +231,12 @@ class _TrackingPageState extends State<TrackingPage> {
                                                         letterSpacing: 1
                                                     ),
                                                   ),
-                                                ):Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: [
-                                                      Icon(Icons.delivery_dining_rounded,color: Colors.white,),
-                                                      SizedBox(width: 20,),
-                                                      Container(
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            Text('Mahender',
-                                                              style: GoogleFonts.lato(
-                                                                  fontSize: 16,
-                                                                  color: Colors.white
-                                                              ),
-                                                            ),
-                                                            SizedBox(height: 0,),
-                                                            Row(
-                                                              //mainAxisAlignment: MainAxisAlignment.center,
-                                                              children: [
-                                                                Text('8008053826',
-                                                                    style: GoogleFonts.lato(
-                                                                        color: Colors.white,
-                                                                        fontWeight: FontWeight.w500,
-                                                                        fontSize: 15,
-                                                                        letterSpacing: 1
-                                                                    )),
-                                                                //TODO: Call the driver
-                                                                IconButton(onPressed: (){
-                                                                  launch("tel://9618111780}");
-                                                                }, icon: Icon(Icons.call,color: Colors.white,))
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                )
+                                                ):(partnerDetails=={})?FutureBuilder(
+                                                  future: getDeliveryPartner(orderDetails['assignedTo']),
+                                                  builder: (context, snapshot) {
+                                                    return deliveryPartnerWidget();
+                                                  }
+                                                ):deliveryPartnerWidget()
                                               ],
                                             ),
                                           ),
@@ -292,32 +259,90 @@ class _TrackingPageState extends State<TrackingPage> {
 
         }
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Material(
-          elevation: 2,
-          borderRadius: BorderRadius.circular(10),
-          child: GestureDetector(
-            onTap: (){},
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 105, vertical: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: kPrimaryColor,
-              ),
-              child: Text(
-                'Track your order',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+      floatingActionButton: StreamBuilder<Object>(
+        stream: isAssigned.stream,
+        builder: (context, snapshot) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Material(
+              elevation: (assigned)?2:0,
+              borderRadius: BorderRadius.circular(10),
+              child: GestureDetector(
+                onTap: (){},
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 105, vertical: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: (assigned)?kPrimaryColor:ksecondaryColor,
+                  ),
+                  child: Text(
+                    'Track your order',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        }
       ),
     );
+  }
+
+  Padding deliveryPartnerWidget() {
+    return (partnerDetails['Name']==''|| partnerDetails['Name']==null)?Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+      child: Text('Could not get the deliveryPartner details',
+        style: GoogleFonts.lato(
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+            fontSize: 15,
+            letterSpacing: 1
+        ),
+      ),
+    ):Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Icon(Icons.delivery_dining_rounded,color: Colors.white,),
+                                                        SizedBox(width: 20,),
+                                                        Container(
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              Text(partnerDetails['Name'],
+                                                                style: GoogleFonts.lato(
+                                                                    fontSize: 16,
+                                                                    color: Colors.white
+                                                                ),
+                                                              ),
+                                                              SizedBox(height: 0,),
+                                                              Row(
+                                                                //mainAxisAlignment: MainAxisAlignment.center,
+                                                                children: [
+                                                                  Text(partnerDetails['phone'],
+                                                                      style: GoogleFonts.lato(
+                                                                          color: Colors.white,
+                                                                          fontWeight: FontWeight.w500,
+                                                                          fontSize: 15,
+                                                                          letterSpacing: 1
+                                                                      )),
+                                                                  //TODO: Call the driver
+                                                                  IconButton(onPressed: (){
+                                                                    launch("tel://${partnerDetails['phone']}");
+                                                                  }, icon: Icon(Icons.call,color: Colors.white,))
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  );
   }
 
   Stream<Map<String,dynamic>> getOrderDetails()=>
@@ -343,6 +368,16 @@ class _TrackingPageState extends State<TrackingPage> {
       };
       return data;
     }
+  }
+
+  getDeliveryPartner(String partnerId)async{
+    Map<String,dynamic> data = {
+      'partnerId': partnerId,
+      'branchId':branchId
+    };
+    var response = await ApiServices().getDeliveryPartnerDetails(data);
+
+    partnerDetails = response;
   }
 
   Center loadingScreen() {
@@ -429,3 +464,5 @@ class _TrackingPageState extends State<TrackingPage> {
   }
 
 }
+
+//TODO: edit loadingScreen,edit ErrorScreen.

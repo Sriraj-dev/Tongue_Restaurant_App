@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:delivery_app/Services/DBoperations.dart';
 import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/Services/locationServices.dart';
@@ -12,12 +14,13 @@ String homeAddress = '';
 late Position homeLocation ;
 late Position userLocation;
 String userAddress = '';
-// TODO: Store these lists locally;
 List userCart = [];
 List userFav = [];
 List<Map<String,dynamic>> billingItems = [];// List of Maps where Map = {id:ItemUniqueId  ,count: Count}
 String msg = '';
 List myOrders = [];
+//Stream<int> cartCount = userCart.length as Stream<int>;
+StreamController<int> cartCount = StreamController();
 
 Future<int> getUserLocation()async{
  try{
@@ -55,6 +58,7 @@ addToUserCart(var id){
   userCart.add(id);
   billingItems.add(cartItem);
  }
+ cartCount.sink.add(userCart.length);
  saveToUserCartDb(id);
 }
 
@@ -65,6 +69,7 @@ removeFromUserCart(var id){
    return e['id']==id;
   });
  }
+ cartCount.sink.add(userCart.length);
  deleteFromUserCartDb(id);
 }
 
@@ -149,6 +154,7 @@ getUserCart()async{
    billingItems.add(cartItem);
   }
  });
+ cartCount.sink.add(userCart.length);
  print('no.of time cart loop - $j');
 }
 
