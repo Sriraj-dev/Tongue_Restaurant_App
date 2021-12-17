@@ -20,7 +20,7 @@ List<Map<String,dynamic>> billingItems = [];// List of Maps where Map = {id:Item
 String msg = '';
 List myOrders = [];
 //Stream<int> cartCount = userCart.length as Stream<int>;
-StreamController<int> cartCount = StreamController();
+StreamController<int> cartCount = StreamController<int>.broadcast();
 
 Future<int> getUserLocation()async{
  try{
