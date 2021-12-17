@@ -31,8 +31,6 @@ class _PageManagerState extends State<PageManager> {
   @override
   void dispose() {
     super.dispose();
-
-    LocalDB.instance.close();
   }
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,7 @@ class _PageManagerState extends State<PageManager> {
           return ConvexAppBar.badge(
             {
               //2:userCart.length.toString()=='0'?'':userCart.length.toString(),
-              2:snapshot.data.toString()??count
+              2:(snapshot.data.toString()=='0')?'':snapshot.data.toString() ?? ''
             },
             color: kPrimaryColor,
             backgroundColor: Colors.white,

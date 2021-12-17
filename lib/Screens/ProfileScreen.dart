@@ -253,7 +253,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(20))),
                 child: InkWell(
                   onTap: (){
-                    //logOutCurrentUser();
+                    logOutCurrentUser();
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -295,12 +295,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // void logOutCurrentUser() async{
-  //   await Storage().deleteData();
-  //   await DbOperations().clearDataBase();
-  //   await LocalDB.instance.close();
-  //   Navigator.of(context).popUntil((route) => false);
-  //   Phoenix.rebirth(context);
-  //   //Navigator.push(context, route)
-  // }
+  void logOutCurrentUser() async{
+    await Storage().deleteData();
+    await DbOperations().clearDataBase();
+    Navigator.of(context).popUntil((route) => false);
+    Phoenix.rebirth(context);
+    //Navigator.push(context, route)
+  }
 }
