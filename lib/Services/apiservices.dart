@@ -251,6 +251,8 @@ class ApiServices{
   }
 
   Future getDeliveryPartnerDetails(Map<String,dynamic> data)async{
+    print('getting Partner Details using - $data');
+
     var res = await http.post(
       Uri.parse(baseUrl+'tongue/deliveryPartners/profile'),
       headers: {
@@ -258,9 +260,12 @@ class ApiServices{
       },
       body: json.encode(data)
     );
+    print( "deliveryPartner -  ${res.body}");
     if(res.statusCode ==200){
+      print('status code is 200');
       var result = json.decode(res.body);
-      return result['partnerDetails'];
+      print('returning - ${result['partnerDetails']}');
+      return result['partnerDetails'][0];
     }
     else{
       print('Error in getting deliveryPartner details');

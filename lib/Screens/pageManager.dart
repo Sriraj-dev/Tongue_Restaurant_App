@@ -43,7 +43,7 @@ class _PageManagerState extends State<PageManager> {
           return ConvexAppBar.badge(
             {
               //2:userCart.length.toString()=='0'?'':userCart.length.toString(),
-              2:(snapshot.data.toString()=='0')?'':snapshot.data.toString() ?? ''
+              2:count
             },
             color: kPrimaryColor,
             backgroundColor: Colors.white,
