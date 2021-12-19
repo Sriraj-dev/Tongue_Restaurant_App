@@ -185,9 +185,8 @@ class _LaunchScreenState extends State<LaunchScreen> {
               }
             ) .. show();
           }else{
-            if(userAddress!= 'Not Set'){
-              setHomeLocation();
-            }
+            if(homeAddress != '')
+              setHomeLocation(homeAddress);
           }
           initialiseCategories();
           initialiseCategoryItems();

@@ -46,7 +46,11 @@ class LocationServices {
   //If the user enters the address manually -->
   getPositionFromAddress(String Address)async{
     List<Location> locations = await locationFromAddress(Address);
-    print(locations);
-    return locations[0];
+    print('Locations are - $locations');
+    if(locations.length != 0){
+      return locations[0];
+    }else{
+      return Location(latitude: 0.0, longitude: 0.0,timestamp: DateTime(DateTime.wednesday));
+    }
   }
 }

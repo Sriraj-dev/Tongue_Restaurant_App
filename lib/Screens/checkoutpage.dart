@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:delivery_app/Screens/trackingScreen.dart';
 import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/constants.dart';
@@ -15,23 +16,29 @@ import 'package:geolocator/geolocator.dart';
 class checkout extends StatefulWidget {
   //const checkout({Key? key}) : super(key: key);
   num bill;
-  checkout(this.bill);
+  String deliveryAddress;
+  double deliveryLatitude;
+  double deliveryLongitude;
+  checkout(this.bill,this.deliveryAddress,this.deliveryLatitude,this.deliveryLongitude);
   @override
-  _checkoutState createState() => _checkoutState(bill);
+  _checkoutState createState() => _checkoutState(bill,deliveryAddress,deliveryLatitude,deliveryLongitude);
 }
 
 class _checkoutState extends State<checkout> {
 
   num bill;
-  _checkoutState(this.bill);
+
+  _checkoutState(this.bill,this.deliveryAddress,this.deliveryLatitude,this.deliveryLongitude);
   List<String> address = userAddress.split(',');
-  Position deliveryPosition = userLocation;
-  double deliveryLatitude = userLocation.latitude;
-  double deliveryLongitude = userLocation.longitude;
+  //Position deliveryPosition = userLocation;
+  String deliveryAddress;
+  double deliveryLatitude;
+  double deliveryLongitude;
   bool value = true;
   bool placingOrder = false;
   @override
   Widget build(BuildContext context) {
+    address = deliveryAddress.split(',');
     List e = userCart;
     return Scaffold(
       backgroundColor: Background_Color,
@@ -100,36 +107,37 @@ class _checkoutState extends State<checkout> {
                 //TODO : Ask User to choose homeLocation or currentLocation.
                 //dialogueBox
                 GestureDetector(
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            child: Container(
-                              height: 130,
-                              child: ListView(
-                                children: [
-                                  CheckboxListTile(
-                                      activeColor: kPrimaryColor,
-                                      controlAffinity:
-                                          ListTileControlAffinity.leading,
-                                      value: value,
-                                      title: Text('Home'),
-                                      onChanged: (value) =>
-                                          setState(() => this.value = value!)),
-                                  CheckboxListTile(
-                                      activeColor: kPrimaryColor,
-                                      controlAffinity:
-                                          ListTileControlAffinity.leading,
-                                      value: !value,
-                                      title: Text('Current'),
-                                      onChanged: (value) =>
-                                          setState(() => this.value = value!)),
-                                ],
-                              ),
-                            ),
-                          );
-                        });
+                  onTap: () async{
+                    await changeDeliveryLocation(context);
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (BuildContext context) {
+                    //       return Dialog(
+                    //         child: Container(
+                    //           height: 130,
+                    //           child: ListView(
+                    //             children: [
+                    //               CheckboxListTile(
+                    //                   activeColor: kPrimaryColor,
+                    //                   controlAffinity:
+                    //                       ListTileControlAffinity.leading,
+                    //                   value: value,
+                    //                   title: Text('Home'),
+                    //                   onChanged: (value) =>
+                    //                       setState(() => this.value = value!)),
+                    //               CheckboxListTile(
+                    //                   activeColor: kPrimaryColor,
+                    //                   controlAffinity:
+                    //                       ListTileControlAffinity.leading,
+                    //                   value: !value,
+                    //                   title: Text('Current'),
+                    //                   onChanged: (value) =>
+                    //                       setState(() => this.value = value!)),
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       );
+                    //     });
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 16.0, top: 16),
@@ -166,7 +174,8 @@ class _checkoutState extends State<checkout> {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        '${address[1]},${address[2]}',
+                        (address.length>=3)? '${address[1]},${address[2]} ...'
+                            :(address.length>=2)?'${address[1]} ...':'...',
                         style: TextStyle(
                             fontSize: 15, color: Colors.black.withOpacity(0.7)),
                       ),
@@ -262,7 +271,7 @@ class _checkoutState extends State<checkout> {
               Map<String, dynamic> orderDetails = {
                 'customerName': username,
                 'customerPhone': userPhone,
-                'customerAddress': userAddress,
+                'customerAddress': deliveryAddress,
                 'latitude': deliveryLatitude.toString(),
                 'longitude': deliveryLongitude.toString(),
                 'orderItems': billingItems,
@@ -308,6 +317,87 @@ class _checkoutState extends State<checkout> {
         ),
       ),
     );
+  }
+
+  Future<void> changeDeliveryLocation(BuildContext context) async {
+    AwesomeDialog(
+        context: context,
+        dismissOnTouchOutside: false,
+        dismissOnBackKeyPress: false,
+        showCloseIcon: true,
+        dialogType: DialogType.INFO_REVERSED,
+        padding: EdgeInsets.symmetric(horizontal: 5),
+        title: 'Choose your Delivery Location!',
+        btnOkText: 'Current location',
+        btnCancelText: 'Home Location',
+        btnOkOnPress: ()async{
+          await getUserLocation();
+          if(userAddress !='Not Set'){
+            AwesomeDialog(
+                context: context,
+                showCloseIcon: false,
+                dismissOnBackKeyPress: false,
+                dismissOnTouchOutside: false,
+                dialogType: DialogType.SUCCES,
+                title: 'Delivery Location:',
+                desc: '$userAddress',
+                btnOkOnPress: (){
+                  setState(() {
+                    deliveryAddress = userAddress;
+                    deliveryLatitude = userLocation.latitude;
+                    deliveryLongitude = userLocation.longitude;
+                  });
+                }
+            )..show();
+          }else{
+            AwesomeDialog(
+              context: context,
+              showCloseIcon: false,
+              dismissOnBackKeyPress: false,
+              dismissOnTouchOutside: false,
+              dialogType: DialogType.ERROR,
+              title: 'Location Permissions are required!',
+              //btnOkIcon: Icons.cancel,
+              btnOkColor: Colors.red,
+              btnOkOnPress: (){},
+            )..show();
+          }
+        },
+        btnCancelOnPress: (){
+          if(homeAddress == ''){
+            AwesomeDialog(
+              context: context,
+              showCloseIcon: false,
+              dismissOnBackKeyPress: false,
+              dismissOnTouchOutside: false,
+              dialogType: DialogType.INFO_REVERSED,
+              title: 'Home Location is not set!',
+              desc: 'Please set your home location in your profile',
+              //btnOkIcon: Icons.cancel,
+              btnOkColor: Colors.red,
+              btnOkOnPress: (){
+              },
+            )..show();
+          }else{
+            AwesomeDialog(
+                context: context,
+                showCloseIcon: false,
+                dismissOnBackKeyPress: false,
+                dismissOnTouchOutside: false,
+                dialogType: DialogType.SUCCES,
+                title: 'Delivery Location:',
+                desc: '$homeAddress',
+                btnOkOnPress: (){
+                  setState(() {
+                    deliveryAddress = homeAddress;
+                    deliveryLatitude = homeLatitude;
+                    deliveryLongitude = homeLongitude;
+                  });
+                }
+            )..show();
+          }
+        }
+    )..show();
   }
 
   Column total_order(List<dynamic> e) {
