@@ -47,5 +47,6 @@ class LocationServices {
   getPositionFromAddress(String Address)async{
     List<Location> locations = await locationFromAddress(Address);
     print(locations);
+    return locations[0];
   }
 }

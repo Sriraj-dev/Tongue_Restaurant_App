@@ -42,7 +42,15 @@ class DbOperations{
     String tableName = 'user_homeAddress';
 
     var res=await LocalDB.instance.getData(tableName);
-    print(res[0]['Address']);
-    return res[0]['Address'];
+    if(res.length != 0){
+      print(res[0]['Address']);
+      return res[0]['Address'];
+    }else{
+      return '';
+    }
+  }
+  clearHomeAddress()async{
+    String tableName = 'user_homeAddress';
+    await LocalDB.instance.clearTable(tableName);
   }
 }

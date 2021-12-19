@@ -49,6 +49,7 @@ dependencies:
   location: ^4.2.0
   google_maps_flutter:
   flutter_polyline_points:
+  awesome_dialog:
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:delivery_app/Screens/Body.dart';
 import 'package:delivery_app/Screens/LoginPage.dart';
@@ -6,6 +7,7 @@ import 'package:delivery_app/Screens/homePage.dart';
 import 'package:delivery_app/Screens/maintenance.dart';
 import 'package:delivery_app/Screens/pageManager.dart';
 import 'package:delivery_app/Screens/updateScreen.dart';
+import 'package:delivery_app/Services/DBoperations.dart';
 import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/Services/authentication.dart';
 import 'package:delivery_app/Services/locationServices.dart';
@@ -161,6 +163,32 @@ class _LaunchScreenState extends State<LaunchScreen> {
             loadingValue = 0.75;
           });
           await getUserLocation();
+          //homeAddress = await DbOperations().getHomeAddress();
+          await getHomeAddress();
+          print('home address is - $homeAddress');
+          if((homeAddress == null || homeAddress == '') && userAddress!='Not Set'){
+            print('Yes im showing awesome dialogue');
+           await AwesomeDialog(
+                context: context,
+              dismissOnTouchOutside: false,
+              dismissOnBackKeyPress: false,
+              dialogType: DialogType.QUESTION,
+              title: 'Do you want to set your current location as Home Location?',
+              btnOkOnPress: (){
+                DbOperations().saveHomeAddress(userAddress);
+                homeAddress = userAddress;
+                homeLocation = userLocation;
+                homeLatitude = userLocation.latitude;
+                homeLongitude = userLocation.longitude;
+              },
+              btnCancelOnPress: (){
+              }
+            ) .. show();
+          }else{
+            if(userAddress!= 'Not Set'){
+              setHomeLocation();
+            }
+          }
           initialiseCategories();
           initialiseCategoryItems();
           initialiseMenu();
@@ -174,7 +202,6 @@ class _LaunchScreenState extends State<LaunchScreen> {
               setState(() {
                 loadingValue = 1;
               });
-              getUserAddress();
               return 0;
             }else{
               setState(() {
@@ -236,10 +263,6 @@ class _LaunchScreenState extends State<LaunchScreen> {
 
 }
 
-
-
-//TODO : gps for the driver
-//TODO : location of the client
 //TODO : payment gateway
 //TODO : offers
 //TODO : review and ratings
