@@ -26,6 +26,7 @@ class _PageManagerState extends State<PageManager> {
   @override
   void initState() {
     super.initState();
+    getMyOrders();
   }
 
   @override

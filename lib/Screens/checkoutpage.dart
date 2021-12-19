@@ -34,12 +34,13 @@ class _checkoutState extends State<checkout> {
   String deliveryAddress;
   double deliveryLatitude;
   double deliveryLongitude;
-  bool value = true;
+  bool warningShown = false;
   bool placingOrder = false;
+  List e = userCart;
   @override
   Widget build(BuildContext context) {
     address = deliveryAddress.split(',');
-    List e = userCart;
+
     return Scaffold(
       backgroundColor: Background_Color,
       appBar: PreferredSize(
@@ -109,35 +110,6 @@ class _checkoutState extends State<checkout> {
                 GestureDetector(
                   onTap: () async{
                     await changeDeliveryLocation(context);
-                    // showDialog(
-                    //     context: context,
-                    //     builder: (BuildContext context) {
-                    //       return Dialog(
-                    //         child: Container(
-                    //           height: 130,
-                    //           child: ListView(
-                    //             children: [
-                    //               CheckboxListTile(
-                    //                   activeColor: kPrimaryColor,
-                    //                   controlAffinity:
-                    //                       ListTileControlAffinity.leading,
-                    //                   value: value,
-                    //                   title: Text('Home'),
-                    //                   onChanged: (value) =>
-                    //                       setState(() => this.value = value!)),
-                    //               CheckboxListTile(
-                    //                   activeColor: kPrimaryColor,
-                    //                   controlAffinity:
-                    //                       ListTileControlAffinity.leading,
-                    //                   value: !value,
-                    //                   title: Text('Current'),
-                    //                   onChanged: (value) =>
-                    //                       setState(() => this.value = value!)),
-                    //             ],
-                    //           ),
-                    //         ),
-                    //       );
-                    //     });
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 16.0, top: 16),
@@ -220,7 +192,7 @@ class _checkoutState extends State<checkout> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: total_order(e),
+                child: total_order(),
               ),
             ),
             Padding(
@@ -290,6 +262,7 @@ class _checkoutState extends State<checkout> {
                 };
                 await ApiServices().addToMyOrders(data ,token);
                 showSnackBar('Order placed!', context, Colors.green);
+                getMyOrders();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => TrackingPage(res,"61a9b1c56a629f43c19616c0")));
                 //TODO: clear User cart from Database;
@@ -400,7 +373,7 @@ class _checkoutState extends State<checkout> {
     )..show();
   }
 
-  Column total_order(List<dynamic> e) {
+  Column total_order() {
     return Column(
       children: [
         Padding(
@@ -418,11 +391,37 @@ class _checkoutState extends State<checkout> {
           child: ListView.builder(
               itemCount: e.length,
               itemBuilder: (context, index) {
+                print('e.length is ${e.length}');
                 var req = menu.firstWhere((map) {
                   return map['id'] == e[index];
                 });
                 var item = req['item'];
-                return Container(
+                if(!item['isAvailable']){
+                  //TODO: Remove from user cart.
+                  removeFromUserCart(req['id']);
+                    bill = Billing().calculateBill(billingItems);
+                  if(!warningShown){
+                    warningShown = true;
+                    Future.delayed(Duration.zero,(){
+                      AwesomeDialog(
+                        context: context,
+                        dismissOnTouchOutside: false,
+                        dismissOnBackKeyPress: false,
+                        showCloseIcon: false,
+                        dialogType: DialogType.WARNING,
+                        title: 'Items removed!',
+                        desc: 'Some unavailable items are removed from cart!',
+                        btnOkOnPress: (){
+                          setState(() {
+
+                          });
+                        },
+                        btnOkColor: Colors.red,
+                      )..show();
+                    });
+                  }
+                }
+                return (item['isAvailable']==true)?Container(
                   height: 35,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -434,7 +433,7 @@ class _checkoutState extends State<checkout> {
                       ],
                     ),
                   ),
-                );
+                ):Container();
               }),
         ),
         Padding(

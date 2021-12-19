@@ -15,21 +15,20 @@ class order_history extends StatefulWidget {
 }
 
 class _order_historyState extends State<order_history> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Background_Color,
-      body: FutureBuilder(
-        future: getMyOrders(),
+      body: StreamBuilder(
+        stream: initialisedOrders.stream,
         builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.waiting){
-            return loadingScreen();
-          }else{
+          print('gotOrders = $gotOrders');
             if(snapshot.hasError){
               return errorScreen();
             }
             else{
-              return Column(
+              return (gotOrders)?Column(
                 children: [
                   SizedBox(height: 20,),
                   Center(child: Lottie.asset('assets/history.json',repeat: false,height: 200,)),
@@ -59,9 +58,8 @@ class _order_historyState extends State<order_history> {
                     ),
                   )
                 ],
-              );
+              ):loadingScreen();
             }
-          }
         }
       ),
     );
@@ -80,49 +78,6 @@ class _order_historyState extends State<order_history> {
     return Center(
               child: Text('Unable to fetch your Orders!!'),
             );
-  }
-
-  getMyOrders() async{
-    myOrders = [];
-    var result = await ApiServices().getMyOrders(token);
-    print('myOrderDetails are - $result');
-    if(result['status']){
-       List<dynamic> myOrderDetails = result['myOrders'];
-       for(int i=0;i<myOrderDetails.length;i++){
-         var e = myOrderDetails[i];
-         Map<String,dynamic> orderData = {
-           'branchId': e['branchId'],
-           'orderId': e['orderId']
-         };
-         var response = await ApiServices().getOrderDetails(orderData);
-         if(response['status']){
-           var order = response['order'];
-           //if order['delivered'] == true then it is pastOrder else it is Current(Ongoing) Order.
-           //remember that you can access the time of Orderplacemnet by order['createdAt']
-           myOrders.add(order);
-         }else{
-           var order = {
-             'orderId': e['orderId'],
-             'branchId':e['branchId'],
-             'msg': response['msg']
-           };
-           //TODO: remove from MyOrders
-           myOrders.add(order);
-         }
-       }
-      return;
-    }else{
-      showSnackBar('An Error Occurred!!', context, Colors.red);
-    }
-  }
-
-  orderTapped(String orderId,String branchId){
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context)=>TrackingPage(orderId, branchId))
-    );
-    // Navigator.push(context,
-    //   MaterialPageRoute(builder: (context)=>TrackingPage(orderId, branchId))
-    // );
   }
 }
 

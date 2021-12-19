@@ -24,6 +24,8 @@ String msg = '';
 List myOrders = [];
 //Stream<int> cartCount = userCart.length as Stream<int>;
 StreamController<int> cartCount = StreamController<int>.broadcast();
+StreamController<bool> initialisedOrders = StreamController<bool>.broadcast();
+bool gotOrders = false;
 
 Future<int> getUserLocation()async{
  try{
@@ -161,6 +163,52 @@ getUserCart()async{
  cartCount.sink.add(userCart.length);
  print('no.of time cart loop - $j');
 }
+
+
+getMyOrders() async{
+ myOrders = [];
+ initialisedOrders.sink.add(false);
+ gotOrders = false;
+ var result = await ApiServices().getMyOrders(token);
+ print('myOrderDetails are - $result');
+ if(result['status']){
+  List<dynamic> myOrderDetails = result['myOrders'];
+  for(int i=0;i<myOrderDetails.length;i++){
+   var e = myOrderDetails[i];
+   Map<String,dynamic> orderData = {
+    'branchId': e['branchId'],
+    'orderId': e['orderId']
+   };
+   var response = await ApiServices().getOrderDetails(orderData);
+   if(response['status']){
+    var order = response['order'];
+    //if order['delivered'] == true then it is pastOrder else it is Current(Ongoing) Order.
+    //remember that you can access the time of Orderplacemnet by order['createdAt']
+
+    myOrders.add(order);
+   }else{
+    var order = {
+     'orderId': e['orderId'],
+     'branchId':e['branchId'],
+     'msg': response['msg']
+    };
+    //TODO: remove from MyOrders
+    myOrders.add(order);
+   }
+  }
+  initialisedOrders.sink.add(true);
+  print('got my Orders');
+  gotOrders = true;
+  return;
+ }else{
+  myOrders = [];
+  initialisedOrders.sink.add(true);
+  print('error in getting Orders');
+  gotOrders = true;
+  //showSnackBar('An Error Occurred!!', context, Colors.red);
+ }
+}
+
 
 getHomeAddress()async{
  var res = await DbOperations().getHomeAddress();

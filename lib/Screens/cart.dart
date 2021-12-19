@@ -20,6 +20,14 @@ class cart extends StatefulWidget {
 class _cartState extends State<cart> {
   num totalCost = 0;
   bool reloaded = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    reloadMenuItems();
+  }
+
   @override
   Widget build(BuildContext context) {
     List e = userCart;
@@ -216,7 +224,8 @@ class _cartState extends State<cart> {
               ),
             )
           : FutureBuilder(
-            future: (reloaded)?null:reloadMenuItems(),
+            //future: (reloaded)?null:reloadMenuItems(),
+            future: null,
             builder: (context, snapshot) {
               //This is the loading Screen.
               if(snapshot.connectionState==ConnectionState.waiting){
@@ -231,15 +240,15 @@ class _cartState extends State<cart> {
                     });
                     int quantity = billingItems.firstWhere((req) => req['id']==e[index] , orElse: (){return {'id': 0,'count':0};})['count'];
                     var item = req['item'];
-                    if(!item['isAvailable']){
-                      //TODO: Remove from user cart.
-
-                        removeFromUserCart(req['id']);
-
-                    }
+                    // if(!item['isAvailable']){
+                    //   //TODO: Remove from user cart.
+                    //
+                    //     removeFromUserCart(req['id']);
+                    //
+                    // }
                     totalCost = Billing().calculateBill(billingItems);
                     print('Total cost is - $totalCost');
-                    return (item['isAvailable']==true)?Padding(
+                    return Padding(
                       padding:
                           const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
                       child: Material(
@@ -401,8 +410,7 @@ class _cartState extends State<cart> {
                           ),
                         ),
                       ),
-                    )
-                        :Container();
+                    );
                   },
                   itemCount: e.length,
                 );
