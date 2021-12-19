@@ -26,6 +26,8 @@ class _checkoutState extends State<checkout> {
   _checkoutState(this.bill);
   List<String> address = userAddress.split(',');
   Position deliveryPosition = userLocation;
+  double deliveryLatitude = userLocation.latitude;
+  double deliveryLongitude = userLocation.longitude;
   bool value = true;
   bool placingOrder = false;
   @override
@@ -261,8 +263,8 @@ class _checkoutState extends State<checkout> {
                 'customerName': username,
                 'customerPhone': userPhone,
                 'customerAddress': userAddress,
-                'latitude': deliveryPosition.latitude.toString(),
-                'longitude': deliveryPosition.longitude.toString(),
+                'latitude': deliveryLatitude.toString(),
+                'longitude': deliveryLongitude.toString(),
                 'orderItems': billingItems,
                 'amountPaid': bill.toString(),
                 'branchId': "61a9b1c56a629f43c19616c0",

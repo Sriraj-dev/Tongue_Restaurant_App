@@ -4,6 +4,7 @@ import 'package:delivery_app/Services/DBoperations.dart';
 import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/Services/locationServices.dart';
 import 'package:delivery_app/constants.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 String token = '';
@@ -11,8 +12,10 @@ String username = '';
 String userEmail = '';
 String userPhone = '';
 String homeAddress = '';
-late Position homeLocation ;
+late Position homeLocation;
 late Position userLocation;
+late double homeLatitude;
+late double homeLongitude;
 String userAddress = '';
 List userCart = [];
 List userFav = [];
@@ -24,15 +27,16 @@ StreamController<int> cartCount = StreamController<int>.broadcast();
 
 Future<int> getUserLocation()async{
  try{
+  print('trying to get the current location');
   Position position = await LocationServices().getCurrentPosition();
   userLocation = position;
   userAddress = await LocationServices().getCurrentAddress(position);
-  DbOperations().saveHomeAddress(userAddress);
   print('Current address is - $userAddress');
   return 1;
  }catch(e){
-  //showSnackBar('Unable to access location!', context,Colors.red);
-  userAddress = 'AccessLocation';
+ // showSnackBar('Unable to access location!', context,Colors.red);
+  userAddress = 'Not Set';
+  print('userAddress is - $userAddress');
   return 0;
  }
 }
@@ -158,8 +162,15 @@ getUserCart()async{
  print('no.of time cart loop - $j');
 }
 
-getUserAddress()async{
+getHomeAddress()async{
  var res = await DbOperations().getHomeAddress();
  //print('No.of addresses = ${res.length}');
  homeAddress = res;
+}
+
+setHomeLocation()async{
+ Location tempLocation = await LocationServices().getPositionFromAddress(homeAddress);
+
+ homeLatitude = tempLocation.latitude;
+ homeLongitude = tempLocation.longitude;
 }

@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:delivery_app/Screens/help_support.dart';
 import 'package:delivery_app/Services/DBoperations.dart';
 import 'package:delivery_app/Services/localStorage.dart';
@@ -25,272 +26,347 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Background_Color,
 
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 30,
-          ),
-          // Padding(
-          //   padding: const EdgeInsets.only(right: 16.0,top: 16),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.end,
-          //     children: [
-          //       //TODO order history
-          //       Icon(Icons.history,size: 40,color: kPrimaryColor.withOpacity(0.5),),
-          //     ],
-          //   ),
-          // ),
-          Center(
-            child: Container(
-              child: Lottie.asset(
-                'assets/profile.json',
-                height: 150,
-              ),
-            ),
-          ),
-          Text(
-            username,
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: kPrimaryColor,
-                fontSize: 32),
-          ),
-          Text(
-            userEmail,
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: kPrimaryColor.withOpacity(0.5),
-                fontSize: 20),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 64),
-            child: Container(
-              height: 48,
-              decoration: BoxDecoration(
-                  color: kPrimaryColor.withOpacity(0.03),
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Icon(Icons.phone),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          userPhone,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: kPrimaryColor.withOpacity(0.4),
-                              fontSize: 18),
-                        ),
-                      ),
-                    ],
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Container(
+                  child: Lottie.asset(
+                    'assets/profile.json',
+                    height: 150,
                   ),
-                  Row(
-                    children: [
-                      Icon(Icons.edit),
-                      SizedBox(
-                        width: 16,
-                      ),
-                    ],
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
-          //TODO address overflow condition
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
-            child: Material(
-              elevation: 5,
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              child: Container(
-
-               // height: 100,
-                decoration: BoxDecoration(
-                    color: kPrimaryColor.withOpacity(0.03),
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                child: Row(
-                  children: [
-                    SizedBox(width: 10,),
-                    Icon(Icons.home),
-                    SizedBox(width: 15,),
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.7,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 5),
-                        child: Text(
-                          userAddress.substring(0,(userAddress.length>125)?125:userAddress.length),
-                          style: TextStyle(
-                            fontSize: 18,
+              Text(
+                username,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: kPrimaryColor,
+                    fontSize: 32),
+              ),
+              Text(
+                userEmail,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: kPrimaryColor.withOpacity(0.5),
+                    fontSize: 20),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 64),
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                      color: kPrimaryColor.withOpacity(0.03),
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 16,
                           ),
-                          //maxLines: 3,
+                          Icon(Icons.phone),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              userPhone,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: kPrimaryColor.withOpacity(0.4),
+                                  fontSize: 18),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.edit),
+                          SizedBox(
+                            width: 16,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              //TODO address overflow condition
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
+                child: Material(
+                  elevation: 5,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  child: Container(
+
+                   // height: 100,
+                    decoration: BoxDecoration(
+                        color: kPrimaryColor.withOpacity(0.03),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    child: Row(
+                      children: [
+                        SizedBox(width: 10,),
+                        Icon(Icons.home),
+                        SizedBox(width: 15,),
+                        Container(
+                          //width: MediaQuery.of(context).size.width*0.65,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 5),
+                            child: (homeAddress=='')?
+                                Text('Home location is not set!',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                )
+                                :Text(
+                              homeAddress.substring(0,(homeAddress.length>125)?125:homeAddress.length),
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                              //maxLines: 3,
+                            ),
+                          ),
                         ),
+                        IconButton(
+                            onPressed: (){
+                              TextEditingController address = new TextEditingController();
+                              String hintText = 'Type your address';
+                              AwesomeDialog(
+                                context: context,
+                                animType: AnimType.BOTTOMSLIDE,
+                                showCloseIcon: true,
+                                dismissOnTouchOutside: false,
+                                dismissOnBackKeyPress: false,
+                                btnCancelText: 'Set current location',
+                                dialogType: DialogType.INFO_REVERSED,
+                                btnOkOnPress:(address.text.length!=0)?(){
+                                  // homeAddress = address.text;
+                                  // setHomeLocation();
+                                }:(){
+                                  AwesomeDialog(
+                                      context: context,
+                                      showCloseIcon: false,
+                                      dismissOnBackKeyPress: false,
+                                      dismissOnTouchOutside: false,
+                                      dialogType: DialogType.ERROR,
+                                      title: 'Address cannot be empty',
+                                     // btnOkIcon: Icons.cancel,
+                                      btnOkColor: Colors.red,
+                                    btnOkOnPress: (){}
+                                  )..show();
+                                },
+                                btnCancelOnPress: ()async{
+                                  await getUserLocation();
+                                  if(userAddress!= "Not Set"){
+                                    await DbOperations().clearHomeAddress();
+                                    DbOperations().saveHomeAddress(userAddress);
+                                    homeAddress = userAddress;
+                                    homeLocation = userLocation;
+                                    homeLatitude = userLocation.latitude;
+                                    homeLongitude = userLocation.longitude;
+                                  }else{
+                                    AwesomeDialog(
+                                      context: context,
+                                      showCloseIcon: false,
+                                      dismissOnBackKeyPress: false,
+                                      dismissOnTouchOutside: false,
+                                      dialogType: DialogType.ERROR,
+                                      title: 'Location Permissions are required!',
+                                      //btnOkIcon: Icons.cancel,
+                                      btnOkColor: Colors.red,
+                                      btnOkOnPress: (){},
+                                    )..show();
+                                  }
+                                },
+                                body: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('Add your Home Address',
+                                      style: GoogleFonts.lato(
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10,),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      child: TextField(
+                                        controller: address,
+                                        decoration: InputDecoration(
+                                          hintText: hintText,
+                                          helperText: 'Set current location instead',
+                                          //errorText: 'Address cannot be empty',
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ) ..show();
+                            },
+                            icon: Icon(Icons.edit_rounded)
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+                child: Material(
+                  elevation: 2,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                child: GestureDetector(
+                    onTap: (){Navigator.push(context,
+                        MaterialPageRoute(builder: (context)=>help_and_support())
+                    );
+                    },
+                    child: Container(
+                      height: 48,
+                      decoration: BoxDecoration(
+                          color: kPrimaryColor.withOpacity(0.12),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Icon(Icons.help_outline_outlined),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Text(
+                                  'Help & Support',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: kPrimaryColor.withOpacity(0.4),
+                                      fontSize: 18),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Icon(Icons.navigate_next_rounded),
+                              SizedBox(
+                                width: 16,
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    Icon(Icons.change_circle_rounded)
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
-            child: Material(
-              elevation: 2,
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-            child: GestureDetector(
-                onTap: (){Navigator.push(context,
-                    MaterialPageRoute(builder: (context)=>help_and_support())
-                );
-                },
-                child: Container(
-                  height: 48,
-                  decoration: BoxDecoration(
-                      color: kPrimaryColor.withOpacity(0.12),
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Icon(Icons.help_outline_outlined),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              'Help & Support',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: kPrimaryColor.withOpacity(0.4),
-                                  fontSize: 18),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Icon(Icons.navigate_next_rounded),
-                          SizedBox(
-                            width: 16,
-                          ),
-                        ],
-                      ),
-                    ],
                   ),
                 ),
               ),
-            ),
-          ),
-          //TODO my orders
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
-            child: Material(
-              elevation: 3,
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              child: GestureDetector(
-                onTap: (){Navigator.push(context,
-                    MaterialPageRoute(builder: (context)=> order_history())
-                );
-                },
-                child: Container(
-                  height: 48,
-                  decoration: BoxDecoration(
-                      color: kPrimaryColor.withOpacity(0.12),
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+              //TODO my orders
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+                child: Material(
+                  elevation: 3,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  child: GestureDetector(
+                    onTap: (){Navigator.push(context,
+                        MaterialPageRoute(builder: (context)=> order_history())
+                    );
+                    },
+                    child: Container(
+                      height: 48,
+                      decoration: BoxDecoration(
+                          color: kPrimaryColor.withOpacity(0.12),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            width: 16,
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Icon(Icons.history),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Text(
+                                  'My Orders',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: kPrimaryColor.withOpacity(0.4),
+                                      fontSize: 18),
+                                ),
+                              ),
+                            ],
                           ),
-                          Icon(Icons.history),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              'My Orders',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: kPrimaryColor.withOpacity(0.4),
-                                  fontSize: 18),
-                            ),
+                          Row(
+                            children: [
+                              Icon(Icons.navigate_next_rounded),
+                              SizedBox(
+                                width: 16,
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Icon(Icons.navigate_next_rounded),
-                          SizedBox(
-                            width: 16,
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-          //TODO logout
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
-            child: Material(
-              elevation: 2,
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                    color: kPrimaryColor.withOpacity(0.15),
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                child: InkWell(
-                  onTap: (){
-                    logOutCurrentUser();
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+              //TODO logout
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+                child: Material(
+                  elevation: 2,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  child: Container(
+                    height: 48,
+                    decoration: BoxDecoration(
+                        color: kPrimaryColor.withOpacity(0.15),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    child: InkWell(
+                      onTap: (){
+                        logOutCurrentUser();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            width: 16,
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Icon(Icons.power_settings_new_rounded ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: kPrimaryColor.withOpacity(0.4),
+                                      fontSize: 18),
+                                ),
+                              ),
+                            ],
                           ),
-                          Icon(Icons.power_settings_new_rounded ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              'Logout',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: kPrimaryColor.withOpacity(0.4),
-                                  fontSize: 18),
-                            ),
+                          Row(
+                            children: [
+                              Icon(Icons.navigate_next_rounded),
+                              SizedBox(
+                                width: 16,
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Icon(Icons.navigate_next_rounded),
-                          SizedBox(
-                            width: 16,
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
