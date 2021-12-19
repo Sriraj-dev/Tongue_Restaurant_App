@@ -168,8 +168,8 @@ getHomeAddress()async{
  homeAddress = res;
 }
 
-setHomeLocation()async{
- Location tempLocation = await LocationServices().getPositionFromAddress(homeAddress);
+setHomeLocation(String tempAddress)async{
+ Location tempLocation = await LocationServices().getPositionFromAddress(tempAddress);
 
  homeLatitude = tempLocation.latitude;
  homeLongitude = tempLocation.longitude;

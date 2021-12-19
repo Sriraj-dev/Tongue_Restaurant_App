@@ -112,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Icon(Icons.home),
                         SizedBox(width: 15,),
                         Container(
-                          //width: MediaQuery.of(context).size.width*0.65,
+                          width: MediaQuery.of(context).size.width*0.65,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 5),
                             child: (homeAddress=='')?
@@ -130,83 +130,135 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
-                        IconButton(
-                            onPressed: (){
-                              TextEditingController address = new TextEditingController();
-                              String hintText = 'Type your address';
-                              AwesomeDialog(
-                                context: context,
-                                animType: AnimType.BOTTOMSLIDE,
-                                showCloseIcon: true,
-                                dismissOnTouchOutside: false,
-                                dismissOnBackKeyPress: false,
-                                btnCancelText: 'Set current location',
-                                dialogType: DialogType.INFO_REVERSED,
-                                btnOkOnPress:(address.text.length!=0)?(){
-                                  // homeAddress = address.text;
-                                  // setHomeLocation();
-                                }:(){
-                                  AwesomeDialog(
-                                      context: context,
-                                      showCloseIcon: false,
-                                      dismissOnBackKeyPress: false,
-                                      dismissOnTouchOutside: false,
-                                      dialogType: DialogType.ERROR,
-                                      title: 'Address cannot be empty',
-                                     // btnOkIcon: Icons.cancel,
-                                      btnOkColor: Colors.red,
-                                    btnOkOnPress: (){}
-                                  )..show();
-                                },
-                                btnCancelOnPress: ()async{
-                                  await getUserLocation();
-                                  if(userAddress!= "Not Set"){
-                                    await DbOperations().clearHomeAddress();
-                                    DbOperations().saveHomeAddress(userAddress);
-                                    homeAddress = userAddress;
-                                    homeLocation = userLocation;
-                                    homeLatitude = userLocation.latitude;
-                                    homeLongitude = userLocation.longitude;
-                                  }else{
-                                    AwesomeDialog(
-                                      context: context,
-                                      showCloseIcon: false,
-                                      dismissOnBackKeyPress: false,
-                                      dismissOnTouchOutside: false,
-                                      dialogType: DialogType.ERROR,
-                                      title: 'Location Permissions are required!',
-                                      //btnOkIcon: Icons.cancel,
-                                      btnOkColor: Colors.red,
-                                      btnOkOnPress: (){},
-                                    )..show();
-                                  }
-                                },
-                                body: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text('Add your Home Address',
-                                      style: GoogleFonts.lato(
-                                        fontSize: 17,
-                                      ),
-                                    ),
-                                    SizedBox(height: 10,),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                                      child: TextField(
-                                        controller: address,
-                                        decoration: InputDecoration(
-                                          hintText: hintText,
-                                          helperText: 'Set current location instead',
-                                          //errorText: 'Address cannot be empty',
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ) ..show();
+                        // IconButton(
+                        //     onPressed: (){
+                        //       TextEditingController address = new TextEditingController();
+                        //       String hintText = 'Type your address';
+                        //       AwesomeDialog(
+                        //         context: context,
+                        //         animType: AnimType.BOTTOMSLIDE,
+                        //         showCloseIcon: true,
+                        //         dismissOnTouchOutside: false,
+                        //         dismissOnBackKeyPress: false,
+                        //         btnCancelText: 'Set current location',
+                        //         dialogType: DialogType.INFO_REVERSED,
+                        //         btnOkOnPress:(address.text=='')?()async{
+                        //           print('address is not empty - ${address.text}');
+                        //            homeAddress = address.text;
+                        //            print('the home address is set temporarly to: $homeAddress');
+                        //            try{
+                        //              await setHomeLocation();
+                        //              if(homeLatitude == 0.0 || homeLongitude == 0.0){
+                        //                AwesomeDialog(
+                        //                    context: context,
+                        //                    showCloseIcon: false,
+                        //                    dismissOnBackKeyPress: false,
+                        //                    dismissOnTouchOutside: false,
+                        //                    dialogType: DialogType.ERROR,
+                        //                    title: 'Invalid Address',
+                        //                    // btnOkIcon: Icons.cancel,
+                        //                    btnOkColor: Colors.red,
+                        //                    btnOkOnPress: (){}
+                        //                )..show();
+                        //              }else{
+                        //                DbOperations().clearHomeAddress();
+                        //                DbOperations().saveHomeAddress(homeAddress);
+                        //                AwesomeDialog(
+                        //                    context: context,
+                        //                    showCloseIcon: false,
+                        //                    dismissOnBackKeyPress: false,
+                        //                    dismissOnTouchOutside: false,
+                        //                    dialogType: DialogType.SUCCES,
+                        //                    title: 'Home Address:',
+                        //                    desc: '$homeAddress',
+                        //                    btnOkOnPress: (){
+                        //                    }
+                        //                )..show();
+                        //              }
+                        //            }catch(e){
+                        //              homeAddress = '';
+                        //              AwesomeDialog(
+                        //                  context: context,
+                        //                  showCloseIcon: false,
+                        //                  dismissOnBackKeyPress: false,
+                        //                  dismissOnTouchOutside: false,
+                        //                  dialogType: DialogType.ERROR,
+                        //                  title: 'Invalid Address',
+                        //                  // btnOkIcon: Icons.cancel,
+                        //                  btnOkColor: Colors.red,
+                        //                  btnOkOnPress: (){}
+                        //              )..show();
+                        //            }
+                        //
+                        //         }:(){
+                        //           print('The entered text is - ${address.text}');
+                        //           AwesomeDialog(
+                        //               context: context,
+                        //               showCloseIcon: false,
+                        //               dismissOnBackKeyPress: false,
+                        //               dismissOnTouchOutside: false,
+                        //               dialogType: DialogType.ERROR,
+                        //               title: 'Address cannot be empty',
+                        //              // btnOkIcon: Icons.cancel,
+                        //               btnOkColor: Colors.red,
+                        //             btnOkOnPress: (){}
+                        //           )..show();
+                        //         },
+                        //         btnCancelOnPress: ()async{
+                        //           await getUserLocation();
+                        //           if(userAddress!= "Not Set"){
+                        //             await DbOperations().clearHomeAddress();
+                        //             DbOperations().saveHomeAddress(userAddress);
+                        //             homeAddress = userAddress;
+                        //             homeLocation = userLocation;
+                        //             homeLatitude = userLocation.latitude;
+                        //             homeLongitude = userLocation.longitude;
+                        //           }else{
+                        //             AwesomeDialog(
+                        //               context: context,
+                        //               showCloseIcon: false,
+                        //               dismissOnBackKeyPress: false,
+                        //               dismissOnTouchOutside: false,
+                        //               dialogType: DialogType.ERROR,
+                        //               title: 'Location Permissions are required!',
+                        //               //btnOkIcon: Icons.cancel,
+                        //               btnOkColor: Colors.red,
+                        //               btnOkOnPress: (){},
+                        //             )..show();
+                        //           }
+                        //         },
+                        //         body: Column(
+                        //           mainAxisAlignment: MainAxisAlignment.center,
+                        //           crossAxisAlignment: CrossAxisAlignment.center,
+                        //           children: [
+                        //             Text('Add your Home Address',
+                        //               style: GoogleFonts.lato(
+                        //                 fontSize: 17,
+                        //               ),
+                        //             ),
+                        //             SizedBox(height: 10,),
+                        //             Padding(
+                        //               padding: const EdgeInsets.symmetric(horizontal: 10),
+                        //               child: TextField(
+                        //                 controller: address,
+                        //                 decoration: InputDecoration(
+                        //                   hintText: hintText,
+                        //                   helperText: 'Set current location instead',
+                        //                   //errorText: 'Address cannot be empty',
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ) ..show();
+                        //     },
+                        //     icon: Icon(Icons.edit_rounded)
+                        // ),
+                        InkWell(
+                            onTap: ()async{
+                              await editHomeAddress(context);
                             },
-                            icon: Icon(Icons.edit_rounded)
+                            child: Icon(Icons.edit_rounded)
                         ),
                       ],
                     ),
@@ -369,6 +421,132 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> editHomeAddress(BuildContext context) async {
+    TextEditingController address = new TextEditingController();
+    String hintText = 'Type your address';
+    AwesomeDialog(
+      context: context,
+      animType: AnimType.BOTTOMSLIDE,
+      showCloseIcon: true,
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      btnCancelText: 'Set current location',
+      dialogType: DialogType.INFO_REVERSED,
+      btnOkOnPress:()async{
+        print('address is not empty - ${address.text}');
+        var tempAddress = address.text;
+        print('the home address is set temporarly to: $tempAddress');
+        try{
+          await setHomeLocation(tempAddress);
+          if(homeLatitude == 0.0 || homeLongitude == 0.0){
+            AwesomeDialog(
+                context: context,
+                showCloseIcon: false,
+                dismissOnBackKeyPress: false,
+                dismissOnTouchOutside: false,
+                dialogType: DialogType.ERROR,
+                title: 'Invalid Address',
+                // btnOkIcon: Icons.cancel,
+                btnOkColor: Colors.red,
+                btnOkOnPress: (){}
+            )..show();
+          }else{
+            DbOperations().clearHomeAddress();
+            DbOperations().saveHomeAddress(tempAddress);
+            homeAddress = tempAddress;
+            AwesomeDialog(
+                context: context,
+                showCloseIcon: false,
+                dismissOnBackKeyPress: false,
+                dismissOnTouchOutside: false,
+                dialogType: DialogType.SUCCES,
+                title: 'Home Address:',
+                desc: '$homeAddress',
+                btnOkOnPress: (){
+                  setState(() {
+
+                  });
+                }
+            )..show();
+          }
+        }catch(e){
+          homeAddress = '';
+          AwesomeDialog(
+              context: context,
+              showCloseIcon: false,
+              dismissOnBackKeyPress: false,
+              dismissOnTouchOutside: false,
+              dialogType: DialogType.ERROR,
+              title: 'Invalid Address',
+              // btnOkIcon: Icons.cancel,
+              btnOkColor: Colors.red,
+              btnOkOnPress: (){}
+          )..show();
+        }
+      },
+      btnCancelOnPress: ()async{
+        await getUserLocation();
+        if(userAddress!= "Not Set"){
+          await DbOperations().clearHomeAddress();
+          DbOperations().saveHomeAddress(userAddress);
+          homeAddress = userAddress;
+          homeLocation = userLocation;
+          homeLatitude = userLocation.latitude;
+          homeLongitude = userLocation.longitude;
+          AwesomeDialog(
+              context: context,
+              showCloseIcon: false,
+              dismissOnBackKeyPress: false,
+              dismissOnTouchOutside: false,
+              dialogType: DialogType.SUCCES,
+              title: 'Home Address:',
+              desc: '$homeAddress',
+              btnOkOnPress: (){
+                setState(() {
+
+                });
+              }
+          )..show();
+        }else{
+          AwesomeDialog(
+            context: context,
+            showCloseIcon: false,
+            dismissOnBackKeyPress: false,
+            dismissOnTouchOutside: false,
+            dialogType: DialogType.ERROR,
+            title: 'Location Permissions are required!',
+            //btnOkIcon: Icons.cancel,
+            btnOkColor: Colors.red,
+            btnOkOnPress: (){},
+          )..show();
+        }
+      },
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('Add your Home Address',
+            style: GoogleFonts.lato(
+              fontSize: 17,
+            ),
+          ),
+          SizedBox(height: 10,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: TextField(
+              controller: address,
+              decoration: InputDecoration(
+                hintText: hintText,
+                helperText: 'Set current location instead',
+                //errorText: 'Address cannot be empty',
+              ),
+            ),
+          ),
+        ],
+      ),
+    ) ..show();
   }
 
   void logOutCurrentUser() async{

@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:delivery_app/Screens/checkoutpage.dart';
 import 'package:delivery_app/Services/BillingServices.dart';
 import 'package:delivery_app/Services/apiservices.dart';
@@ -69,13 +70,8 @@ class _cartState extends State<cart> {
               borderRadius: BorderRadius.circular(30),
 
               child: GestureDetector(
-                onTap: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => checkout(totalCost),
-                    ),// map == name,cost,id,offer.
-                  );
+                onTap: ()async{
+                  await completeOrder(context);
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 95, vertical: 20),
@@ -98,6 +94,102 @@ class _cartState extends State<cart> {
         ),
       )
     );
+  }
+
+  Future<void> completeOrder(BuildContext context) async {
+    if(userAddress != 'Not Set'){
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => checkout(totalCost,userAddress,userLocation.latitude,userLocation.longitude),
+        ),// map == name,cost,id,offer.
+      );
+    }else{
+      AwesomeDialog(
+        context: context,
+        dismissOnBackKeyPress: false,
+        dismissOnTouchOutside: false,
+        showCloseIcon: true,
+        dialogType: DialogType.INFO_REVERSED,
+        padding: EdgeInsets.symmetric(horizontal: 5),
+        title: 'Choose your Delivery Location!',
+        btnOkText: 'Current location',
+        btnCancelText: 'Home Location',
+        btnOkOnPress: ()async{
+          await getUserLocation();
+          if(userAddress !='Not Set'){
+            AwesomeDialog(
+                context: context,
+                showCloseIcon: false,
+                dismissOnBackKeyPress: false,
+                dismissOnTouchOutside: false,
+                dialogType: DialogType.SUCCES,
+                title: 'Delivery Location:',
+                desc: '$userAddress',
+                btnOkOnPress: (){
+                  setState(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => checkout(totalCost,userAddress,userLocation.latitude,userLocation.longitude),
+                      ),// map == name,cost,id,offer.
+                    );
+                  });
+                }
+            )..show();
+          }else{
+            AwesomeDialog(
+              context: context,
+              showCloseIcon: false,
+              dismissOnBackKeyPress: false,
+              dismissOnTouchOutside: false,
+              dialogType: DialogType.ERROR,
+              title: 'Location Permissions are required!',
+              //btnOkIcon: Icons.cancel,
+              btnOkColor: Colors.red,
+              btnOkOnPress: (){},
+            )..show();
+          }
+        },
+        btnCancelOnPress: (){
+          if(homeAddress == ''){
+            AwesomeDialog(
+              context: context,
+              showCloseIcon: false,
+              dismissOnBackKeyPress: false,
+              dismissOnTouchOutside: false,
+              dialogType: DialogType.INFO_REVERSED,
+              title: 'Home Location is not set!',
+              desc: 'Please set your home location in your profile',
+              //btnOkIcon: Icons.cancel,
+              btnOkColor: Colors.red,
+              btnOkOnPress: (){
+              },
+            )..show();
+          }else{
+            AwesomeDialog(
+                context: context,
+                showCloseIcon: false,
+                dismissOnBackKeyPress: false,
+                dismissOnTouchOutside: false,
+                dialogType: DialogType.SUCCES,
+                title: 'Delivery Location:',
+                desc: '$homeAddress',
+                btnOkOnPress: (){
+                  setState(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => checkout(totalCost,homeAddress,homeLatitude,homeLongitude),
+                      ),// map == name,cost,id,offer.
+                    );
+                  });
+                }
+            )..show();
+          }
+        }
+      )..show();
+    }
   }
 
 //example(e)

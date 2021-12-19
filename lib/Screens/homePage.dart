@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:delivery_app/Screens/SearchScreen.dart';
 import 'package:delivery_app/Services/DBoperations.dart';
 import 'package:delivery_app/Services/locationServices.dart';
@@ -55,31 +56,112 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: 120,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(20),
-                        bottomRight: Radius.circular(20)),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                        color: kPrimaryColor,
-                      ),
-                      (displayAddress.length <= 12)
-                          ? Text(
-                              '$displayAddress',
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            )
-                          : Text(
-                              '${displayAddress.substring(0, 10)}..',
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                    ],
+                GestureDetector(
+                  onTap:(){
+                    AwesomeDialog(
+                      context: context,
+                      dismissOnTouchOutside: false,
+                      dismissOnBackKeyPress: false,
+                      showCloseIcon: true,
+                      dialogType: DialogType.INFO_REVERSED,
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      title: 'Choose your Delivery Location!',
+                      btnOkText: 'Current location',
+                      btnCancelText: 'Home Location',
+                      btnOkOnPress: ()async{
+                        await getUserLocation();
+                        if(userAddress !='Not Set'){
+                          AwesomeDialog(
+                              context: context,
+                              showCloseIcon: false,
+                              dismissOnBackKeyPress: false,
+                              dismissOnTouchOutside: false,
+                              dialogType: DialogType.SUCCES,
+                              title: 'Delivery Location:',
+                              desc: '$userAddress',
+                              btnOkOnPress: (){
+                                setState(() {
+                                  displayAddress = userAddress.split(',')[0];
+                                });
+                              }
+                          )..show();
+                        }else{
+                          AwesomeDialog(
+                            context: context,
+                            showCloseIcon: false,
+                            dismissOnBackKeyPress: false,
+                            dismissOnTouchOutside: false,
+                            dialogType: DialogType.ERROR,
+                            title: 'Location Permissions are required!',
+                            //btnOkIcon: Icons.cancel,
+                            btnOkColor: Colors.red,
+                            btnOkOnPress: (){},
+                          )..show();
+                        }
+                      },
+                      btnCancelOnPress: (){
+                        if(homeAddress == ''){
+                          AwesomeDialog(
+                            context: context,
+                            showCloseIcon: false,
+                            dismissOnBackKeyPress: false,
+                            dismissOnTouchOutside: false,
+                            dialogType: DialogType.INFO_REVERSED,
+                            title: 'Home Location is not set!',
+                            desc: 'Please set your home location in your profile',
+                            //btnOkIcon: Icons.cancel,
+                            btnOkColor: Colors.red,
+                            btnOkOnPress: (){
+                              setState(() {
+                                displayAddress = userAddress.split(',')[0];
+                              });
+                            },
+                          )..show();
+                        }else{
+                          AwesomeDialog(
+                              context: context,
+                              showCloseIcon: false,
+                              dismissOnBackKeyPress: false,
+                              dismissOnTouchOutside: false,
+                              dialogType: DialogType.SUCCES,
+                              title: 'Delivery Location:',
+                              desc: '$homeAddress',
+                              btnOkOnPress: (){
+                                setState(() {
+                                  displayAddress = homeAddress.split(',')[0];
+                                });
+                              }
+                          )..show();
+                        }
+                      }
+                    )..show();
+                  },
+                  child: Container(
+                    width: 120,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(20),
+                          bottomRight: Radius.circular(20)),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          color: kPrimaryColor,
+                        ),
+                        (displayAddress.length <= 12)
+                            ? Text(
+                                '$displayAddress',
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              )
+                            : Text(
+                                '${displayAddress.substring(0, 10)}..',
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              ),
+                      ],
+                    ),
                   ),
                 ),
                 Image.asset(
