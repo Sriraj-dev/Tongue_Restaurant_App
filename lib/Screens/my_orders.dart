@@ -70,7 +70,8 @@ class _order_historyState extends State<order_history> {
                   SizedBox(height: 40,),
                   Container(
                     height: MediaQuery.of(context).size.height*0.6,
-                    child:(myOrders.length==0)? ListView.builder(
+                    // TODO isempty then add lottie assets/search.json
+                    child: ListView.builder(
                         itemBuilder:(context,index){
                           return GestureDetector(
                             onTap: (){
@@ -90,12 +91,7 @@ class _order_historyState extends State<order_history> {
                           );
                         },
                       itemCount: myOrders.length,
-                    ):Container(child: Center(child: Column(
-                      children: [
-                        Lottie.asset('assets/search.json',repeat: false,height: 200,),
-                        Text('No Orders Yet')
-                      ],
-                    ),)),
+                    )
                   )
                 ],
               ):loadingScreen();

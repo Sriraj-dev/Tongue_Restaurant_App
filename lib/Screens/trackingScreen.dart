@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:lottie/lottie.dart';
 
 class TrackingPage extends StatefulWidget {
   //const TrackingPage({Key? key}) : super(key: key);
@@ -446,7 +447,7 @@ class _TrackingPageState extends State<TrackingPage> {
   Center loadingScreen() {
     return Center(
       //This is the Loading Screen.
-      child: CircularProgressIndicator(),
+      child: Lottie.asset('assets/loading_hand.json'),
     );
   }
 
