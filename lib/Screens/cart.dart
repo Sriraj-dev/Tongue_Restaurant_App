@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'offers.dart';
 
 class cart extends StatefulWidget {
   const cart({Key? key}) : super(key: key);
@@ -52,25 +53,32 @@ class _cartState extends State<cart> {
         child: Column(mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(right :16.0),
-              child: Container(
-                width: 300,
-                height: 40,
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text('Total Bill ',style: TextStyle(color: kPrimaryColor),),
-                    Text('₹ '+totalCost.toString(),
-                      style: TextStyle(color: kPrimaryColor),),
-                  ],
+            GestureDetector(
+              onTap: (){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context)=>Offers())
+                );
+      }     ,
+                child: Padding(
+                padding: const EdgeInsets.only(right :16.0),
+                child: Container(
+                  width: 300,
+                  height: 40,
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Image.asset('assets/images/eating-disorder.png',height: 150,),
+                      Text('CHECK FOR OFFERS ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16,),),
+
+                    ],
+
+                  ),
+                  decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.all(Radius.circular(5))
+
+                  ),
 
                 ),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(20))
-
-                ),
-
               ),
             ),
             Material(
@@ -421,7 +429,7 @@ class _cartState extends State<cart> {
 
    loadingScreen() {
     return Center(
-                child: CircularProgressIndicator(),
+                child:Lottie.asset('assets/loading_hand.json'),
               );
   }
 

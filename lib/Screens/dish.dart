@@ -186,7 +186,7 @@ class _DishState extends State<Dish> {
                           ),
                         ),
                       ),
-                      Padding(
+                      (item['isAvailable']==true)?Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
                           height: 32,
@@ -258,12 +258,12 @@ class _DishState extends State<Dish> {
                             ],
                           ),
                         ),
-                      ),
+                      ):Container(),
                     ],
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16.0),
-                    child: GestureDetector(
+                    child: (item['isAvailable']==true)?GestureDetector(
                       onTap: (){
                         setState(() {
                           if(!userCart.contains(item['id'])){
@@ -292,6 +292,27 @@ class _DishState extends State<Dish> {
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
+                          ),
+                        ),
+                      ),
+                    ):Material(
+                      elevation: 5,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(32),
+                      ),
+                      child: Container(
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                        decoration: BoxDecoration(
+                            color: userCart.contains(item['id'])?ksecondaryColor:kPrimaryColor,
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(32),
+                                bottomRight: Radius.circular(32))),
+                        child: Text(
+                          'Currently Unavailable',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
