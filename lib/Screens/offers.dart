@@ -14,47 +14,41 @@ class _OffersState extends State<Offers> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Background_Color,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(10),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
+      body:Column(
+        children: [
+          Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 48.0, left: 16),
-                child: GestureDetector(
-                  onTap: (){
-                    Navigator.pop(context);
-
-                  },
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: IconButton(
-                      iconSize: 25,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(
-                        Icons.arrow_back_ios_outlined,
-                        color: kTextColor,
-                      ),
+                padding: const EdgeInsets.only(top:40,left: 12),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: kPrimaryColor.withOpacity(0.2),
+                  ),
+                  child: IconButton(
+                    iconSize: 25,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios_outlined,
+                      color: kTextColor,
                     ),
                   ),
                 ),
               ),
-
+              SizedBox(width: 100,),
+              Padding(
+                padding: const EdgeInsets.only(top: 40.0),
+                child: Text(
+                  'Offers',
+                  style: TextStyle(fontSize: 24, color: kPrimaryColor),
+                ),
+              )
             ],
           ),
-        ),
-      ),
-      body:Column(
-        children: [
-          SizedBox(height: 50,),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(

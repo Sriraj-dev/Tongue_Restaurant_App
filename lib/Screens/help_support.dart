@@ -19,15 +19,38 @@ class _help_and_supportState extends State<help_and_support> {
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Padding(
+            padding: const EdgeInsets.only(top:40,left: 12),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: kPrimaryColor.withOpacity(0.2),
+              ),
+              child: IconButton(
+                iconSize: 25,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.arrow_back_ios_outlined,
+                  color: kTextColor,
+                ),
+              ),
+            ),
+          ),
+
           Expanded(child: Lottie.asset('assets/support.json', repeat: false)),
           SizedBox(
             height: 25,
           ),
-          Text(
+          Center(child: Text(
             'Welcome to Support ',
             style: TextStyle(fontSize: 24),
-          ),
+          ),),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
             child: GestureDetector(

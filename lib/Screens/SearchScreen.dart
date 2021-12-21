@@ -112,23 +112,42 @@ class _SearchScreenState extends State<SearchScreen> {
                                 Row(
                                   children: [
                                     //itemImage
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Hero(
-                                        tag: searchItems[index]['id'],
-                                        child: Image.network(
-                                          searchItems[index]['image'],
-                                          height: 100,
-                                        ),
-                                      ),
-                                    ),
+                                    (searchItems[index]['isAvailable'] == true)
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Hero(
+                                              tag: searchItems[index]['id'],
+                                              child: Image.network(
+                                                searchItems[index]['image'],
+                                                height: 100,
+                                              ),
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              foregroundDecoration:
+                                                  BoxDecoration(
+                                                color: Colors.grey,
+                                                backgroundBlendMode:
+                                                    BlendMode.saturation,
+                                              ),
+                                              child: Hero(
+                                                tag: searchItems[index]['id'],
+                                                child: Image.network(
+                                                  searchItems[index]['image'],
+                                                  height: 100,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                                     Column(
                                       children: [
                                         itemDetails(searchItems, index),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 5, vertical: 5),
-                                          child: ElevatedButton(
+                                          child: (searchItems[index]['isAvailable']==true)?ElevatedButton(
                                             style: ElevatedButton.styleFrom(
                                               primary: (userCart.contains(
                                                       searchItems[index]['id']))
@@ -167,6 +186,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                                 ),
                                               ),
                                             ),
+                                          ):Container(
+                                            child: Text(
+                                                'Currectly Unavailable'),
                                           ),
                                         ),
                                       ],

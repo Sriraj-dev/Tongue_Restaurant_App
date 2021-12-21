@@ -31,11 +31,46 @@ class _order_historyState extends State<order_history> {
               return (gotOrders)?Column(
                 children: [
                   SizedBox(height: 20,),
-                  Center(child: Lottie.asset('assets/history.json',repeat: false,height: 200,)),
+                  Row(mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top:40,left: 12),
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: kPrimaryColor.withOpacity(0.2),
+                          ),
+                          child: IconButton(
+                            iconSize: 25,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: Icon(
+                              Icons.arrow_back_ios_outlined,
+                              color: kTextColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 64, top: 48),
+                        child: Text(
+                          'MY ORDERS',
+                          style: TextStyle(
+                              fontSize: 24,
+                              color: kPrimaryColor,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
                   SizedBox(height: 40,),
                   Container(
                     height: MediaQuery.of(context).size.height*0.6,
-                    child: ListView.builder(
+                    child:(myOrders.length==0)? ListView.builder(
                         itemBuilder:(context,index){
                           return GestureDetector(
                             onTap: (){
@@ -55,7 +90,12 @@ class _order_historyState extends State<order_history> {
                           );
                         },
                       itemCount: myOrders.length,
-                    ),
+                    ):Container(child: Center(child: Column(
+                      children: [
+                        Lottie.asset('assets/search.json',repeat: false,height: 200,),
+                        Text('No Orders Yet')
+                      ],
+                    ),)),
                   )
                 ],
               ):loadingScreen();

@@ -34,10 +34,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Center(
                 child: Container(
-                  child: Lottie.asset(
-                    'assets/profile.json',
-                    height: 150,
-                  ),
+                  // child:Image.asset('assets/images/man (1).png',height: 150,)
+                  // child:Image.asset('assets/images/man.png',height: 150,)
+                   child:Image.asset('assets/images/eating-disorder.png',height: 150,)
                 ),
               ),
               Text(
