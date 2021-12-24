@@ -66,7 +66,7 @@ class _cartState extends State<cart> {
                   height: 40,
                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Image.asset('assets/images/eating-disorder.png',height: 150,),
+                      Image.asset('assets/images/offer.png',height: 150,),
                       Text('CHECK FOR OFFERS ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16,),),
 
                     ],

@@ -35,59 +35,64 @@ class _LoginPageState extends State<LoginPage> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-
                 Text(
                   "WELCOME TO TONGUE",
-                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Image.asset(
-                      'assets/images/1.png',
-                      height: size.height * 0.3,
+                      'assets/images/chicken-leg.png',
+                      height: size.height * 0.4,
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/images/2.png',
-                      height: size.height * 0.2,
-                    ),
-                  ],
-                ),
+
                 Container(
                   width: size.width * 0.8,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(29),
-                    child: FlatButton(
-                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                        color: kPrimaryColor,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => login()),
-                          );
-                        },
-                        child: Text(
-                          "Login",
-                          style: TextStyle(color: Colors.white),
-                        )),
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(31),
+                  ),
+                  child: Container(
+                    width: size.width * 0.75,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(29),
+                      child: FlatButton(
+                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+                          color: kPrimaryColor,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => login()),
+                            );
+                          },
+                          child: Text(
+                            "Login",
+                            style: TextStyle(color: Colors.white,fontSize: 24),
+                          )),
+                    ),
                   ),
                 ),
-                Padding(
-                  //TODO------------sign up-------------------
-                  padding: const EdgeInsets.only(top: 16),
+                SizedBox(height:16),
+
+                Container(
+                  width: size.width * 0.8,
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(31),
+                  ),
                   child: Container(
-                    width: size.width * 0.8,
+                    width: size.width * 0.75,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(29),
                       child: FlatButton(
                           padding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                          color: kPrimaryLightColor,
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+                          color: ksecondaryColor,
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -96,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           child: Text(
                             "Signup",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 24),
                           )),
                     ),
                   ),

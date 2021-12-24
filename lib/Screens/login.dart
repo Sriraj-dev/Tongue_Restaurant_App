@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:flutter/painting.dart';
+import 'package:delivery_app/Screens/SignUp2.dart';
 import 'package:delivery_app/Screens/homePage.dart ';
 import 'package:flutter/rendering.dart';
 import 'package:progress_indicators/progress_indicators.dart';
@@ -25,6 +26,7 @@ class _loginState extends State<login> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: kPrimaryColor,
       body: Container(
         child: Stack(
           children: <Widget>[
@@ -45,126 +47,155 @@ class _loginState extends State<login> {
               ),
             ),
             Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Center(
+                  child: Padding(
                     padding: const EdgeInsets.only(top: 64),
                     child: Text(
                       "WELCOME BACK!",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset(
-                          'assets/images/6.png',
-                          height: size.height * 0.4,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 16, bottom: 8),
+                            child: Text(
+                              "LOGIN",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.black),
+                            ),
+                          ),
                         ),
+                        Container(
+                          child: TextField(
+                            controller: usr,
+                            decoration: InputDecoration(
+                              hintText: " Username ",
+                              border: InputBorder.none,
+                            ),
+                          ),
+                          padding: EdgeInsets.fromLTRB(16, 0, 24, 0),
+                          width: size.width * 0.8,
+                          decoration: BoxDecoration(
+                            color: ksecondaryColor,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        Container(
+                          child: TextField(
+                            controller: pwd,
+                            decoration: InputDecoration(
+                              hintText: " Password ",
+                              border: InputBorder.none,
+                            ),
+                          ),
+                          padding: EdgeInsets.fromLTRB(16, 0, 24, 0),
+                          width: size.width * 0.8,
+                          decoration: BoxDecoration(
+                            color: kPrimaryLightColor,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16, bottom: 16),
+                          child: Container(
+                            width: size.width * 0.6,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(29),
+                              child: FlatButton(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 20, horizontal: 40),
+                                  color: kPrimaryColor,
+                                  onPressed: () async {
+                                    setState(() {
+                                      loggingIn = true;
+                                    });
+                                    var isLogin = await Authentication()
+                                        .login(usr.text, pwd.text, false);
+                                    if (isLogin == 'true') {
+                                      getUserInfo();
+                                      Navigator.popUntil(
+                                          context, (route) => false);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                PageManager()),
+                                      );
+                                    } else {
+                                      showSnackBar(
+                                          isLogin, context, Colors.red);
+                                      setState(() {
+                                        loggingIn = false;
+                                      });
+                                    }
+                                  },
+                                  child: (loggingIn)
+                                      ? CircularProgressIndicator()
+                                      : Text(
+                                          "Login",
+                                          style: TextStyle(color: Colors.white),
+                                        )),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 8.0, right: 8, bottom: 16, left: 8),
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Don't have an account ? ",
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.black),
+                                ),
+                                GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => SignUp2()),
+                                    );
+                                  },
+                                    child: Text(
+                                  "Signup",
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.blue),
+                                ))
+                              ],
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
-                  Container(
-                    child: TextField(
-                      controller: usr,
-                      decoration: InputDecoration(
-                        hintText: " Username ",
-                        border: InputBorder.none,
-                      ),
-                    ),
-                    padding: EdgeInsets.fromLTRB(16, 0, 24, 0),
-                    width: size.width * 0.8,
-                    decoration: BoxDecoration(
-                      color: kPrimaryLightColor,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  SizedBox(
-                    height: size.height*0.02,
-                  ),
-                  Container(
-                    child: TextField(
-                      controller: pwd,
-                      decoration: InputDecoration(
-                        hintText: " Password ",
-                        border: InputBorder.none,
-                      ),
-                    ),
-                    padding: EdgeInsets.fromLTRB(16, 0, 24, 0),
-                    width: size.width * 0.8,
-                    decoration: BoxDecoration(
-                      color: kPrimaryLightColor,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  Container(
-                    width: size.width * 0.8,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(29),
-                      child: FlatButton(
-                          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                          color: kPrimaryColor.withOpacity(0),
-                          onPressed: () {
-                            //TODO ------------------------forgot password------------------
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => login()),
-                            // );
-                          },
-                          child: Text(
-                            "Forgot password",
-                            style: TextStyle(color:kPrimaryColor),
-                          )),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Container(
-                      width: size.width * 0.8,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(29),
-                        child: FlatButton(
-                            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                            color: kPrimaryColor,
-                            onPressed: () async{
-                              setState(() {
-                                loggingIn = true;
-                              });
-                              var isLogin = await Authentication().login(usr.text,pwd.text , false);
-                              if(isLogin == 'true'){
-                                getUserInfo();
-                                Navigator.popUntil(context, (route) => false);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => PageManager()),
-                                );
-                              }else{
-                                showSnackBar(isLogin, context,Colors.red);
-                                setState(() {
-                                  loggingIn = false;
-                                });
-                              }
-
-                            },
-                            child: (loggingIn)?CircularProgressIndicator():Text(
-                              "Login",
-                              style: TextStyle(color: Colors.white),
-                            )),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: size.height*0.05,
-                  ),
-                ],
-              ),
-
+                ),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
-
-
 }
