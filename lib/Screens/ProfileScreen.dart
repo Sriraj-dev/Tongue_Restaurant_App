@@ -56,40 +56,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 64),
                 child: Container(
-                  height: 48,
                   decoration: BoxDecoration(
-                      color: kPrimaryColor.withOpacity(0.03),
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                    color:kPrimaryColor,
+                      borderRadius: BorderRadius.all(Radius.circular(24),),
+                ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Container(
+                      height: 48,
+                      decoration: BoxDecoration(
+                          color: Colors.white70,
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            width: 16,
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Icon(Icons.phone),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Text(
+                                  userPhone,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 18),
+                                ),
+                              ),
+                            ],
                           ),
-                          Icon(Icons.phone),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              userPhone,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: kPrimaryColor.withOpacity(0.4),
-                                  fontSize: 18),
-                            ),
+                          Row(
+                            children: [
+                              Icon(Icons.edit),
+                              SizedBox(
+                                width: 16,
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Icon(Icons.edit),
-                          SizedBox(
-                            width: 16,
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
