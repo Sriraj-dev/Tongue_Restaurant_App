@@ -114,45 +114,56 @@ class _loginState extends State<login> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 16, bottom: 16),
+                          padding: const EdgeInsets.only(top:12.0),
                           child: Container(
-                            width: size.width * 0.6,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(29),
-                              child: FlatButton(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 20, horizontal: 40),
-                                  color: kPrimaryColor,
-                                  onPressed: () async {
-                                    setState(() {
-                                      loggingIn = true;
-                                    });
-                                    var isLogin = await Authentication()
-                                        .login(usr.text, pwd.text, false);
-                                    if (isLogin == 'true') {
-                                      getUserInfo();
-                                      Navigator.popUntil(
-                                          context, (route) => false);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                PageManager()),
-                                      );
-                                    } else {
-                                      showSnackBar(
-                                          isLogin, context, Colors.red);
-                                      setState(() {
-                                        loggingIn = false;
-                                      });
-                                    }
-                                  },
-                                  child: (loggingIn)
-                                      ? CircularProgressIndicator()
-                                      : Text(
-                                          "Login",
-                                          style: TextStyle(color: Colors.white),
-                                        )),
+                            decoration:BoxDecoration(
+
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(33),
+
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Container(
+                                width: size.width * 0.6,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(29),
+                                  child: FlatButton(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 40),
+                                      color: kPrimaryColor,
+                                      onPressed: () async {
+                                        setState(() {
+                                          loggingIn = true;
+                                        });
+                                        var isLogin = await Authentication()
+                                            .login(usr.text, pwd.text, false);
+                                        if (isLogin == 'true') {
+                                          getUserInfo();
+                                          Navigator.popUntil(
+                                              context, (route) => false);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PageManager()),
+                                          );
+                                        } else {
+                                          showSnackBar(
+                                              isLogin, context, Colors.red);
+                                          setState(() {
+                                            loggingIn = false;
+                                          });
+                                        }
+                                      },
+                                      child: (loggingIn)
+                                          ? CircularProgressIndicator()
+                                          : Text(
+                                              "Login",
+                                              style: TextStyle(color: Colors.white,fontSize: 24),
+                                            )),
+                                ),
+                              ),
                             ),
                           ),
                         ),
