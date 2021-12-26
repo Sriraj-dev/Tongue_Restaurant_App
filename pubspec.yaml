@@ -50,6 +50,7 @@ dependencies:
   google_maps_flutter:
   flutter_polyline_points:
   awesome_dialog:
+  flutter_rating_bar: ^4.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

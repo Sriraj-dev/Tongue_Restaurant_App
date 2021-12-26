@@ -95,36 +95,39 @@ class _LaunchScreenState extends State<LaunchScreen> {
     );
   }
 
-  Column splashScreen(BuildContext context) {
+   splashScreen(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 32),
-          child: Image.asset('assets/images/title_image.png'),
+          padding: const EdgeInsets.only(top: 20),
+          child: Image.asset('assets/images/title_image.png',),
         ),
-        Lottie.asset('assets/preparing_food.json'),
-        Expanded(child: Container(
-          width:  MediaQuery.of(context).copyWith().size.width,
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-                child: LiquidLinearProgressIndicator(
-                  value: loadingValue, // Defaults to 0.5.
-                  valueColor: AlwaysStoppedAnimation(kPrimaryColor), // Defaults to the current Theme's accentColor.
-                  backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
-                  borderColor: ksecondaryColor,
-                  borderWidth: 5.0,
-                  borderRadius: 12.0,
-                  direction: Axis.horizontal, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.horizontal.
-                  center: Text("Loading..."),
+        Image.asset('assets/images/splash_img.png',width: MediaQuery.of(context).size.width,),
+        Expanded(
+          child: Container(
+            width:  MediaQuery.of(context).copyWith().size.width,
+            color: Colors.black,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                  child: LiquidLinearProgressIndicator(
+                    value: loadingValue, // Defaults to 0.5.
+                    valueColor: AlwaysStoppedAnimation(kPrimaryColor), // Defaults to the current Theme's accentColor.
+                    backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
+                    borderColor: ksecondaryColor,
+                    borderWidth: 5.0,
+                    borderRadius: 12.0,
+                    direction: Axis.horizontal, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.horizontal.
+                    center: Text("Loading..."),
+                  ),
                 ),
               ),
             ),
           ),
-        )),
+        ),
       ],
     );
   }
@@ -258,8 +261,6 @@ class _LaunchScreenState extends State<LaunchScreen> {
       return false;
     else return true;
   }
-
-
 }
 
 //TODO : payment gateway

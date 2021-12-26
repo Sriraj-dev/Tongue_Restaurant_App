@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:lottie/lottie.dart'as lottie;
+import 'package:progress_indicators/progress_indicators.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MapPage extends StatefulWidget {
@@ -78,7 +80,7 @@ class _MapPageState extends State<MapPage> {
           markerId: MarkerId('partnerPosition'),
         position: partnerPosition,
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
-          //icon: customIcon,
+        //  icon: customIcon,
         infoWindow: InfoWindow(
           title: "Delivery Partner"
         )
@@ -210,10 +212,24 @@ class _MapPageState extends State<MapPage> {
                   );
   }
 
-  Center loadingScreen() {
-    return Center(
-                  child: CircularProgressIndicator(),
-                );
+  loadingScreen() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(),
+        Center(
+          child: lottie.Lottie.asset('assets/userMapLoading.json'),
+        ),
+        SizedBox(height: 10,),
+        FadingText('Loading ...',
+          style: GoogleFonts.lato(
+              fontSize: 19,
+              color: kTextColor
+          ),
+        )
+      ],
+    );
   }
 
   Stream getPartnerDetails()=>

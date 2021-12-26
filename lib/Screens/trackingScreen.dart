@@ -1,15 +1,18 @@
 import 'dart:async';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:delivery_app/Screens/MapPage.dart';
 import 'package:delivery_app/Screens/help_support.dart';
 import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:im_stepper/stepper.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:lottie/lottie.dart';
+import 'package:progress_indicators/progress_indicators.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TrackingPage extends StatefulWidget {
   //const TrackingPage({Key? key}) : super(key: key);
@@ -35,7 +38,8 @@ class _TrackingPageState extends State<TrackingPage> {
   int activeStep = 0;
   Map<String, dynamic> partnerDetails = {};
   StreamController<bool> isAssigned = new StreamController();
-
+  double partnerRating = 0;
+  bool ratingGiven =false;
   generateYourOrder(var orderItems) {
     String yourOrder = '';
     orderItems.forEach((map) {
@@ -57,7 +61,9 @@ class _TrackingPageState extends State<TrackingPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Background_Color,
@@ -88,20 +94,21 @@ class _TrackingPageState extends State<TrackingPage> {
                 } else {
                   if (snapshot.hasData) {
                     Map<String, dynamic> orderDetails =
-                        snapshot.data as Map<String, dynamic>;
+                    snapshot.data as Map<String, dynamic>;
                     if (orderDetails['customerName'] == "") {
                       return errorScreen(context, orderDetails['msg']);
                     } else {
                       accepted = orderDetails['accepted'];
                       assigned = orderDetails['assigned'];
+                      ratingGiven = orderDetails['ratingGiven'];
                       isAssigned.sink.add(assigned);
                       outForDelivery = orderDetails['outForDelivery'];
                       delivered = orderDetails['delivered'];
                       activeStep = 0;
                       activeStep = (accepted)
                           ? (outForDelivery)
-                              ? 2
-                              : 1
+                          ? 2
+                          : 1
                           : 0;
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -191,11 +198,11 @@ class _TrackingPageState extends State<TrackingPage> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             'OrderId:$orderId',
@@ -209,22 +216,9 @@ class _TrackingPageState extends State<TrackingPage> {
                                       SizedBox(
                                         height: 10,
                                       ),
-                                      Text(
-                                        'Delivery Address:',
-                                        style: GoogleFonts.lato(
-                                            fontSize: 16, color: kTextColor),
-                                      ),
-                                      Text(
-                                        orderDetails['customerAddress'] + '.',
-                                        style: GoogleFonts.lato(
-                                            color: kTextLightColor,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 15,
-                                            letterSpacing: 0.5),
-                                      ),
-                                      SizedBox(
-                                        height: 15,
-                                      ),
+                                      (!orderDetails['delivered'])
+                                          ? orderAddress(orderDetails)
+                                          : Container(),
                                       Text(
                                         'Your Order:',
                                         style: GoogleFonts.lato(
@@ -249,10 +243,10 @@ class _TrackingPageState extends State<TrackingPage> {
                                           decoration: BoxDecoration(
                                               color: kPrimaryColor,
                                               borderRadius:
-                                                  BorderRadius.circular(20)),
+                                              BorderRadius.circular(20)),
                                           child: Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.only(
@@ -266,40 +260,107 @@ class _TrackingPageState extends State<TrackingPage> {
                                               ),
                                               (!orderDetails['assigned'])
                                                   ? Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 10,
-                                                          horizontal: 5),
-                                                      child: Text(
-                                                        'We will Assign a deliveryPartner soon to you address',
-                                                        style: GoogleFonts.lato(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontSize: 15,
-                                                            letterSpacing: 1),
-                                                      ),
-                                                    )
-                                                  : (partnerDetails['Name'] == null)
-                                                      ? FutureBuilder(
-                                                          future: getDeliveryPartner(
-                                                              orderDetails[
-                                                                  'assignedTo']),
-                                                          builder: (context,
-                                                              snapshot) {
-                                                            return deliveryPartnerWidget();
-                                                          })
-                                                      : deliveryPartnerWidget()
+                                                padding: const EdgeInsets
+                                                    .symmetric(
+                                                    vertical: 10,
+                                                    horizontal: 5),
+                                                child: Text(
+                                                  'We will Assign a deliveryPartner soon to you address',
+                                                  style: GoogleFonts.lato(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                      FontWeight.w500,
+                                                      fontSize: 15,
+                                                      letterSpacing: 1),
+                                                ),
+                                              )
+                                                  : (partnerDetails['Name'] ==
+                                                  null)
+                                                  ? FutureBuilder(
+                                                  future: getDeliveryPartner(
+                                                      orderDetails[
+                                                      'assignedTo']),
+                                                  builder: (context,
+                                                      snapshot) {
+                                                    return deliveryPartnerWidget();
+                                                  })
+                                                  : deliveryPartnerWidget()
                                             ],
                                           ),
                                         ),
                                       ),
+                                      //TODO: Rate your DeliveryPartner
+                                      (orderDetails['delivered'])
+                                          ? Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+                                          Text(
+                                            (ratingGiven)?'Thanks for your Feedback!':'Rate your delivery partner:',
+                                            style: GoogleFonts.lato(
+                                                fontSize: 17,
+                                                color: kTextColor),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          (ratingGiven)?Container():RatingBar.builder(
+                                            updateOnDrag: ratingGiven,
+                                            tapOnlyMode: ratingGiven,
+                                            initialRating: 1,
+                                            minRating: 1,
+                                            direction:
+                                            Axis.horizontal,
+                                            allowHalfRating: false,
+                                            itemCount: 5,
+                                            itemPadding:
+                                            EdgeInsets.symmetric(
+                                                horizontal: 4.0),
+                                            itemBuilder:
+                                                (context, _) =>
+                                                Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                ),
+                                            onRatingUpdate: (ratingGiven)? (rating){}:(rating) async{
+                                              var newRating = (((partnerDetails['rating']??5) *
+                                                  (partnerDetails['numberOfRatings']??1)) +
+                                                  rating) /
+                                                  ((partnerDetails['numberOfRatings']??1) +
+                                                      1);
+                                              bool isDone = await ApiServices().rateDeliveryPartner(partnerDetails['branchId'], partnerDetails['_id'],newRating);
+                                              if(isDone){
+                                                Map<String,dynamic> data = {
+                                                  "branchId":branchId,
+                                                  "orderId":orderId
+                                                };
+                                                ratingGiven = true;
+                                                ApiServices().ratingGiven(data);
+                                                AwesomeDialog(
+                                                  context: context,
+                                                  dismissOnTouchOutside: false,
+                                                  dismissOnBackKeyPress: false,
+                                                  dialogType: DialogType.SUCCES,
+                                                  title: 'Thanks for your feedback!',
+                                                  btnOkOnPress: (){}
+                                                )..show();
+                                              }
+                                              print(newRating);
+                                            },
+                                          )
+                                        ],
+                                      )
+                                          : Container()
                                     ],
                                   ),
                                 ),
                               ]),
                             ),
-                            trackingButton(context,orderDetails['latitude'],orderDetails['longitude'])
+                            trackingButton(context, orderDetails['latitude'],
+                                orderDetails['longitude'])
                           ],
                         ),
                       );
@@ -309,15 +370,34 @@ class _TrackingPageState extends State<TrackingPage> {
                 return Container();
             }
           }),
-      // floatingActionButton: StreamBuilder<Object>(
-      //     stream: isAssigned.stream,
-      //     builder: (context, snapshot) {
-      //       return trackingButton(context);
-      //     }),
     );
   }
 
-  Padding trackingButton(BuildContext context,String latitude,String longitude) {
+  Column orderAddress(Map<String, dynamic> orderDetails) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Delivery Address:',
+          style: GoogleFonts.lato(fontSize: 16, color: kTextColor),
+        ),
+        Text(
+          orderDetails['customerAddress'] + '.',
+          style: GoogleFonts.lato(
+              color: kTextLightColor,
+              fontWeight: FontWeight.w500,
+              fontSize: 15,
+              letterSpacing: 0.5),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+      ],
+    );
+  }
+
+  Padding trackingButton(BuildContext context, String latitude,
+      String longitude) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Material(
@@ -326,18 +406,26 @@ class _TrackingPageState extends State<TrackingPage> {
         child: GestureDetector(
           onTap: outForDelivery
               ? () {
-                  if (!delivered) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => MapPage(partnerDetails['_id'],
-                            partnerDetails['Name'], partnerDetails['phone'],latitude,longitude,branchId)));
-                  }
-                }
+            if (!delivered) {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      MapPage(
+                          partnerDetails['_id'],
+                          partnerDetails['Name'],
+                          partnerDetails['phone'],
+                          latitude,
+                          longitude,
+                          branchId)));
+            }
+          }
               : null,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 105, vertical: 20),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: (outForDelivery) ? kPrimaryColor : ksecondaryColor,
+              color: (outForDelivery) ? (!delivered)
+                  ? kPrimaryColor
+                  : ksecondaryColor : ksecondaryColor,
             ),
             child: Text(
               'Track your order',
@@ -356,66 +444,77 @@ class _TrackingPageState extends State<TrackingPage> {
   Padding deliveryPartnerWidget() {
     return (partnerDetails['Name'] == '' || partnerDetails['Name'] == null)
         ? Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-            child: Text(
-              'Could not get the deliveryPartner details',
-              style: GoogleFonts.lato(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 15,
-                  letterSpacing: 1),
-            ),
-          )
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+      child: Text(
+        'Could not get the deliveryPartner details',
+        style: GoogleFonts.lato(
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+            fontSize: 15,
+            letterSpacing: 1),
+      ),
+    )
         : Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.delivery_dining_rounded,
+            color: Colors.white,
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.delivery_dining_rounded,
-                  color: Colors.white,
+                Text(
+                  partnerDetails['Name'],
+                  style:
+                  GoogleFonts.lato(fontSize: 16, color: Colors.white),
                 ),
                 SizedBox(
-                  width: 20,
+                  height: 0,
                 ),
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        partnerDetails['Name'],
-                        style:
-                            GoogleFonts.lato(fontSize: 16, color: Colors.white),
-                      ),
-                      SizedBox(
-                        height: 0,
-                      ),
-                      Row(
-                        //mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(partnerDetails['phone'],
-                              style: GoogleFonts.lato(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                  letterSpacing: 1)),
-                          //TODO: Call the driver
-                          IconButton(
-                              onPressed: () {
-                                launch("tel://+91${partnerDetails['phone']}");
-                              },
-                              icon: Icon(
-                                Icons.call,
-                                color: Colors.white,
-                              ))
-                        ],
-                      ),
-                    ],
-                  ),
-                )
+                Row(
+                  //mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(partnerDetails['phone'],
+                        style: GoogleFonts.lato(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            letterSpacing: 1)),
+                    //TODO: Call the driver
+                    IconButton(
+                        onPressed: () {
+                          launch("tel://+91${partnerDetails['phone']}");
+                        },
+                        icon: Icon(
+                          Icons.call,
+                          color: Colors.white,
+                        ))
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      partnerDetails['rating'].toString(),
+                      style:
+                      GoogleFonts.lato(fontSize: 16, color: Colors.white),
+                    ),
+                    Icon(Icons.star,color: Colors.amber,)
+                  ],
+                ),
+                SizedBox(height: 8,),
               ],
             ),
-          );
+          )
+        ],
+      ),
+    );
   }
 
   Stream<Map<String, dynamic>> getOrderDetails() =>
@@ -444,10 +543,23 @@ class _TrackingPageState extends State<TrackingPage> {
     print('partnerDetails = $partnerDetails');
   }
 
-  Center loadingScreen() {
-    return Center(
-      //This is the Loading Screen.
-      child: Lottie.asset('assets/loading_hand.json'),
+  loadingScreen() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(),
+        Center(
+          child: Lottie.asset('assets/userLoading.json'),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        FadingText(
+          'Fetching Order Details ...',
+          style: GoogleFonts.lato(fontSize: 19, color: kTextColor),
+        )
+      ],
     );
   }
 
