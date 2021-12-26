@@ -125,7 +125,9 @@ class _wish_listState extends State<wish_list> {
                                       ),
                                     ),
                                     (item['isAvailable']==true)
-                                        ? ElevatedButton(
+                                        ? (userCart.contains(item['id']))?
+                                        plusMinusButton(item)
+                                        :ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         primary: (userCart.contains(item['id']))?ksecondaryColor:kPrimaryColor,
                                         // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
@@ -202,5 +204,67 @@ class _wish_listState extends State<wish_list> {
         // child: Text('This is cart page.',style: GoogleFonts.lato(fontSize: 17),),
         //   ),
         );
+  }
+
+  Row plusMinusButton(item) {
+    int quantity = billingItems.firstWhere((element) => element['id']==item['id'] , orElse: (){return {'id': 0,'count':0};})['count'];
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              changeCount(item['id'], false);
+            });
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: kPrimaryColor, borderRadius: BorderRadius.circular(4)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+              child: Text(
+                '-',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: 10),
+        Container(
+          child: Text(
+            quantity.toString(),
+            style: TextStyle(
+              color: kPrimaryColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        SizedBox(width: 10),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              changeCount(item['id'], true);
+            });
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: kPrimaryColor, borderRadius: BorderRadius.circular(4)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+              child: Text(
+                '+',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

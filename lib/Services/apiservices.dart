@@ -228,11 +228,6 @@ class ApiServices{
     );
     var result = json.decode(res.body);
     return result;
-    if(result['status']){
-      return result['myOrders'];
-    }else{
-      return false;
-    }
   }
 
   Future getOrderDetails(Map<String,dynamic> orderData)async{
@@ -273,5 +268,36 @@ class ApiServices{
         'Name':"",
       };
     }
+  }
+
+  Future rateDeliveryPartner(String branchId,String partnerId,var newRating)async{
+    Map<String ,dynamic> data = {
+      "branchId":branchId,
+      "partnerid":partnerId,
+      "rating":newRating
+    };
+    var res = await http.patch(
+      Uri.parse(baseUrl+'user/ratePartner'),
+      headers: {
+        "Content-Type":"application/json"
+      },
+      body: json.encode(data)
+    );
+
+    var result = json.decode(res.body);
+    return result['status'];
+  }
+  
+  Future ratingGiven(Map<String,dynamic> data)async{
+    var res = await http.patch(
+        Uri.parse(baseUrl+'tongue/pastOrders/rateOrder'),
+      headers: {
+        "Content-Type":"application/json",
+      },
+      body: json.encode(data)
+    );
+    var result = json.decode(res.body);
+    print('Order Rated - ${result['status']}');
+    return result['status'];
   }
 }

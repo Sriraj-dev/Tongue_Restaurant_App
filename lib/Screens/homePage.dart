@@ -1,7 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:delivery_app/Screens/SearchScreen.dart';
-import 'package:delivery_app/Services/DBoperations.dart';
-import 'package:delivery_app/Services/locationServices.dart';
+import 'package:delivery_app/Screens/dish.dart';
+import 'package:delivery_app/Screens/offers.dart';
 import 'package:delivery_app/components/SearchBox.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
@@ -9,11 +9,9 @@ import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tab_indicator_styler/flutter_tab_indicator_styler.dart';
-import 'package:delivery_app/Screens/dish.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
-import 'package:delivery_app/Screens/offers.dart';
+import 'package:lottie/lottie.dart';
 
 class homePage extends StatefulWidget {
   const homePage({Key? key}) : super(key: key);
@@ -25,6 +23,7 @@ class homePage extends StatefulWidget {
 //-------------------------------------------------jashwanth-------------------
 class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
   late TabController _tabController;
+
   @override
   void initState() {
     super.initState();
@@ -37,6 +36,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
 
   bool isAdded = false;
   String displayAddress = userAddress.split(',')[0];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -287,9 +287,9 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                           child: (e[index]['isAvailable'] ==
                                                   true)
                                               ? Image.network(
-                                                  e[index]['image'],
-                                                  height: 100,
-                                                )
+                                                e[index]['image'],
+                                                height: 100,
+                                              )
                                               : Container(
                                                   decoration: BoxDecoration(
                                                     borderRadius:
@@ -320,49 +320,60 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                                 horizontal: 5, vertical: 0),
                                             child: (e[index]['isAvailable'] ==
                                                     true)
-                                                ? ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      primary: (userCart
-                                                              .contains(e[index]
-                                                                  ['id']))
-                                                          ? ksecondaryColor
-                                                          : kPrimaryColor,
-                                                      // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
-                                                      shape:
-                                                          const RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    10)),
-                                                      ),
-                                                    ),
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        if (!userCart.contains(
-                                                            e[index]['id'])) {
-                                                          addToUserCart(
-                                                              e[index]['id']);
-                                                        } else {
-                                                          print(
-                                                              'trying to remove');
-                                                          removeFromUserCart(
-                                                              e[index]['id']);
-                                                        }
-                                                      });
-                                                    },
-                                                    child: Center(
-                                                        child: Text(
-                                                      (userCart.contains(
-                                                              e[index]['id']))
-                                                          ? 'Added'
-                                                          : 'Add to Cart',
-                                                      style: GoogleFonts.lora(
-                                                        fontSize: 17,
-                                                        color: Colors.white,
-                                                      ),
-                                                    )),
-                                                  )
+                                                ? (userCart.contains(
+                                                        e[index]['id']))
+                                                    ? plusMinusButton(e, index)
+                                                    : ElevatedButton(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary: (userCart
+                                                                  .contains(e[
+                                                                          index]
+                                                                      ['id']))
+                                                              ? ksecondaryColor
+                                                              : kPrimaryColor,
+                                                          // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                                                          shape:
+                                                              const RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            10)),
+                                                          ),
+                                                        ),
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            if (!userCart
+                                                                .contains(e[
+                                                                        index]
+                                                                    ['id'])) {
+                                                              addToUserCart(
+                                                                  e[index]
+                                                                      ['id']);
+                                                            } else {
+                                                              print(
+                                                                  'trying to remove');
+                                                              removeFromUserCart(
+                                                                  e[index]
+                                                                      ['id']);
+                                                            }
+                                                          });
+                                                        },
+                                                        child: Center(
+                                                            child: Text(
+                                                          (userCart.contains(
+                                                                  e[index]
+                                                                      ['id']))
+                                                              ? 'Added'
+                                                              : 'Add to Cart',
+                                                          style:
+                                                              GoogleFonts.lora(
+                                                            fontSize: 17,
+                                                            color: Colors.white,
+                                                          ),
+                                                        )),
+                                                      )
                                                 : Container(
                                                     child: Text(
                                                         'Currectly Unavailable'),
@@ -480,6 +491,71 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
     );
   }
 
+  Row plusMinusButton(e, int index) {
+    int quantity = billingItems
+        .firstWhere((element) => element['id'] == e[index]['id'], orElse: () {
+      return {'id': 0, 'count': 0};
+    })['count'];
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              changeCount(e[index]['id'], false);
+            });
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: kPrimaryColor, borderRadius: BorderRadius.circular(4)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+              child: Text(
+                '-',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: 10),
+        Container(
+          child: Text(
+            quantity.toString(),
+            style: TextStyle(
+              color: kPrimaryColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        SizedBox(width: 10),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              changeCount(e[index]['id'], true);
+            });
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: kPrimaryColor, borderRadius: BorderRadius.circular(4)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+              child: Text(
+                '+',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Padding itemDetails(e, int index) {
     return Padding(
       padding: const EdgeInsets.only(top: 15, bottom: 10),
@@ -509,40 +585,5 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
     );
   }
 }
-//-------------------------------------------------------------
-// tileColor: Colors.white,
-// // leading:Container(
-// //   height: 110,
-// //   decoration: BoxDecoration(
-// //     color:Colors.blue,
-// //     borderRadius: BorderRadius.circular(20),
-// //   ),
-// //
-// // ),
-// leading: Container(
-// height: 110,
-// width: 110,
-// decoration: BoxDecoration(
-// shape: BoxShape.circle,
-// color: (e[index]['type'] == 'veg')?Colors.green:Colors.red,
-// ),
-// ),
-// title: Text(e[index]['itemName']),
-// subtitle: Text(e[index]['description']),
-// trailing: Text(e[index]['cost']),
-//-------------------------------------------------------------
-
-//sriraj:
-//sharedPrefs(favourites)
-//payment last
-//fetching User information
-// jaswanth:
-// ListTile ,
-// ItemPage ,
-// loginPage,
-// SignUp page,
-
-//menupage(last)
-
 //TODO :changeButton(Checkout),NetworkPage, MaintainencePage , checkOutBox , Cart, WishList,UserProfile
 //TODO : OffersMongodb

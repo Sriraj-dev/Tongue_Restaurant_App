@@ -51,7 +51,7 @@ getUserInfo() async {
   username = userInfo['username'];
   userEmail = userInfo['email'];
   userPhone = userInfo['phone'];
-  myOrders = userInfo['myOrders'];
+ // myOrders = userInfo['myOrders'];
  }
 }
 
