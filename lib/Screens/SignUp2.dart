@@ -3,6 +3,7 @@ import 'package:delivery_app/Services/authentication.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
 class SignUp2 extends StatefulWidget {
@@ -76,23 +77,6 @@ class _SignUp2State extends State<SignUp2> {
                           SizedBox(
                             height: 16,
                           ),
-                          Material(
-                            elevation: 5,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            child: Container(
-                              width: 128,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(20)),
-                                color: Colors.white,
-                              ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: 'OTP',
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                          ),
                           SizedBox(
                             height: 16,
                           ),
@@ -112,12 +96,13 @@ class _SignUp2State extends State<SignUp2> {
                             decoration: InputDecoration(
                             ),
                           ),
+                          SizedBox(height: 25,),
                           Padding(
                             padding: const EdgeInsets.only(top:16, bottom: 16),
                             child: Container(
                               width: size.width * 0.8,
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(29),
+                                borderRadius: BorderRadius.circular(25),
                                 child: FlatButton(
                                     padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                                     color: kPrimaryColor,
@@ -136,7 +121,7 @@ class _SignUp2State extends State<SignUp2> {
                                     },
                                     child: Text(
                                       "Signup",
-                                      style: TextStyle(color: Colors.white),
+                                      style: GoogleFonts.lato(color: Colors.white,fontSize:18 ),
                                     )
                                 ),
                               ),

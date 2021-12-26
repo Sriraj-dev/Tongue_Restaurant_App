@@ -29,7 +29,8 @@ class _wish_listState extends State<wish_list> {
         backgroundColor: Background_Color,
         title: Text('Favourites',
           style: GoogleFonts.arvo(
-            color: ksecondaryColor
+            color: ksecondaryColor,
+            fontSize: 25
           ),
         ),
         centerTitle: true,

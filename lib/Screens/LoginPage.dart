@@ -5,6 +5,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:delivery_app/Screens/login.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -27,41 +28,25 @@ class _LoginPageState extends State<LoginPage> {
               left:0,
               child: Image.asset('assets/images/main_top.png',width: size.width*0.3,),
             ),
-            Positioned(
-              bottom: 0,
-              left:0,
-              child: Image.asset('assets/images/main_bottom.png',width: size.width*0.2,),
-            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-
+                Row(),
                 Text(
                   "WELCOME TO TONGUE",
-                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
+                  style: GoogleFonts.baloo(
+                      fontWeight: FontWeight.bold,
+                      color: kPrimaryColor,
+                      fontSize: 25),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/images/1.png',
-                      height: size.height * 0.3,
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/images/2.png',
-                      height: size.height * 0.2,
-                    ),
-                  ],
-                ),
+                SizedBox(height: 25,),
+                Lottie.asset('assets/userMain.json'),
+                SizedBox(height: 35,),
                 Container(
                   width: size.width * 0.8,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(29),
+                    borderRadius: BorderRadius.circular(20),
                     child: FlatButton(
                         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                         color: kPrimaryColor,
@@ -73,7 +58,10 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         child: Text(
                           "Login",
-                          style: TextStyle(color: Colors.white),
+                          style: GoogleFonts.lato(
+                            fontSize: 18,
+                              color: Colors.white,
+                          ),
                         )),
                   ),
                 ),
@@ -83,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Container(
                     width: size.width * 0.8,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(29),
+                      borderRadius: BorderRadius.circular(20),
                       child: FlatButton(
                           padding:
                           EdgeInsets.symmetric(vertical: 20, horizontal: 40),
@@ -96,7 +84,10 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           child: Text(
                             "Signup",
-                            style: TextStyle(color: Colors.black),
+                            style: GoogleFonts.lato(
+                                fontSize: 18,
+                                color: Colors.black,
+                            ),
                           )),
                     ),
                   ),
