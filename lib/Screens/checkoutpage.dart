@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:delivery_app/Screens/offers.dart';
 import 'package:delivery_app/Screens/trackingScreen.dart';
 import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/constants.dart';
@@ -194,6 +195,25 @@ class _checkoutState extends State<checkout> {
                 ),
                 child: total_order(),
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 8),
+                  child: GestureDetector(
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Offers()));
+                    },
+                    child: Text('Apply Offer',
+                      style: GoogleFonts.lato(
+                        fontSize: 17,
+                        color: kPrimaryColor
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding:
