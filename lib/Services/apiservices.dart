@@ -300,4 +300,16 @@ class ApiServices{
     print('Order Rated - ${result['status']}');
     return result['status'];
   }
+
+  Future getOffers(Map<String,dynamic> data)async{
+    var res = await http.post(
+      Uri.parse(baseUrl+'tongue/offers'),
+      headers: {
+        "Content-Type":"application/json",
+      },
+      body: json.encode(data)
+    );
+    var result = json.decode(res.body);
+    return result['status'];
+  }
 }

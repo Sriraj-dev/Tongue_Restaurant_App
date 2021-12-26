@@ -22,6 +22,9 @@ List userFav = [];
 List<Map<String,dynamic>> billingItems = [];// List of Maps where Map = {id:ItemUniqueId  ,count: Count}
 String msg = '';
 List myOrders = [];
+List offers = [];
+bool gotOffers = false;
+StreamController<bool> initialisedOffers = StreamController<bool>.broadcast();
 //Stream<int> cartCount = userCart.length as Stream<int>;
 StreamController<int> cartCount = StreamController<int>.broadcast();
 StreamController<bool> initialisedOrders = StreamController<bool>.broadcast();
@@ -209,6 +212,14 @@ getMyOrders() async{
  }
 }
 
+getMyOffers()async{
+ gotOffers = false;
+ initialisedOffers.sink.add(false);
+ offers = [];
+ //TODO:Get offers from the backend.
+ gotOffers = true;
+ initialisedOffers.sink.add(true);
+}
 
 getHomeAddress()async{
  var res = await DbOperations().getHomeAddress();

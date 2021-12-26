@@ -7,6 +7,8 @@ import 'package:delivery_app/constants.dart';
 import 'package:flutter/painting.dart';
 import 'package:delivery_app/Screens/homePage.dart ';
 import 'package:flutter/rendering.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 class login extends StatefulWidget {
@@ -51,17 +53,22 @@ class _loginState extends State<login> {
                     padding: const EdgeInsets.only(top: 64),
                     child: Text(
                       "WELCOME BACK!",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      style: GoogleFonts.baloo(
+                        color: kPrimaryColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 30
+                      ),
                     ),
                   ),
                   Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Image.asset(
-                          'assets/images/6.png',
-                          height: size.height * 0.4,
-                        ),
+                        // Image.asset(
+                        //   'assets/images/6.png',
+                        //   height: size.height * 0.4,
+                        // ),
+                        Lottie.asset('assets/userLogin.json',width: size.width*0.9)
                       ],
                     ),
                   ),
@@ -70,6 +77,7 @@ class _loginState extends State<login> {
                       controller: usr,
                       decoration: InputDecoration(
                         hintText: " Username ",
+                        prefixIcon: Icon(Icons.person_rounded),
                         border: InputBorder.none,
                       ),
                     ),
@@ -77,7 +85,7 @@ class _loginState extends State<login> {
                     width: size.width * 0.8,
                     decoration: BoxDecoration(
                       color: kPrimaryLightColor,
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                   SizedBox(
@@ -86,7 +94,9 @@ class _loginState extends State<login> {
                   Container(
                     child: TextField(
                       controller: pwd,
+                      obscureText: true,
                       decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.lock_rounded),
                         hintText: " Password ",
                         border: InputBorder.none,
                       ),
@@ -95,35 +105,53 @@ class _loginState extends State<login> {
                     width: size.width * 0.8,
                     decoration: BoxDecoration(
                       color: kPrimaryLightColor,
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  Container(
-                    width: size.width * 0.8,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(29),
-                      child: FlatButton(
-                          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                          color: kPrimaryColor.withOpacity(0),
-                          onPressed: () {
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Container(
+                      //   width: size.width * 0.8,
+                      //   child: ClipRRect(
+                      //     borderRadius: BorderRadius.circular(29),
+                      //     child: FlatButton(
+                      //         padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                      //         color: kPrimaryColor.withOpacity(0),
+                      //         onPressed: () {
+                      //           // Navigator.push(
+                      //           //   context,
+                      //           //   MaterialPageRoute(builder: (context) => login()),
+                      //           // );
+                      //         },
+                      //         child: Text(
+                      //           "Forgot password",
+                      //           style: TextStyle(color:kPrimaryColor),
+                      //         )),
+                      //   ),
+                      // ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15,bottom: 20,top: 8),
+                        child: GestureDetector(
+                          onTap: (){
                             //TODO ------------------------forgot password------------------
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => login()),
-                            // );
                           },
-                          child: Text(
-                            "Forgot password",
-                            style: TextStyle(color:kPrimaryColor),
-                          )),
-                    ),
+                          child: Text('Forgot Password?',
+                            style: GoogleFonts.lato(
+                              color: kPrimaryColor,
+                              fontWeight: FontWeight.w500
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16),
                     child: Container(
                       width: size.width * 0.8,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(29),
+                        borderRadius: BorderRadius.circular(20),
                         child: FlatButton(
                             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                             color: kPrimaryColor,
@@ -149,7 +177,10 @@ class _loginState extends State<login> {
                             },
                             child: (loggingIn)?CircularProgressIndicator():Text(
                               "Login",
-                              style: TextStyle(color: Colors.white),
+                              style: GoogleFonts.lato(
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
                             )),
                       ),
                     ),
