@@ -23,12 +23,31 @@ class _OffersState extends State<Offers> {
           style: GoogleFonts.lato(fontSize: 24, color: kPrimaryColor),
         ),
         leading: IconButton(
-          onPressed: (){},
+          onPressed: (){
+            Navigator.of(context).pop();
+          },
           icon: Icon(Icons.arrow_back_ios_rounded),
           color: kPrimaryColor,
         ),
       ),
+      body: noOffersPage(),
+    );
+  }
 
+  Column noOffersPage() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(),
+        Lottie.asset('assets/no_offers.json'),
+        Text('No Offers!!',
+          style: GoogleFonts.lato(
+            color: kTextColor,
+            fontSize: 20
+          ),
+        ),
+      ],
     );
   }
 
