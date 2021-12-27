@@ -145,9 +145,6 @@ class _checkoutState extends State<checkout> {
                   ),
                   child: IconButton(
                     iconSize: 25,
-                    // onPressed: () {
-                    //   Navigator.pop(context);
-                    // },
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -256,6 +253,33 @@ class _checkoutState extends State<checkout> {
               ),
             ),
             Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text('Branch :',
+                    style: GoogleFonts.lato(
+                      color: kPrimaryColor,
+                      fontSize: 18
+                    ),
+                  ),
+                  SizedBox(width: 10,),
+                  DropdownButton<Map>(
+                    value: selectedBranch,
+                      onChanged: (newValue){
+                      setState(() {
+                        selectedBranch = newValue??{};
+                      });
+                      },
+                      items: branches.map((e) => DropdownMenuItem<Map>(
+                        child: Text(e['branchArea']),
+                        value: e,
+                      )).toList(),
+                  )
+                ],
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.all(12.0),
               child: Container(
                 child: Text(
@@ -338,7 +362,21 @@ class _checkoutState extends State<checkout> {
           borderRadius: BorderRadius.circular(30),
           child: GestureDetector(
             onTap: () async {
-              openCheckout();
+              double distance =calculateDistance(deliveryLatitude,deliveryLongitude,selectedBranch['latitude'],selectedBranch['longitude']);
+              if(distance>10.0){
+                AwesomeDialog(
+                    context: context,
+                    showCloseIcon: false,
+                    dismissOnBackKeyPress: false,
+                    dismissOnTouchOutside: false,
+                    dialogType: DialogType.WARNING,
+                    title: 'Delivery service is not available in your location!',
+                    btnOkOnPress: (){},
+                    btnOkColor: Colors.red
+                )..show();
+              }else{
+                openCheckout();
+              }
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 105, vertical: 14),
