@@ -399,7 +399,7 @@ class _TrackingPageState extends State<TrackingPage> {
   Padding trackingButton(BuildContext context, String latitude,
       String longitude) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 2.0),
       child: Material(
         elevation: (outForDelivery) ? 2 : 0,
         borderRadius: BorderRadius.circular(10),
@@ -420,7 +420,7 @@ class _TrackingPageState extends State<TrackingPage> {
           }
               : null,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 105, vertical: 20),
+            padding: EdgeInsets.symmetric(horizontal: 105, vertical: 14),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: (outForDelivery) ? (!delivered)
