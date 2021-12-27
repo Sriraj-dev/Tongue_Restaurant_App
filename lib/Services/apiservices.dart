@@ -95,7 +95,7 @@ class ApiServices{
     var res = await http.patch(
       Uri.parse(baseUrl+'user/updatePhone'),
       headers: {
-        "Content_Type":"application/json",
+        "Content-Type":"application/json",
         "Authorization": token
       },
       body: json.encode(data)

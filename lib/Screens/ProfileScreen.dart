@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:delivery_app/Screens/help_support.dart';
 import 'package:delivery_app/Services/DBoperations.dart';
+import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/Services/storageServices.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/userModel.dart';
@@ -71,7 +72,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontSize: 20),
                       ),
                       SizedBox(width: 15,),
-                      IconButton(onPressed: (){}, icon: Icon(Icons.edit_rounded),color: Colors.white,iconSize: 17,)
+                      IconButton(onPressed: ()async{
+                        await editPhoneNumber(context);
+                      }, icon: Icon(Icons.edit_rounded),color: Colors.white,iconSize: 17,)
                     ],
                   ),
                   Row(
@@ -121,54 +124,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-          //TODO address overflow condition
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
-          //   child: Material(
-          //     elevation: 5,
-          //     borderRadius: BorderRadius.all(Radius.circular(20)),
-          //     child: Container(
-          //
-          //      // height: 100,
-          //       decoration: BoxDecoration(
-          //           color: kPrimaryColor.withOpacity(0.03),
-          //           borderRadius: BorderRadius.all(Radius.circular(20))),
-          //       child: Row(
-          //         children: [
-          //           SizedBox(width: 10,),
-          //           Icon(Icons.home),
-          //           SizedBox(width: 15,),
-          //           Container(
-          //             width: MediaQuery.of(context).size.width*0.65,
-          //             child: Padding(
-          //               padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 5),
-          //               child: (homeAddress=='')?
-          //                   Text('Home location is not set!',
-          //                     style: TextStyle(
-          //                       fontSize: 18,
-          //                     ),
-          //                   )
-          //                   :Text(
-          //                 homeAddress.substring(0,(homeAddress.length>125)?125:homeAddress.length),
-          //                 style: TextStyle(
-          //                   fontSize: 18,
-          //                 ),
-          //                 //maxLines: 3,
-          //               ),
-          //             ),
-          //           ),
-          //
-          //           InkWell(
-          //               onTap: ()async{
-          //                 await editHomeAddress(context);
-          //               },
-          //               child: Icon(Icons.edit_rounded)
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ),
           SizedBox(height: 35,),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
@@ -452,6 +407,110 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ) ..show();
   }
 
+  Future<void> editPhoneNumber(BuildContext context) async {
+    TextEditingController phone = new TextEditingController();
+    String hintText = 'Enter phoneNo.';
+    AwesomeDialog(
+      context: context,
+      animType: AnimType.BOTTOMSLIDE,
+      showCloseIcon: true,
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      btnCancelText: 'Cancel',
+      dialogType: DialogType.INFO_REVERSED,
+      btnOkOnPress:()async{
+        print('phone is not empty - ${phone.text}');
+        var tempPhone = phone.text;
+        print('The phone is set temporarly to: $tempPhone');
+        try{
+          // await setHomeLocation(tempAddress);
+          bool updated = false;
+          bool validPhone = true;
+          if(tempPhone.length!=10){
+            validPhone = false;
+          }else{
+            for(int i=0;i<tempPhone.length;i++){
+              int num = int.parse(tempPhone[i]);
+              if(num.toString() != tempPhone[i]){
+                validPhone = false;
+              }
+            }
+          }
+          if(validPhone){
+            updated = await ApiServices().changePhone(token, tempPhone);
+          }
+          if((validPhone==false) || (updated == false)){
+            AwesomeDialog(
+                context: context,
+                showCloseIcon: false,
+                dismissOnBackKeyPress: false,
+                dismissOnTouchOutside: false,
+                dialogType: DialogType.ERROR,
+                title: 'Invalid PhoneNo.',
+                // btnOkIcon: Icons.cancel,
+                btnOkColor: Colors.red,
+                btnOkOnPress: (){}
+            )..show();
+          }else{
+            userPhone = tempPhone;
+            AwesomeDialog(
+                context: context,
+                showCloseIcon: false,
+                dismissOnBackKeyPress: false,
+                dismissOnTouchOutside: false,
+                dialogType: DialogType.SUCCES,
+                title: 'PhoneNo. updated successfully!',
+                desc: '$userPhone',
+                btnOkOnPress: (){
+                  setState(() {
+
+                  });
+                }
+            )..show();
+          }
+        }catch(e){
+          AwesomeDialog(
+              context: context,
+              showCloseIcon: false,
+              dismissOnBackKeyPress: false,
+              dismissOnTouchOutside: false,
+              dialogType: DialogType.ERROR,
+              title: 'Invalid PhoneNo.',
+              // btnOkIcon: Icons.cancel,
+              btnOkColor: Colors.red,
+              btnOkOnPress: (){}
+          )..show();
+        }
+      },
+      btnCancelOnPress: ()async{
+
+      },
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('Change your PhoneNo.',
+            style: GoogleFonts.lato(
+              fontSize: 17,
+            ),
+          ),
+          SizedBox(height: 10,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: TextField(
+              keyboardType: TextInputType.phone,
+              controller: phone,
+              decoration: InputDecoration(
+                hintText: hintText,
+                helperText: 'Country code is\'nt required',
+                //errorText: 'Address cannot be empty',
+              ),
+            ),
+          ),
+        ],
+      ),
+    ) ..show();
+  }
   void logOutCurrentUser() async{
     await Storage().deleteData();
     await DbOperations().clearDataBase();
