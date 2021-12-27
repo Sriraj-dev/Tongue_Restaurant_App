@@ -53,34 +53,6 @@ class _cartState extends State<cart> {
         child: Column(mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            GestureDetector(
-              onTap: (){
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context)=>Offers())
-                );
-      }     ,
-                child: Padding(
-                padding: const EdgeInsets.only(right :16.0),
-                child: Container(
-                  width: 300,
-                  height: 40,
-                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Image.asset('assets/images/eating-disorder.png',height: 150,),
-                      Text('CHECK FOR OFFERS ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16,),),
-
-                    ],
-
-                  ),
-                  decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.all(Radius.circular(5))
-
-                  ),
-
-                ),
-              ),
-            ),
             Material(
               elevation: 10,
               borderRadius: BorderRadius.circular(30),
