@@ -286,30 +286,62 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                                           tag: e[index]['id'],
                                           child: (e[index]['isAvailable'] ==
                                                   true)
-                                              ? Image.network(
-                                                e[index]['image'],
-                                                height: 100,
-                                              )
-                                              : Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                50)),
-                                                  ),
-                                                  child: Container(
-                                                    foregroundDecoration:
-                                                        BoxDecoration(
-                                                      color: Colors.grey,
-                                                      backgroundBlendMode:
-                                                          BlendMode.saturation,
+                                              ? Stack(
+                                                children: [
+                                                  Container(
+                                                    height: 100,
+                                                    width: 100,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(40),
+                                                      image: DecorationImage(
+                                                        image: AssetImage('assets/images/shimmerImage.jpg')
+                                                      )
                                                     ),
+                                                  ),
+                                                  Container(
+                                                    color: Colors.white,
                                                     child: Image.network(
                                                       e[index]['image'],
                                                       height: 100,
                                                     ),
                                                   ),
-                                                ),
+                                                ],
+                                              )
+                                              : Stack(
+                                                children: [
+                                                  Container(
+                                                    height: 100,
+                                                    width: 100,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(40),
+                                                        image: DecorationImage(
+                                                            image: AssetImage('assets/images/shimmerImage.jpg')
+                                                        )
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    50)),
+                                                      ),
+                                                      child: Container(
+                                                        foregroundDecoration:
+                                                            BoxDecoration(
+                                                          color: Colors.grey,
+                                                          backgroundBlendMode:
+                                                              BlendMode.saturation,
+                                                        ),
+                                                        child: Image.network(
+                                                          e[index]['image'],
+                                                          height: 100,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
                                         ),
                                       ),
                                       Column(
