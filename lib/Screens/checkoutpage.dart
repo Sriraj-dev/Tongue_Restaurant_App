@@ -6,7 +6,7 @@ import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:delivery_app/Services/BillingServices.dart';
 import 'package:delivery_app/restaurantModel.dart';
-
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -38,6 +38,90 @@ class _checkoutState extends State<checkout> {
   bool warningShown = false;
   bool placingOrder = false;
   List e = userCart;
+  //-------------------------------payment------------------
+  late Razorpay razorpay;
+  @override
+  void initState(){
+    super.initState();
+    razorpay =new Razorpay();
+    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,handlerPaymentSuccess);
+    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,handlerErrorFailure);
+    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,handlerExternalWallet);
+  }
+  @override
+  void dispose(){
+    super.dispose();
+    razorpay.clear;
+  }
+  void openCheckout(){
+    var options={
+      "key":"rzp_test_dH8wBxdVVrmtZX",
+      "amount":bill*100,
+      "name":username,
+      "description":"Tongue order",
+      "prefill":{
+        "contact":userPhone,
+        "email":userEmail,
+      },
+      "external":{
+        "wallets":["paytm"],
+      }
+    };
+    try{
+      razorpay.open(options);
+    }catch(e){
+      print(e.toString());
+    }
+  }
+  void handlerPaymentSuccess()async{
+    //AfterPayment:
+    setState(() {
+      placingOrder = true;
+    });
+    Map<String, dynamic> orderDetails = {
+      'customerName': username,
+      'customerPhone': userPhone,
+      'customerAddress': deliveryAddress,
+      'latitude': deliveryLatitude.toString(),
+      'longitude': deliveryLongitude.toString(),
+      'orderItems': billingItems,
+      'amountPaid': bill.toString(),
+      'branchId': "61a9b1c56a629f43c19616c0",
+      'accepted': false
+    };
+    var res = await ApiServices().placeOrder(orderDetails);
+    if (res != 'false') {
+      Map<String,dynamic> orderDetails = {
+        'orderId': res,
+        'branchId':"61a9b1c56a629f43c19616c0"
+      };
+      Map<String,dynamic> data = {
+        'orderDetails': orderDetails
+      };
+      await ApiServices().addToMyOrders(data ,token);
+      showSnackBar('Order placed!', context, Colors.green);
+      getMyOrders();
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => TrackingPage(res,"61a9b1c56a629f43c19616c0")));
+      //TODO: clear User cart from Database;
+    } else {
+      showSnackBar('Failed to place Order', context, Colors.red);
+      Navigator.pop(context);
+    }
+    print("Payment success");
+  }
+  void handlerErrorFailure(){
+    showSnackBar('Failed to place Order', context, Colors.red);
+    print("Payment error");
+  }
+  void handlerExternalWallet(){
+    showSnackBar('external wallet paid', context, Colors.red);
+
+    print("external wallet");
+
+  }
+
+  //--------------------------------------------------------
   @override
   Widget build(BuildContext context) {
     address = deliveryAddress.split(',');
@@ -106,7 +190,6 @@ class _checkoutState extends State<checkout> {
                     ),
                   ),
                 ),
-                //TODO : Ask User to choose homeLocation or currentLocation.
                 //dialogueBox
                 GestureDetector(
                   onTap: () async{
@@ -255,44 +338,10 @@ class _checkoutState extends State<checkout> {
           borderRadius: BorderRadius.circular(30),
           child: GestureDetector(
             onTap: () async {
-              //TODO: payment.
-              //AfterPayment:
-              setState(() {
-                placingOrder = true;
-              });
-              Map<String, dynamic> orderDetails = {
-                'customerName': username,
-                'customerPhone': userPhone,
-                'customerAddress': deliveryAddress,
-                'latitude': deliveryLatitude.toString(),
-                'longitude': deliveryLongitude.toString(),
-                'orderItems': billingItems,
-                'amountPaid': bill.toString(),
-                'branchId': "61a9b1c56a629f43c19616c0",
-                'accepted': false
-              };
-              var res = await ApiServices().placeOrder(orderDetails);
-              if (res != 'false') {
-                Map<String,dynamic> orderDetails = {
-                  'orderId': res,
-                  'branchId':"61a9b1c56a629f43c19616c0"
-                };
-                Map<String,dynamic> data = {
-                  'orderDetails': orderDetails
-                };
-                await ApiServices().addToMyOrders(data ,token);
-                showSnackBar('Order placed!', context, Colors.green);
-                getMyOrders();
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => TrackingPage(res,"61a9b1c56a629f43c19616c0")));
-                //TODO: clear User cart from Database;
-              } else {
-                showSnackBar('Failed to place Order', context, Colors.red);
-                Navigator.pop(context);
-              }
+              openCheckout();
             },
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 105, vertical: 20),
+              padding: EdgeInsets.symmetric(horizontal: 105, vertical: 14),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
                 color: kPrimaryColor,
