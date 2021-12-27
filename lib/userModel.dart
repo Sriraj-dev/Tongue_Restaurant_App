@@ -4,6 +4,7 @@ import 'package:delivery_app/Services/DBoperations.dart';
 import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/Services/locationServices.dart';
 import 'package:delivery_app/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -20,16 +21,17 @@ String userAddress = '';
 List userCart = [];
 List userFav = [];
 List<Map<String,dynamic>> billingItems = [];// List of Maps where Map = {id:ItemUniqueId  ,count: Count}
-String msg = '';
 List myOrders = [];
 List offers = [];
 bool gotOffers = false;
 StreamController<bool> initialisedOffers = StreamController<bool>.broadcast();
-//Stream<int> cartCount = userCart.length as Stream<int>;
 StreamController<int> cartCount = StreamController<int>.broadcast();
 StreamController<bool> initialisedOrders = StreamController<bool>.broadcast();
 bool gotOrders = false;
 
+List branches = [];
+Map selectedBranch = {};
+double nearestBranch = 0.0;
 Future<int> getUserLocation()async{
  try{
   print('trying to get the current location');
@@ -232,4 +234,30 @@ setHomeLocation(String tempAddress)async{
 
  homeLatitude = tempLocation.latitude;
  homeLongitude = tempLocation.longitude;
+}
+
+getAllBranches()async{
+ branches = await ApiServices().getBranches();
+ if(branches.length !=0){
+  selectedBranch = branches[0];
+ }
+}
+
+checkNearestBranch(Position sourcePosition){
+ double minDist = (Geolocator.distanceBetween(sourcePosition.latitude,sourcePosition.longitude,
+     double.parse(selectedBranch['latitude']),double.parse(selectedBranch['longitude'])))/1000;
+ nearestBranch = minDist;
+ branches.forEach((element) {
+   double x = calculateDistance(sourcePosition.latitude,sourcePosition.longitude, element['latitude'],element['longitude']);
+   if(x<minDist){
+    selectedBranch = element;
+    nearestBranch = x;
+    minDist =x;
+   }
+ });
+ print('The nearest Branch - $selectedBranch , distance - $nearestBranch');
+}
+calculateDistance(double startLatitude,double startLongitude,String endLatitude,String endLongitude){
+ return (Geolocator.distanceBetween(startLatitude,startLongitude,
+     double.parse(endLatitude),double.parse(endLongitude)))/1000;
 }

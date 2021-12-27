@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:delivery_app/Screens/ProfileScreen.dart';
 import 'package:delivery_app/Screens/cart.dart';
@@ -22,11 +23,29 @@ class _PageManagerState extends State<PageManager> {
   int currentIndex = 0;
   final pages = [homePage(), wish_list(), cart(), ProfileScreen()];
 
+  checkServiceAvailability(){
+    checkNearestBranch(userLocation);
+    if(nearestBranch>10.0){
+      Future.delayed(Duration(seconds: 4),(){
+        AwesomeDialog(
+            context: context,
+            showCloseIcon: false,
+            dismissOnBackKeyPress: false,
+            dismissOnTouchOutside: false,
+            dialogType: DialogType.WARNING,
+            title: 'Delivery service is not available in your location!',
+            btnOkOnPress: (){},
+            btnOkColor: Colors.red
+        )..show();
+      });
 
+    }
+  }
   @override
   void initState() {
     super.initState();
     getMyOrders();
+    checkServiceAvailability();
   }
 
   @override
