@@ -308,4 +308,17 @@ class ApiServices{
     var result = json.decode(res.body);
     return result['offers'];
   }
+  
+  Future applyCouponCode(Map<String,dynamic> data)async{
+    var res = await http.post(
+      Uri.parse(baseUrl+'tongue/applyOffer'),
+      headers: {
+        "Content-Type":"application/json",
+      },
+      body: json.encode(data)
+    );
+    var result = json.decode(res.body);
+    print('Applying Offer result - $result');
+    return result;
+  }
 }
