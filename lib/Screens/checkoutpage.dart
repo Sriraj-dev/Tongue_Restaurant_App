@@ -6,6 +6,7 @@ import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:delivery_app/Services/BillingServices.dart';
 import 'package:delivery_app/restaurantModel.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,9 @@ class _checkoutState extends State<checkout> {
   double deliveryLongitude;
   bool warningShown = false;
   bool placingOrder = false;
-  String offerCode = '';
+  bool applyingOffer = false;
+  bool appliedOffer = false;
+  num offerAmount = 0.0;
   List e = userCart;
   List paymentOptions = ['Pay now','Cash On Delivery'];
   //-------------------------------payment------------------
@@ -316,16 +319,23 @@ class _checkoutState extends State<checkout> {
                       var tempCode=await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Offers(true)));
                       if(tempCode!=null){
                         print('im applying offer');
-                        offerCode = tempCode;
+                        String offerCode = tempCode;
+                        setState(() {
+                          applyingOffer = true;
+                          appliedOffer = false;
+                          bill = bill+offerAmount;
+                        });
+                        applyOffer(offerCode);
                         print('Offer code received- $offerCode');
                       }else{
                         print('not received');
                       }
                     },
-                    child: Text('Apply Offer',
+                    child: Text(
+                      (appliedOffer)?'Offer Applied!':'Apply Offer',
                       style: GoogleFonts.lato(
                         fontSize: 17,
-                        color: kPrimaryColor
+                        color: (appliedOffer)?Colors.green:kPrimaryColor
                       ),
                     ),
                   ),
@@ -353,7 +363,9 @@ class _checkoutState extends State<checkout> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Text(
+                      child: (applyingOffer)?JumpingText('₹ ...',
+                        style: GoogleFonts.lato(fontSize: 15,color: Colors.black),
+                      ):Text(
                         '₹ ' + bill.toString(),
                         style: TextStyle(fontSize: 15, color: Colors.black),
                       ),
@@ -378,7 +390,7 @@ class _checkoutState extends State<checkout> {
                   elevation: 10,
                   borderRadius: BorderRadius.circular(30),
                   child: GestureDetector(
-                    onTap: () async {
+                    onTap: (applyingOffer)?(){}:() async {
                       double distance =calculateDistance(deliveryLatitude,deliveryLongitude,selectedBranch['latitude'],selectedBranch['longitude']);
                       if(distance>10.0){
                         AwesomeDialog(
@@ -392,20 +404,6 @@ class _checkoutState extends State<checkout> {
                             btnOkColor: Colors.red
                         )..show();
                       }else{
-                        // AwesomeDialog(
-                        //     context: context,
-                        //     showCloseIcon: true,
-                        //     dismissOnBackKeyPress: false,
-                        //     dismissOnTouchOutside: false,
-                        //     dialogType: DialogType.INFO_REVERSED,
-                        //     title: 'Pay using',
-                        //     btnOkText: 'Cash on Delivery',
-                        //     btnCancelText: 'Pay now',
-                        //     btnOkColor: kPrimaryColor,
-                        //     btnCancelColor: kPrimaryColor.withOpacity(0.5),
-                        //     btnOkOnPress: (){handlerPaymentSuccess();},
-                        //   btnCancelOnPress: (){openCheckout();},
-                        // )..show();
                         if(payNow){
                           openCheckout();
                         }else if(cashOnDelivery){
@@ -423,7 +421,14 @@ class _checkoutState extends State<checkout> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          (placingOrder)?CircularProgressIndicator():Text(
+                          (placingOrder)?CircularProgressIndicator():
+                          (applyingOffer)?JumpingText('    ...    ',
+                            style: GoogleFonts.lato(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white
+                            ),
+                          ):Text(
                             'PLACE ORDER ',
                             style: TextStyle(
                               fontSize: 16,
@@ -442,6 +447,54 @@ class _checkoutState extends State<checkout> {
         ),
       ),
     );
+  }
+
+  applyOffer(offerCode)async{
+    Map<String,dynamic> data = {
+      "branchId": selectedBranch['_id'],
+      "offerCode":offerCode,
+      "billingItems":billingItems,
+      "bill":bill
+    };
+    var result = await ApiServices().applyCouponCode(data);
+    if(result['status']){
+      appliedOffer = true;
+      applyingOffer = false;
+      offerAmount = bill-result['cost'];
+      bill = bill - offerAmount;
+      AwesomeDialog(
+        context: context,
+        showCloseIcon: false,
+        dismissOnTouchOutside: false,
+        dismissOnBackKeyPress: false,
+        dialogType: DialogType.SUCCES,
+        title: result['msg'],
+        desc: 'You have saved ₹$offerAmount',
+        btnOkOnPress: (){
+          setState(() {
+
+          });
+        }
+      )..show();
+    }else{
+      appliedOffer = false;
+      applyingOffer = false;
+      offerAmount = 0;
+      AwesomeDialog(
+          context: context,
+          showCloseIcon: false,
+          dismissOnTouchOutside: false,
+          dismissOnBackKeyPress: false,
+          dialogType: DialogType.ERROR,
+          title: 'Failed!',
+          desc: result['msg'],
+          btnOkOnPress: (){
+            setState(() {
+
+            });
+          }
+      )..show();
+    }
   }
 
    paymentChoosingButton() {
