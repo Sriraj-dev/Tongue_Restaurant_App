@@ -172,7 +172,7 @@ class _LoginPageState extends State<homePage> with TickerProviderStateMixin {
                 GestureDetector(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Offers()));
+                        MaterialPageRoute(builder: (context) => Offers(false)));
                   },
                   child: Row(
                     children: [

@@ -306,6 +306,6 @@ class ApiServices{
       body: json.encode(data)
     );
     var result = json.decode(res.body);
-    return result['status'];
+    return result['offers'];
   }
 }

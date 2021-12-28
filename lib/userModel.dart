@@ -219,6 +219,10 @@ getMyOffers()async{
  initialisedOffers.sink.add(false);
  offers = [];
  //TODO:Get offers from the backend.
+ Map<String,dynamic> data = {
+  "branchId": selectedBranch['_id']
+ };
+ offers = await ApiServices().getOffers(data);
  gotOffers = true;
  initialisedOffers.sink.add(true);
 }

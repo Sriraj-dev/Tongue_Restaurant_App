@@ -1,15 +1,25 @@
+import 'package:delivery_app/constants.dart';
+import 'package:delivery_app/userModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:delivery_app/constants.dart';
+import 'package:progress_indicators/progress_indicators.dart';
+
 class Offers extends StatefulWidget {
-  const Offers({Key? key}) : super(key: key);
+  //const Offers({Key? key}) : super(key: key);
+  bool allowApply;
+
+  Offers(this.allowApply);
 
   @override
-  _OffersState createState() => _OffersState();
+  _OffersState createState() => _OffersState(allowApply);
 }
 
 class _OffersState extends State<Offers> {
+  bool allowApply;
+
+  _OffersState(this.allowApply);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,14 +33,28 @@ class _OffersState extends State<Offers> {
           style: GoogleFonts.lato(fontSize: 24, color: kPrimaryColor),
         ),
         leading: IconButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.of(context).pop();
           },
           icon: Icon(Icons.arrow_back_ios_rounded),
           color: kPrimaryColor,
         ),
       ),
-      body: noOffersPage(),
+      body: StreamBuilder(
+        stream: initialisedOffers.stream,
+        builder: (context, snapshot) {
+          return (!gotOffers)
+              ? loadingScreen()
+              : (offers.length == 0)
+                  ? noOffersPage()
+                  : ListView.builder(
+                      itemCount: offers.length,
+                      itemBuilder: (context, index) {
+                        return offerContainer(offers[index]);
+                      },
+                    );
+        },
+      ),
     );
   }
 
@@ -41,27 +65,129 @@ class _OffersState extends State<Offers> {
       children: [
         Row(),
         Lottie.asset('assets/no_offers.json'),
-        Text('No Offers!!',
-          style: GoogleFonts.lato(
-            color: kTextColor,
-            fontSize: 20
-          ),
+        Text(
+          'No Offers!!',
+          style: GoogleFonts.lato(color: kTextColor, fontSize: 20),
         ),
       ],
     );
   }
 
-  Padding offerContainer() {
+  loadingScreen() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(),
+        Center(
+          child: Lottie.asset('assets/userLoading2.json'),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        FadingText(
+          'Loading ...',
+          style: GoogleFonts.lato(fontSize: 19, color: kTextColor),
+        )
+      ],
+    );
+  }
+
+  Padding offerContainer(offer) {
     return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            height: 150,
-            decoration: BoxDecoration(
-                color:Color(0xFF322193),
-                borderRadius: BorderRadius.all(Radius.circular(20))
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      child: Material(
+        elevation: 5,
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        child: Container(
+          //height: 200,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.green),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 5),
+                        child: Text(
+                          offer['code'],
+                          style: GoogleFonts.lato(
+                              color: Colors.green, fontSize: 17),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  offer['title'],
+                  style: GoogleFonts.lato(
+                      color: kPrimaryColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  offer['description'],
+                  maxLines: 3,
+                  style: GoogleFonts.lato(
+                    color: ksecondaryColor,
+                    fontSize: 17,
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                (allowApply) ? applyButton(offer) : Container(),
+              ],
             ),
-            child: Center(child: Text('OFFER',style: TextStyle(fontSize: 64,fontWeight: FontWeight.bold,color: Colors.white),)),
           ),
-        );
+        ),
+      ),
+    );
+  }
+
+  Row applyButton(offer) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        GestureDetector(
+          onTap: (){
+            Navigator.of(context).pop(offer['code']);
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.green,
+                  border: Border.all(color: Colors.green),
+                  borderRadius: BorderRadius.circular(8)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                child: Text(
+                  'Apply',
+                  style: GoogleFonts.lato(color: Colors.white, fontSize: 17),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
   }
 }
