@@ -501,7 +501,7 @@ class _TrackingPageState extends State<TrackingPage> {
                 Row(
                   children: [
                     Text(
-                      partnerDetails['rating'].toString(),
+                      partnerDetails['rating'].toStringAsFixed(1),
                       style:
                       GoogleFonts.lato(fontSize: 16, color: Colors.white),
                     ),
