@@ -25,24 +25,23 @@ import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:progress_indicators/progress_indicators.dart';
-void main() async{
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(
-      Phoenix(
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primaryColor: kPrimaryColor ,
-            scaffoldBackgroundColor: Colors.white ,
-            textTheme: TextTheme(
-            bodyText1: TextStyle(color: ksecondaryColor ),
-              bodyText2: TextStyle(color: ksecondaryColor ),
-            ) ,
-          ),
-          home: LaunchScreen(),
-  ),
-      )
-  );
+  runApp(Phoenix(
+    child: MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: kPrimaryColor,
+        scaffoldBackgroundColor: Colors.white,
+        textTheme: TextTheme(
+          bodyText1: TextStyle(color: ksecondaryColor),
+          bodyText2: TextStyle(color: ksecondaryColor),
+        ),
+      ),
+      home: LaunchScreen(),
+    ),
+  ));
 }
 
 class LaunchScreen extends StatefulWidget {
@@ -52,7 +51,6 @@ class LaunchScreen extends StatefulWidget {
 }
 
 class _LaunchScreenState extends State<LaunchScreen> {
-
   late Future<int> route;
   @override
   void initState() {
@@ -60,6 +58,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
     super.initState();
     route = loadApp();
   }
+
   var loadingValue = 0.0;
   @override
   Widget build(BuildContext context) {
@@ -93,34 +92,44 @@ class _LaunchScreenState extends State<LaunchScreen> {
         },
       ),
     );
+
   }
 
-   splashScreen(BuildContext context) {
+  splashScreen(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 20),
-          child: Image.asset('assets/images/title_image.png',),
+          child: Image.asset(
+            'assets/images/title_image.png',
+          ),
         ),
-        Image.asset('assets/images/splash_img.png',width: MediaQuery.of(context).size.width,),
+        Image.asset(
+          'assets/images/splash_img.png',
+          width: MediaQuery.of(context).size.width,
+        ),
         Expanded(
           child: Container(
-            width:  MediaQuery.of(context).copyWith().size.width,
+            width: MediaQuery.of(context).copyWith().size.width,
             color: Colors.black,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   child: LiquidLinearProgressIndicator(
                     value: loadingValue, // Defaults to 0.5.
-                    valueColor: AlwaysStoppedAnimation(kPrimaryColor), // Defaults to the current Theme's accentColor.
-                    backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
+                    valueColor: AlwaysStoppedAnimation(
+                        kPrimaryColor), // Defaults to the current Theme's accentColor.
+                    backgroundColor: Colors
+                        .white, // Defaults to the current Theme's backgroundColor.
                     borderColor: ksecondaryColor,
                     borderWidth: 5.0,
                     borderRadius: 12.0,
-                    direction: Axis.horizontal, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.horizontal.
+                    direction: Axis
+                        .horizontal, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.horizontal.
                     center: Text("Loading..."),
                   ),
                 ),
@@ -131,29 +140,30 @@ class _LaunchScreenState extends State<LaunchScreen> {
       ],
     );
   }
-  Future<int> loadApp()async{
+
+  Future<int> loadApp() async {
     //check the internet availability-->
     final network = await checkNetwork();
-    if(network){
+    if (network) {
       setState(() {
         loadingValue = 0.15;
       });
       bool isLogin = false;
-      final value  = await Storage().getData();
+      final value = await Storage().getData();
       print('value is - $value');
-      if(value[0]!=null){
+      if (value[0] != null) {
         isLogin = true;
-      }else{
+      } else {
         isLogin = false;
       }
       underMaintenance = await ApiServices().checkMaintenance();
-      if(!underMaintenance){
+      if (!underMaintenance) {
         setState(() {
           loadingValue = 0.35;
         });
         print('App is not under maintenance = $underMaintenance');
         updateAvailable = await ApiServices().checkUpdates();
-        if(!updateAvailable){
+        if (!updateAvailable) {
           setState(() {
             loadingValue = 0.5;
           });
@@ -169,36 +179,37 @@ class _LaunchScreenState extends State<LaunchScreen> {
           //homeAddress = await DbOperations().getHomeAddress();
           await getHomeAddress();
           print('home address is - $homeAddress');
-          if((homeAddress == null || homeAddress == '') && userAddress!='Not Set'){
+          if ((homeAddress == null || homeAddress == '') &&
+              userAddress != 'Not Set') {
             print('Yes im showing awesome dialogue');
-           await AwesomeDialog(
+            await AwesomeDialog(
                 context: context,
-              dismissOnTouchOutside: false,
-              dismissOnBackKeyPress: false,
-              dialogType: DialogType.QUESTION,
-              title: 'Do you want to set your current location as Home Location?',
-              btnOkOnPress: (){
-                DbOperations().saveHomeAddress(userAddress);
-                homeAddress = userAddress;
-                homeLocation = userLocation;
-                homeLatitude = userLocation.latitude;
-                homeLongitude = userLocation.longitude;
-              },
-              btnCancelOnPress: (){
-              }
-            ) .. show();
-          }else{
-            if(homeAddress != '')
-              setHomeLocation(homeAddress);
+                dismissOnTouchOutside: false,
+                dismissOnBackKeyPress: false,
+                dialogType: DialogType.QUESTION,
+                title:
+                    'Do you want to set your current location as Home Location?',
+                btnOkOnPress: () {
+                  DbOperations().saveHomeAddress(userAddress);
+                  homeAddress = userAddress;
+                  homeLocation = userLocation;
+                  homeLatitude = userLocation.latitude;
+                  homeLongitude = userLocation.longitude;
+                },
+                btnCancelOnPress: () {})
+              ..show();
+          } else {
+            if (homeAddress != '') setHomeLocation(homeAddress);
           }
           initialiseCategories();
           initialiseCategoryItems();
           initialiseMenu();
           await getAllBranches();
-          if(isLogin){
+          if (isLogin) {
             //if the user is already logged in -->
-            var isLogin = await Authentication().login(value[0]??'',value[1]??'', true);
-            if(isLogin == 'true'){
+            var isLogin = await Authentication()
+                .login(value[0] ?? '', value[1] ?? '', true);
+            if (isLogin == 'true') {
               getUserInfo();
               await getUserFav();
               await getUserCart();
@@ -206,14 +217,14 @@ class _LaunchScreenState extends State<LaunchScreen> {
                 loadingValue = 1;
               });
               return 0;
-            }else{
+            } else {
               setState(() {
                 loadingValue = 1;
               });
               showSnackBar('An error Occured!', context);
               return 5;
             }
-          }else{
+          } else {
             //if the user need to login-->
             //return LoginPage();
             setState(() {
@@ -221,7 +232,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
             });
             return 1;
           }
-        }else{
+        } else {
           //if the app has updates available-->
           //return UpdateScreen();
           setState(() {
@@ -229,7 +240,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
           });
           return 2;
         }
-      }else{
+      } else {
         //if the app is under maintenance-->
         //return MaintenanceScreen();
         setState(() {
@@ -237,7 +248,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
         });
         return 3;
       }
-    }else{
+    } else {
       setState(() {
         loadingValue = 1;
       });
@@ -245,22 +256,24 @@ class _LaunchScreenState extends State<LaunchScreen> {
     }
   }
 
-  void showSnackBar(String isLogin, BuildContext context) { // isLogin == usernmae is incorrect or password is incorect;
-    final snackBar  = SnackBar(
-      content: Text(isLogin) ,
+  void showSnackBar(String isLogin, BuildContext context) {
+    // isLogin == usernmae is incorrect or password is incorect;
+    final snackBar = SnackBar(
+      content: Text(isLogin),
       backgroundColor: Colors.red,
-      padding: EdgeInsets.only(left: 15,right: 15,bottom: 20),
+      padding: EdgeInsets.only(left: 15, right: 15, bottom: 20),
       behavior: SnackBarBehavior.floating,
     );
     //Scaffold.of(context).showSnackBar(snackBar)
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Future<bool> checkNetwork()async {
+  Future<bool> checkNetwork() async {
     final result = await Connectivity().checkConnectivity();
-    if(result == ConnectivityResult.none)
+    if (result == ConnectivityResult.none)
       return false;
-    else return true;
+    else
+      return true;
   }
 }
 

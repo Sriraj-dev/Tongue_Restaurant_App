@@ -10,6 +10,10 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:delivery_app/components/intermediate.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:delivery_app/Services/notification.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:geolocator/geolocator.dart';
@@ -102,7 +106,7 @@ class _checkoutState extends State<checkout> {
       showSnackBar('Order placed!', context, Colors.green);
       getMyOrders();
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => TrackingPage(res,"61a9b1c56a629f43c19616c0")));
+          MaterialPageRoute(builder: (context) => intermediate(res,"61a9b1c56a629f43c19616c0")));
       //TODO: clear User cart from Database;
     } else {
       showSnackBar('Failed to place Order', context, Colors.red);
@@ -125,257 +129,259 @@ class _checkoutState extends State<checkout> {
   @override
   Widget build(BuildContext context) {
     address = deliveryAddress.split(',');
-
-    return Scaffold(
-      backgroundColor: Background_Color,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 48.0, left: 16),
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: IconButton(
-                    iconSize: 25,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.arrow_back_ios_outlined,
-                      color: kTextColor,
+    return MultiProvider(
+      child: Scaffold(
+        backgroundColor: Background_Color,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(80),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 48.0, left: 16),
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                    child: IconButton(
+                      iconSize: 25,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.arrow_back_ios_outlined,
+                        color: kTextColor,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 64, top: 48),
-                child: Text(
-                  'CHECKOUT',
-                  style: TextStyle(
-                      fontSize: 24,
-                      color: kPrimaryColor,
-                      fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.only(left: 64, top: 48),
+                  child: Text(
+                    'CHECKOUT',
+                    style: TextStyle(
+                        fontSize: 24,
+                        color: kPrimaryColor,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height * 0.75,
-        child: ListView(
-          //crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, top: 16),
+        body: Container(
+          height: MediaQuery.of(context).size.height * 0.75,
+          child: ListView(
+            //crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0, top: 16),
+                    child: Text(
+                      'Address details',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  //dialogueBox
+                         GestureDetector(
+                      onTap: () async{
+                        await changeDeliveryLocation(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 16.0, top: 16),
+                        child: Text('change',
+                            style: TextStyle(fontSize: 20, color: kPrimaryColor)),
+                      ),
+                    ),
+
+
+                ],
+              ),
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 32),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          '${address[0]}',
+                          style: TextStyle(fontSize: 20, color: Colors.black),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                        child: Container(
+                          height: 1,
+                          color: kPrimaryColor,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          (address.length>=3)? '${address[1]},${address[2]} ...'
+                              :(address.length>=2)?'${address[1]} ...':'...',
+                          style: TextStyle(
+                              fontSize: 15, color: Colors.black.withOpacity(0.7)),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                        child: Container(
+                          height: 1,
+                          color: kPrimaryColor,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          userPhone,
+                          style: TextStyle(
+                              fontSize: 20, color: Colors.black.withOpacity(0.4)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text('Branch :',
+                      style: GoogleFonts.lato(
+                          color: kPrimaryColor,
+                          fontSize: 18
+                      ),
+                    ),
+                    SizedBox(width: 10,),
+                    DropdownButton<Map>(
+                      value: selectedBranch,
+                      onChanged: (newValue){
+                        setState(() {
+                          selectedBranch = newValue??{};
+                        });
+                      },
+                      items: branches.map((e) => DropdownMenuItem<Map>(
+                        child: Text(e['branchArea']),
+                        value: e,
+                      )).toList(),
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Container(
                   child: Text(
-                    'Address details',
+                    'Order Summary',
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.black,
                     ),
                   ),
                 ),
-                //dialogueBox
-                GestureDetector(
-                  onTap: () async{
-                    await changeDeliveryLocation(context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 16.0, top: 16),
-                    child: Text('change',
-                        style: TextStyle(fontSize: 20, color: kPrimaryColor)),
+              ),
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 32),
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                ),
-              ],
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 32),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        '${address[0]}',
-                        style: TextStyle(fontSize: 20, color: Colors.black),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                      child: Container(
-                        height: 1,
-                        color: kPrimaryColor,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        (address.length>=3)? '${address[1]},${address[2]} ...'
-                            :(address.length>=2)?'${address[1]} ...':'...',
-                        style: TextStyle(
-                            fontSize: 15, color: Colors.black.withOpacity(0.7)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                      child: Container(
-                        height: 1,
-                        color: kPrimaryColor,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        userPhone,
-                        style: TextStyle(
-                            fontSize: 20, color: Colors.black.withOpacity(0.4)),
-                      ),
-                    ),
-                  ],
+                  child: total_order(),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text('Branch :',
-                    style: GoogleFonts.lato(
-                      color: kPrimaryColor,
-                      fontSize: 18
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 8),
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Offers()));
+                      },
+                      child: Text('Apply Offer',
+                        style: GoogleFonts.lato(
+                            fontSize: 17,
+                            color: kPrimaryColor
+                        ),
+                      ),
                     ),
                   ),
-                  SizedBox(width: 10,),
-                  DropdownButton<Map>(
-                    value: selectedBranch,
-                      onChanged: (newValue){
-                      setState(() {
-                        selectedBranch = newValue??{};
-                      });
-                      },
-                      items: branches.map((e) => DropdownMenuItem<Map>(
-                        child: Text(e['branchArea']),
-                        value: e,
-                      )).toList(),
-                  )
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Container(
-                child: Text(
-                  'Order Summary',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(vertical: 4.0, horizontal: 32),
+                child: Container(
+                  height: 64,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Total Bill ',
+                          style: TextStyle(fontSize: 15, color: Colors.black),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          '₹ ' + bill.toString(),
+                          style: TextStyle(fontSize: 15, color: Colors.black),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 32),
-              child: Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: total_order(),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 8),
-                  child: GestureDetector(
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Offers()));
-                    },
-                    child: Text('Apply Offer',
-                      style: GoogleFonts.lato(
-                        fontSize: 17,
-                        color: kPrimaryColor
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 32),
-              child: Container(
-                height: 64,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'Total Bill ',
-                        style: TextStyle(fontSize: 15, color: Colors.black),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        '₹ ' + bill.toString(),
-                        style: TextStyle(fontSize: 15, color: Colors.black),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Material(
-          elevation: 10,
-          borderRadius: BorderRadius.circular(30),
-          child: GestureDetector(
-            onTap: () async {
-              double distance =calculateDistance(deliveryLatitude,deliveryLongitude,selectedBranch['latitude'],selectedBranch['longitude']);
-              if(distance>10.0){
-                AwesomeDialog(
-                    context: context,
-                    showCloseIcon: false,
-                    dismissOnBackKeyPress: false,
-                    dismissOnTouchOutside: false,
-                    dialogType: DialogType.WARNING,
-                    title: 'Delivery service is not available in your location!',
-                    btnOkOnPress: (){},
-                    btnOkColor: Colors.red
-                )..show();
-              }else{
-                AwesomeDialog(
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Material(
+            elevation: 10,
+            borderRadius: BorderRadius.circular(30),
+            child: GestureDetector(
+              onTap: () async {
+                double distance =calculateDistance(deliveryLatitude,deliveryLongitude,selectedBranch['latitude'],selectedBranch['longitude']);
+                if(distance>10.0){
+                  AwesomeDialog(
+                      context: context,
+                      showCloseIcon: false,
+                      dismissOnBackKeyPress: false,
+                      dismissOnTouchOutside: false,
+                      dialogType: DialogType.WARNING,
+                      title: 'Delivery service is not available in your location!',
+                      btnOkOnPress: (){},
+                      btnOkColor: Colors.red
+                  )..show();
+                }else{
+                  AwesomeDialog(
                     context: context,
                     showCloseIcon: false,
                     dismissOnBackKeyPress: false,
@@ -385,30 +391,40 @@ class _checkoutState extends State<checkout> {
                     btnOkText: 'Cash on Delivery',
                     btnCancelText: 'Pay now',
                     btnOkOnPress: (){handlerPaymentSuccess();},
-                  btnCancelOnPress: (){openCheckout();},
-                )..show();
-                //openCheckout();
-              }
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 105, vertical: 14),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: kPrimaryColor,
-              ),
-              child: (placingOrder)?CircularProgressIndicator():Text(
-                'PLACE ORDER ',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                    btnCancelOnPress: (){openCheckout();},
+                  )..show();
+                  //openCheckout();
+                }
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 105, vertical: 14),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: kPrimaryColor,
+                ),
+                child: (placingOrder)?CircularProgressIndicator():Text(
+                  'PLACE ORDER ',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
           ),
         ),
       ),
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => NotificationService(),
+        ),
+      ],
     );
+
+
+
+
   }
 
   Future<void> changeDeliveryLocation(BuildContext context) async {
@@ -570,83 +586,3 @@ class _checkoutState extends State<checkout> {
   }
 }
 //TODO: Add the - (Apply Offer) button.
-
-
-// AwesomeDialog(
-// context: context,
-// dismissOnTouchOutside: false,
-// dismissOnBackKeyPress: false,
-// showCloseIcon: true,
-// dialogType: DialogType.INFO_REVERSED,
-// padding: EdgeInsets.symmetric(horizontal: 5),
-// title: 'Choose your Delivery Location!',
-// btnOkText: 'Current location',
-// btnCancelText: 'Home Location',
-// btnOkOnPress: () async {
-// await getUserLocation();
-// if (userAddress != 'Not Set') {
-// AwesomeDialog(
-// context: context,
-// showCloseIcon: false,
-// dismissOnBackKeyPress: false,
-// dismissOnTouchOutside: false,
-// dialogType: DialogType.SUCCES,
-// title: 'Delivery Location:',
-// desc: '$userAddress',
-// btnOkOnPress: () {
-// setState(() {
-// displayAddress = userAddress.split(',')[0];
-// });
-// })
-// ..show();
-// } else {
-// AwesomeDialog(
-// context: context,
-// showCloseIcon: false,
-// dismissOnBackKeyPress: false,
-// dismissOnTouchOutside: false,
-// dialogType: DialogType.ERROR,
-// title: 'Location Permissions are required!',
-// //btnOkIcon: Icons.cancel,
-// btnOkColor: Colors.red,
-// btnOkOnPress: () {},
-// )..show();
-// }
-// },
-// btnCancelOnPress: () {
-// if (homeAddress == '') {
-// AwesomeDialog(
-// context: context,
-// showCloseIcon: false,
-// dismissOnBackKeyPress: false,
-// dismissOnTouchOutside: false,
-// dialogType: DialogType.INFO_REVERSED,
-// title: 'Home Location is not set!',
-// desc:
-// 'Please set your home location in your profile',
-// //btnOkIcon: Icons.cancel,
-// btnOkColor: Colors.red,
-// btnOkOnPress: () {
-// setState(() {
-// displayAddress = userAddress.split(',')[0];
-// });
-// },
-// )..show();
-// } else {
-// AwesomeDialog(
-// context: context,
-// showCloseIcon: false,
-// dismissOnBackKeyPress: false,
-// dismissOnTouchOutside: false,
-// dialogType: DialogType.SUCCES,
-// title: 'Delivery Location:',
-// desc: '$homeAddress',
-// btnOkOnPress: () {
-// setState(() {
-// displayAddress = homeAddress.split(',')[0];
-// });
-// })
-// ..show();
-// }
-// })
-// ..show();
