@@ -9,10 +9,7 @@ import 'package:delivery_app/restaurantModel.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'package:geolocator/geolocator.dart';
 
 class checkout extends StatefulWidget {
   //const checkout({Key? key}) : super(key: key);
@@ -31,13 +28,15 @@ class _checkoutState extends State<checkout> {
 
   _checkoutState(this.bill,this.deliveryAddress,this.deliveryLatitude,this.deliveryLongitude);
   List<String> address = userAddress.split(',');
-  //Position deliveryPosition = userLocation;
+  bool cashOnDelivery = false;
+  bool payNow = true;
   String deliveryAddress;
   double deliveryLatitude;
   double deliveryLongitude;
   bool warningShown = false;
   bool placingOrder = false;
   List e = userCart;
+  List paymentOptions = ['Pay now','Cash On Delivery'];
   //-------------------------------payment------------------
   late Razorpay razorpay;
   @override
@@ -86,8 +85,10 @@ class _checkoutState extends State<checkout> {
       'longitude': deliveryLongitude.toString(),
       'orderItems': billingItems,
       'amountPaid': bill.toString(),
-      'branchId': "61a9b1c56a629f43c19616c0",
-      'accepted': false
+      'branchId': selectedBranch['_id'],
+      'accepted': false,
+      'cashOnDelivery':cashOnDelivery,
+      'amountReceived':!cashOnDelivery
     };
     var res = await ApiServices().placeOrder(orderDetails);
     if (res != 'false') {
@@ -357,58 +358,107 @@ class _checkoutState extends State<checkout> {
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Material(
-          elevation: 10,
-          borderRadius: BorderRadius.circular(30),
-          child: GestureDetector(
-            onTap: () async {
-              double distance =calculateDistance(deliveryLatitude,deliveryLongitude,selectedBranch['latitude'],selectedBranch['longitude']);
-              if(distance>10.0){
-                AwesomeDialog(
-                    context: context,
-                    showCloseIcon: false,
-                    dismissOnBackKeyPress: false,
-                    dismissOnTouchOutside: false,
-                    dialogType: DialogType.WARNING,
-                    title: 'Delivery service is not available in your location!',
-                    btnOkOnPress: (){},
-                    btnOkColor: Colors.red
-                )..show();
-              }else{
-                AwesomeDialog(
-                    context: context,
-                    showCloseIcon: false,
-                    dismissOnBackKeyPress: false,
-                    dismissOnTouchOutside: false,
-                    dialogType: DialogType.INFO_REVERSED,
-                    title: 'Pay using',
-                    btnOkText: 'Cash on Delivery',
-                    btnCancelText: 'Pay now',
-                    btnOkOnPress: (){handlerPaymentSuccess();},
-                  btnCancelOnPress: (){openCheckout();},
-                )..show();
-                //openCheckout();
-              }
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 105, vertical: 14),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: kPrimaryColor,
-              ),
-              child: (placingOrder)?CircularProgressIndicator():Text(
-                'PLACE ORDER ',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              paymentChoosingButton(),
+              Expanded(
+                child: Material(
+                  elevation: 10,
+                  borderRadius: BorderRadius.circular(30),
+                  child: GestureDetector(
+                    onTap: () async {
+                      double distance =calculateDistance(deliveryLatitude,deliveryLongitude,selectedBranch['latitude'],selectedBranch['longitude']);
+                      if(distance>10.0){
+                        AwesomeDialog(
+                            context: context,
+                            showCloseIcon: false,
+                            dismissOnBackKeyPress: false,
+                            dismissOnTouchOutside: false,
+                            dialogType: DialogType.WARNING,
+                            title: 'Delivery service is not available in your location!',
+                            btnOkOnPress: (){},
+                            btnOkColor: Colors.red
+                        )..show();
+                      }else{
+                        // AwesomeDialog(
+                        //     context: context,
+                        //     showCloseIcon: true,
+                        //     dismissOnBackKeyPress: false,
+                        //     dismissOnTouchOutside: false,
+                        //     dialogType: DialogType.INFO_REVERSED,
+                        //     title: 'Pay using',
+                        //     btnOkText: 'Cash on Delivery',
+                        //     btnCancelText: 'Pay now',
+                        //     btnOkColor: kPrimaryColor,
+                        //     btnCancelColor: kPrimaryColor.withOpacity(0.5),
+                        //     btnOkOnPress: (){handlerPaymentSuccess();},
+                        //   btnCancelOnPress: (){openCheckout();},
+                        // )..show();
+                        if(payNow){
+                          openCheckout();
+                        }else if(cashOnDelivery){
+                          handlerPaymentSuccess();
+                        }
+                        //openCheckout();
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 18),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: kPrimaryColor,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          (placingOrder)?CircularProgressIndicator():Text(
+                            'PLACE ORDER ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      )
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),
     );
+  }
+
+   paymentChoosingButton() {
+     return Padding(
+       padding: const EdgeInsets.symmetric(horizontal: 8.0),
+       child: DropdownButton(
+         value: (payNow)?paymentOptions[0]:paymentOptions[1],
+         onChanged: (newValue){
+           if(newValue == paymentOptions[0]){
+             setState(() {
+               payNow = true;
+               cashOnDelivery = false;
+             });
+           }else{
+             setState(() {
+               cashOnDelivery = true;
+               payNow = false;
+             });
+           }
+         },
+         items: paymentOptions.map((element) => DropdownMenuItem(
+           child: Text(element),
+           value: element,
+         )).toList(),
+       ),
+     );
   }
 
   Future<void> changeDeliveryLocation(BuildContext context) async {
@@ -569,84 +619,3 @@ class _checkoutState extends State<checkout> {
     );
   }
 }
-//TODO: Add the - (Apply Offer) button.
-
-
-// AwesomeDialog(
-// context: context,
-// dismissOnTouchOutside: false,
-// dismissOnBackKeyPress: false,
-// showCloseIcon: true,
-// dialogType: DialogType.INFO_REVERSED,
-// padding: EdgeInsets.symmetric(horizontal: 5),
-// title: 'Choose your Delivery Location!',
-// btnOkText: 'Current location',
-// btnCancelText: 'Home Location',
-// btnOkOnPress: () async {
-// await getUserLocation();
-// if (userAddress != 'Not Set') {
-// AwesomeDialog(
-// context: context,
-// showCloseIcon: false,
-// dismissOnBackKeyPress: false,
-// dismissOnTouchOutside: false,
-// dialogType: DialogType.SUCCES,
-// title: 'Delivery Location:',
-// desc: '$userAddress',
-// btnOkOnPress: () {
-// setState(() {
-// displayAddress = userAddress.split(',')[0];
-// });
-// })
-// ..show();
-// } else {
-// AwesomeDialog(
-// context: context,
-// showCloseIcon: false,
-// dismissOnBackKeyPress: false,
-// dismissOnTouchOutside: false,
-// dialogType: DialogType.ERROR,
-// title: 'Location Permissions are required!',
-// //btnOkIcon: Icons.cancel,
-// btnOkColor: Colors.red,
-// btnOkOnPress: () {},
-// )..show();
-// }
-// },
-// btnCancelOnPress: () {
-// if (homeAddress == '') {
-// AwesomeDialog(
-// context: context,
-// showCloseIcon: false,
-// dismissOnBackKeyPress: false,
-// dismissOnTouchOutside: false,
-// dialogType: DialogType.INFO_REVERSED,
-// title: 'Home Location is not set!',
-// desc:
-// 'Please set your home location in your profile',
-// //btnOkIcon: Icons.cancel,
-// btnOkColor: Colors.red,
-// btnOkOnPress: () {
-// setState(() {
-// displayAddress = userAddress.split(',')[0];
-// });
-// },
-// )..show();
-// } else {
-// AwesomeDialog(
-// context: context,
-// showCloseIcon: false,
-// dismissOnBackKeyPress: false,
-// dismissOnTouchOutside: false,
-// dialogType: DialogType.SUCCES,
-// title: 'Delivery Location:',
-// desc: '$homeAddress',
-// btnOkOnPress: () {
-// setState(() {
-// displayAddress = homeAddress.split(',')[0];
-// });
-// })
-// ..show();
-// }
-// })
-// ..show();
