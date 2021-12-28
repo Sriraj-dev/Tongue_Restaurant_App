@@ -35,6 +35,7 @@ class _checkoutState extends State<checkout> {
   double deliveryLongitude;
   bool warningShown = false;
   bool placingOrder = false;
+  String offerCode = '';
   List e = userCart;
   List paymentOptions = ['Pay now','Cash On Delivery'];
   //-------------------------------payment------------------
@@ -42,6 +43,7 @@ class _checkoutState extends State<checkout> {
   @override
   void initState(){
     super.initState();
+    getMyOffers();
     razorpay =new Razorpay();
     razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,handlerPaymentSuccess);
     razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,handlerErrorFailure);
@@ -310,8 +312,15 @@ class _checkoutState extends State<checkout> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 8),
                   child: GestureDetector(
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Offers()));
+                    onTap: ()async{
+                      var tempCode=await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Offers(true)));
+                      if(tempCode!=null){
+                        print('im applying offer');
+                        offerCode = tempCode;
+                        print('Offer code received- $offerCode');
+                      }else{
+                        print('not received');
+                      }
                     },
                     child: Text('Apply Offer',
                       style: GoogleFonts.lato(
