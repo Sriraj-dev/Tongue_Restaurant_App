@@ -124,7 +124,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-          SizedBox(height: 35,),
+          Container(
+            height: 35,
+            color: kPrimaryColor,
+            child: Container(
+              height: 35,
+              decoration: BoxDecoration(
+                  color:Background_Color,
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(35),topLeft: Radius.circular(35))
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
             child: Material(
