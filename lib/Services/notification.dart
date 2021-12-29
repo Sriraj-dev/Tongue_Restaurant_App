@@ -79,6 +79,7 @@ class NotificationService extends ChangeNotifier {
   //Sheduled Notification
 
   Future sheduledNotification() async {
+    var scheduledTime = DateTime.now().add(Duration(days: 1));
     var interval = RepeatInterval.everyMinute;
     var bigPicture = BigPictureStyleInformation(
         DrawableResourceAndroidBitmap("ic_launcher"),
@@ -91,11 +92,11 @@ class NotificationService extends ChangeNotifier {
     var android = AndroidNotificationDetails("id", "channel",
         styleInformation: bigPicture);
     var platform = new NotificationDetails(android: android);
-    await _flutterLocalNotificationsPlugin.periodicallyShow(
+    await _flutterLocalNotificationsPlugin.schedule(
         0,
         "Demo Sheduled notification",
         "Tap to do something",
-        interval,
+        scheduledTime,
         platform);
   }
 
