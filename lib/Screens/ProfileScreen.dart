@@ -524,6 +524,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void logOutCurrentUser() async{
     await Storage().deleteData();
     await DbOperations().clearDataBase();
+    userCart = [];
+    billingItems = [];
+    userFav = [];
     Navigator.of(context).popUntil((route) => false);
     Phoenix.rebirth(context);
     //Navigator.push(context, route)

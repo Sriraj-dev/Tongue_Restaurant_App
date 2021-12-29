@@ -521,6 +521,7 @@ class _TrackingPageState extends State<TrackingPage> {
                 SizedBox(
                   width: 20,
                 ),
+
                 Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -572,6 +573,7 @@ class _TrackingPageState extends State<TrackingPage> {
                     ],
                   ),
                 )
+
               ],
             ),
           );

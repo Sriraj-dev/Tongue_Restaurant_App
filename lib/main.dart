@@ -205,7 +205,10 @@ class _LaunchScreenState extends State<LaunchScreen> {
           initialiseCategoryItems();
           initialiseMenu();
           await getAllBranches();
-          if (isLogin) {
+
+          getMyOffers();
+          if(isLogin){
+
             //if the user is already logged in -->
             var isLogin = await Authentication()
                 .login(value[0] ?? '', value[1] ?? '', true);
