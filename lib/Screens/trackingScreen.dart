@@ -19,11 +19,12 @@ class TrackingPage extends StatefulWidget {
   //const TrackingPage({Key? key}) : super(key: key);
   String orderId;
   String branchId;
+  bool fromMyOrders;
 
-  TrackingPage(this.orderId, this.branchId);
+  TrackingPage(this.orderId, this.branchId,this.fromMyOrders);
 
   @override
-  _TrackingPageState createState() => _TrackingPageState(orderId, branchId);
+  _TrackingPageState createState() => _TrackingPageState(orderId, branchId,fromMyOrders);
 }
 
 class _TrackingPageState extends State<TrackingPage> {
@@ -35,8 +36,9 @@ class _TrackingPageState extends State<TrackingPage> {
 
   String orderId;
   String branchId;
+  bool fromMyOrders;
 
-  _TrackingPageState(this.orderId, this.branchId);
+  _TrackingPageState(this.orderId, this.branchId,this.fromMyOrders);
 
   bool accepted = false;
   bool assigned = false;
@@ -74,17 +76,18 @@ class _TrackingPageState extends State<TrackingPage> {
       appBar: AppBar(
         backgroundColor: Background_Color,
         elevation: 0,
-        leading: IconButton(
+        leading: (fromMyOrders)?IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
           },
           color: kTextColor,
-        ),
+        ):Container(),
         title: Text(
           'Order details',
           style: GoogleFonts.lato(color: kTextColor),
         ),
+        centerTitle: !fromMyOrders,
       ),
       backgroundColor: Background_Color,
       body: Consumer<NotificationService>(

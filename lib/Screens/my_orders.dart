@@ -54,7 +54,7 @@ class _order_historyState extends State<order_history> {
                                 builder: (context) => TrackingPage(
                                     myOrders[myOrders.length-index-1]['orderId'] ??
                                         myOrders[myOrders.length-index-1]['_id'],
-                                    myOrders[myOrders.length-index-1]['branchId'])
+                                    myOrders[myOrders.length-index-1]['branchId'],true)
                                 //help_and_support()
                                 ));
                           },

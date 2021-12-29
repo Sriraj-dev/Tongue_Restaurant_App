@@ -36,7 +36,7 @@ class _intermediateState extends State<intermediate> {
     return MultiProvider(
         child: MaterialApp(
           theme: ThemeData(fontFamily: 'Monteserat'),
-          home:TrackingPage(orderId,branchId),
+          home:TrackingPage(orderId,branchId,false),
           debugShowCheckedModeBanner: false,
         ),
         providers: [
