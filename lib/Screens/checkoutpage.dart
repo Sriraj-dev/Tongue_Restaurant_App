@@ -211,8 +211,6 @@ class _checkoutState extends State<checkout> {
                             style: TextStyle(fontSize: 20, color: kPrimaryColor)),
                       ),
                     ),
-
-
                 ],
               ),
               Padding(
@@ -318,8 +316,6 @@ class _checkoutState extends State<checkout> {
                   child: total_order(),
                 ),
               ),
-
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -349,7 +345,8 @@ class _checkoutState extends State<checkout> {
                         color: (appliedOffer)?Colors.green:kPrimaryColor
                       ),
                     ),
-                  ),
+                  )
+                ),
                 ],
               ),
               Padding(
@@ -371,8 +368,6 @@ class _checkoutState extends State<checkout> {
                           style: TextStyle(fontSize: 15, color: Colors.black),
                         ),
                       ),
-
-                    ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: (applyingOffer)?JumpingText('₹ ...',
@@ -381,15 +376,17 @@ class _checkoutState extends State<checkout> {
                         '₹ ' + bill.toString(),
                         style: TextStyle(fontSize: 15, color: Colors.black),
                       ),
-                    ],
+
                   ),
+                    ],
                 ),
               ),
-            ],
           ),
-        ),
-
+        ]
       ),
+      ),
+
+
       floatingActionButton: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Padding(
@@ -458,6 +455,7 @@ class _checkoutState extends State<checkout> {
             ],
           ),
         ),
+      ),
       ),
       providers: [
         ChangeNotifierProvider(
