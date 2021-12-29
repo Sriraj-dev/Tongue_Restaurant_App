@@ -64,10 +64,6 @@ class _loginState extends State<login> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        // Image.asset(
-                        //   'assets/images/6.png',
-                        //   height: size.height * 0.4,
-                        // ),
                         Lottie.asset('assets/userLogin.json',width: size.width*0.9)
                       ],
                     ),
@@ -111,25 +107,6 @@ class _loginState extends State<login> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      // Container(
-                      //   width: size.width * 0.8,
-                      //   child: ClipRRect(
-                      //     borderRadius: BorderRadius.circular(29),
-                      //     child: FlatButton(
-                      //         padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                      //         color: kPrimaryColor.withOpacity(0),
-                      //         onPressed: () {
-                      //           // Navigator.push(
-                      //           //   context,
-                      //           //   MaterialPageRoute(builder: (context) => login()),
-                      //           // );
-                      //         },
-                      //         child: Text(
-                      //           "Forgot password",
-                      //           style: TextStyle(color:kPrimaryColor),
-                      //         )),
-                      //   ),
-                      // ),
                       Padding(
                         padding: const EdgeInsets.only(right: 15,bottom: 20,top: 8),
                         child: GestureDetector(
