@@ -11,7 +11,8 @@ class ApiServices{
   Future checkUser(String text)async{
     var res = await http.get(Uri.parse(baseUrl+'user/check/$text'));
     Map<String ,dynamic> response = json.decode(res.body);
-    return response;
+    print(response);
+    return response['msg'];
   }
 
 

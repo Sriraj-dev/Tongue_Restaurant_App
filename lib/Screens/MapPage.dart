@@ -1,12 +1,13 @@
 import 'dart:async';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+
 import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:lottie/lottie.dart'as lottie;
+import 'package:lottie/lottie.dart' as lottie;
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,10 +20,12 @@ class MapPage extends StatefulWidget {
   String deliveryLatitude;
   String deliveryLongitude;
 
-  MapPage(this.partnerId,this.partnerName,this.partnerPhone,this.deliveryLatitude,this.deliveryLongitude,this.branchId);
+  MapPage(this.partnerId, this.partnerName, this.partnerPhone,
+      this.deliveryLatitude, this.deliveryLongitude, this.branchId);
 
   @override
-  _MapPageState createState() => _MapPageState(partnerId,partnerName,partnerPhone,branchId);
+  _MapPageState createState() =>
+      _MapPageState(partnerId, partnerName, partnerPhone, branchId);
 }
 
 class _MapPageState extends State<MapPage> {
@@ -30,10 +33,12 @@ class _MapPageState extends State<MapPage> {
   String partnerName;
   String partnerPhone;
   String branchId;
-  _MapPageState(this.partnerId,this.partnerName,this.partnerPhone,this.branchId);
 
-   LocationData? deliveryLocation;
-   LocationData? partnerLocation;
+  _MapPageState(
+      this.partnerId, this.partnerName, this.partnerPhone, this.branchId);
+
+  LocationData? deliveryLocation;
+  LocationData? partnerLocation;
   late Location location;
   Set<Marker> reqMarkers = Set<Marker>();
   Set<Polyline> reqPolyline = Set<Polyline>();
@@ -54,62 +59,61 @@ class _MapPageState extends State<MapPage> {
       "longitude": double.parse(widget.deliveryLongitude)
     });
     polylinePoints = PolylinePoints();
-    BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(0.5, 0.5)), 'assets/images/car.png').then((value){
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(0.5, 0.5)), 'assets/images/car.png')
+        .then((value) {
       customIcon = value;
     });
   }
 
-  showLocationPinsOnMap(){
-    var deliveryPosition  = LatLng(deliveryLocation!.latitude??0.0, deliveryLocation!.longitude??0.0);
-    var partnerPosition = LatLng(partnerLocation!.latitude??0.0, partnerLocation!.longitude??0.0);
+  showLocationPinsOnMap() {
+    var deliveryPosition = LatLng(
+        deliveryLocation!.latitude ?? 0.0, deliveryLocation!.longitude ?? 0.0);
+    var partnerPosition = LatLng(
+        partnerLocation!.latitude ?? 0.0, partnerLocation!.longitude ?? 0.0);
 
-    reqMarkers.removeWhere((marker) => marker.mapsId.value == 'deliveryPosition');
-    reqMarkers.removeWhere((marker) => marker.mapsId.value == 'partnerPosition');
-    reqMarkers.add(
-        Marker(
-            markerId: MarkerId('deliveryPosition'),
-          position: deliveryPosition,
-          infoWindow: InfoWindow(
-            title: 'Delivery Location'
-          ),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueMagenta),
-        )
-    );
-    reqMarkers.add(
-      Marker(
-          markerId: MarkerId('partnerPosition'),
+    reqMarkers
+        .removeWhere((marker) => marker.mapsId.value == 'deliveryPosition');
+    reqMarkers
+        .removeWhere((marker) => marker.mapsId.value == 'partnerPosition');
+    reqMarkers.add(Marker(
+      markerId: MarkerId('deliveryPosition'),
+      position: deliveryPosition,
+      infoWindow: InfoWindow(title: 'Delivery Location'),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueMagenta),
+    ));
+    reqMarkers.add(Marker(
+        markerId: MarkerId('partnerPosition'),
         position: partnerPosition,
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
         //  icon: customIcon,
-        infoWindow: InfoWindow(
-          title: "Delivery Partner"
-        )
-      )
-    );
+        infoWindow: InfoWindow(title: "Delivery Partner")));
     showPolyLineOnMap();
   }
-  void showPolyLineOnMap()async{
-    print('---------------------------showing polyline on map------------------------------');
+
+  void showPolyLineOnMap() async {
+    print(
+        '---------------------------showing polyline on map------------------------------');
     var result = await polylinePoints.getRouteBetweenCoordinates(
         googleApiKey,
-        PointLatLng(partnerLocation!.latitude??0.0, partnerLocation!.longitude??0.0),
-        PointLatLng(deliveryLocation!.latitude??0.0,deliveryLocation!.longitude??0.0)
-    );
+        PointLatLng(partnerLocation!.latitude ?? 0.0,
+            partnerLocation!.longitude ?? 0.0),
+        PointLatLng(deliveryLocation!.latitude ?? 0.0,
+            deliveryLocation!.longitude ?? 0.0));
 
-    if(result.points.isNotEmpty){
+    if (result.points.isNotEmpty) {
       print('points are not empty--------------');
-      result.points.forEach((e){
+      result.points.forEach((e) {
         polylineCoordinates.add(LatLng(e.latitude, e.longitude));
       });
-    }else{
+    } else {
       print('---------------------points are empty------------------------');
     }
-      reqPolyline.add(Polyline(
-          polylineId: PolylineId('polyline'),
-          points: polylineCoordinates,
-          width: 4,
-          color: kPrimaryColor
-      ));
+    reqPolyline.add(Polyline(
+        polylineId: PolylineId('polyline'),
+        points: polylineCoordinates,
+        width: 4,
+        color: kPrimaryColor));
     print("req poly line are $reqPolyline");
   }
 
@@ -120,25 +124,26 @@ class _MapPageState extends State<MapPage> {
       body: Stack(
         children: [
           StreamBuilder(
-            stream:  getPartnerDetails(),
-            builder: (context,snapshot){
-              switch (snapshot.connectionState){
+            stream: getPartnerDetails(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
                   return loadingScreen();
                 default:
-                  if(snapshot.hasError){
+                  if (snapshot.hasError) {
                     return errorScreen();
-                  }else{
-                    Map<String,dynamic> partnerDetails = snapshot.data as Map<String,dynamic>;
-                    if(partnerDetails['Name'] == ''){
+                  } else {
+                    Map<String, dynamic> partnerDetails =
+                        snapshot.data as Map<String, dynamic>;
+                    if (partnerDetails['Name'] == '') {
                       return errorScreen();
-                    }else{
+                    } else {
                       return GoogleMap(
                         initialCameraPosition: CameraPosition(
-                            target: LatLng(partnerLocation!.latitude??0.0,partnerLocation!.longitude??0.0),
-                            zoom: 13
-                        ),
-                        onMapCreated: (GoogleMapController controller){
+                            target: LatLng(partnerLocation!.latitude ?? 0.0,
+                                partnerLocation!.longitude ?? 0.0),
+                            zoom: 13),
+                        onMapCreated: (GoogleMapController controller) {
                           _controller.complete(controller);
                           showLocationPinsOnMap();
                         },
@@ -152,50 +157,86 @@ class _MapPageState extends State<MapPage> {
             },
           ),
           Positioned(
-            bottom: 0,
+            top: 45,
+            left: 25,
+            child: Material(
+              borderRadius: BorderRadius.circular(40),
+              elevation: 5,
               child: Container(
-                width: size.width,
-                height: size.height*0.3,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
-                  color: Background_Color,
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))
+                  shape: BoxShape.circle,
+                  color: Colors.white,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 15,left: 15),
-                  child: Column(
-                    children: [
-                      Text('Delivery Partner:',
-                          style: GoogleFonts.lato(
-                            color: kTextColor,
-                            fontSize: 18
-                          ),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.person,color: ksecondaryColor,),
-                        title: Text(partnerName,
-                          style: GoogleFonts.lato(
-                            fontSize: 17,
-                            color: kPrimaryColor,
-                          ),
-                        ),
-                        subtitle: Text(partnerPhone,
-                          style: GoogleFonts.lato(
-                            fontSize: 17,
-                            color: ksecondaryColor
-                          ),
-                        ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.phone,color: kPrimaryColor,),
-                          onPressed: (){
-                            launch("tel://+91$partnerPhone");
-                          },
-                        ),
-                      )
-                    ],
+                child: IconButton(
+                  iconSize: 25,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.arrow_back_ios_outlined,
+                    color: kTextColor,
                   ),
-                )
-              )
-          )
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+              bottom: 0,
+              child: Material(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30)),
+                elevation: 6,
+                child: Container(
+                    width: size.width,
+                    height: size.height * 0.2,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30))),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 15, left: 15),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Delivery Partner:',
+                            style: GoogleFonts.lato(
+                                color: kTextColor, fontSize: 18),
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              Icons.person,
+                              color: ksecondaryColor,
+                            ),
+                            title: Text(
+                              partnerName,
+                              style: GoogleFonts.lato(
+                                fontSize: 17,
+                                color: kPrimaryColor,
+                              ),
+                            ),
+                            subtitle: Text(
+                              partnerPhone,
+                              style: GoogleFonts.lato(
+                                  fontSize: 17, color: ksecondaryColor),
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(
+                                Icons.phone,
+                                color: kPrimaryColor,
+                              ),
+                              onPressed: () {
+                                launch("tel://+91$partnerPhone");
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    )),
+              ))
         ],
       ),
     );
@@ -203,13 +244,14 @@ class _MapPageState extends State<MapPage> {
 
   Center errorScreen() {
     return Center(
-                    child: Text('An Error Occurred!',
-                      style: GoogleFonts.lato(
-                        fontSize: 18,
-                        color: kPrimaryColor,
-                      ),
-                    ),
-                  );
+      child: Text(
+        'An Error Occurred!',
+        style: GoogleFonts.lato(
+          fontSize: 18,
+          color: kPrimaryColor,
+        ),
+      ),
+    );
   }
 
   loadingScreen() {
@@ -219,29 +261,30 @@ class _MapPageState extends State<MapPage> {
       children: [
         Row(),
         Center(
-          child: lottie.Lottie.asset('assets/userMapLoading.json'),
+          child: lottie.Lottie.asset('assets/userMapLoading.json',
+              width: MediaQuery.of(context).size.width * 0.5),
         ),
-        SizedBox(height: 10,),
-        FadingText('Loading ...',
-          style: GoogleFonts.lato(
-              fontSize: 19,
-              color: kTextColor
-          ),
+        SizedBox(
+          height: 10,
+        ),
+        FadingText(
+          'Loading ...',
+          style: GoogleFonts.lato(fontSize: 19, color: kTextColor),
         )
       ],
     );
   }
 
-  Stream getPartnerDetails()=>
-      Stream.periodic(Duration(seconds: 10)).asyncMap((_) => getPartnerLocation());
+  Stream getPartnerDetails() => Stream.periodic(Duration(seconds: 10))
+      .asyncMap((_) => getPartnerLocation());
 
-  getPartnerLocation()async{
+  getPartnerLocation() async {
     Map<String, dynamic> data = {'partnerId': partnerId, 'branchId': branchId};
 
     var response = await ApiServices().getDeliveryPartnerDetails(data);
-    if(response['latitude'] != ""){
+    if (response['latitude'] != "") {
       partnerLocation = LocationData.fromMap({
-        'latitude' : double.parse(response['latitude']),
+        'latitude': double.parse(response['latitude']),
         'longitude': double.parse(response['longitude'])
       });
     }
