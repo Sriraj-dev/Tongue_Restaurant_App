@@ -92,7 +92,7 @@ class _TrackingPageState extends State<TrackingPage> {
       backgroundColor: Background_Color,
       body: Consumer<NotificationService>(
         builder: (context, model, _) => StreamBuilder<Map<String, dynamic>>(
-            stream: getOrderDetails(),
+            stream: getOrderDetails(model),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
@@ -582,14 +582,15 @@ class _TrackingPageState extends State<TrackingPage> {
           );
   }
 
-  Stream<Map<String, dynamic>> getOrderDetails() =>
-      Stream.periodic(Duration(seconds: 10)).asyncMap((_) => getDetails());
+  Stream<Map<String, dynamic>> getOrderDetails(model) =>
+      Stream.periodic(Duration(seconds: 10)).asyncMap((_) => getDetails(model));
 
-  Future<Map<String, dynamic>> getDetails() async {
+  Future<Map<String, dynamic>> getDetails(model) async {
     print("orderId is $orderId");
     print("branchId is $branchId");
     Map<String, dynamic> orderData = {'orderId': orderId, 'branchId': branchId};
     var result = await ApiServices().getOrderDetails(orderData);
+    //model.stylishNotification('Awaiting for Order conformation','we will assign the delivery partner soon');
     print("result is - ${result}");
     if (result['status']) {
       return result['order'];

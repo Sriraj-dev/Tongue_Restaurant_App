@@ -1,4 +1,5 @@
 import 'package:delivery_app/Screens/trackingScreen.dart';
+import 'package:delivery_app/components/intermediate.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
 import 'package:delivery_app/userModel.dart';
@@ -51,10 +52,10 @@ class _order_historyState extends State<order_history> {
                         return GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => TrackingPage(
+                                builder: (context) => intermediate(
                                     myOrders[myOrders.length-index-1]['orderId'] ??
                                         myOrders[myOrders.length-index-1]['_id'],
-                                    myOrders[myOrders.length-index-1]['branchId'],true)
+                                    myOrders[myOrders.length-index-1]['branchId'])
                                 //help_and_support()
                                 ));
                           },
