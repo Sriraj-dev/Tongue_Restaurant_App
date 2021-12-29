@@ -5,6 +5,11 @@
    <application
         android:label="delivery_app"
         android:icon="@mipmap/ic_launcher">
+       <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+           <intent-filter>
+               <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+           </intent-filter>
+       </receiver>
        <meta-data android:name="com.google.android.geo.API_KEY"
            android:value="AIzaSyAVLlBmgRwMmdfFJF57nW0gSb6Nw-_bTus"/>
         <activity
@@ -42,6 +47,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+
     <queries>
         <!-- If your app opens https URLs -->
         <intent>
@@ -65,4 +71,6 @@
         </intent>
     </queries>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 </manifest>
