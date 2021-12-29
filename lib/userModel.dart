@@ -226,7 +226,9 @@ getMyOffers()async{
  };
  offers = await ApiServices().getOffers(data);
  offers.removeWhere((element) {
+  if(element['maximumOrdersPlaced']>=0)
   return element['maximumOrdersPlaced']<numberOfOrdersPlaced;
+  else return false;
  });
  gotOffers = true;
  initialisedOffers.sink.add(true);
