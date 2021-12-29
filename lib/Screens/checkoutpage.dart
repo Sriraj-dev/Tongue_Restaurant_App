@@ -106,7 +106,7 @@ class _checkoutState extends State<checkout> {
     if (res != 'false') {
       Map<String,dynamic> orderDetails = {
         'orderId': res,
-        'branchId':"61a9b1c56a629f43c19616c0"
+        'branchId':selectedBranch['_id']
       };
       Map<String,dynamic> data = {
         'orderDetails': orderDetails
@@ -115,7 +115,7 @@ class _checkoutState extends State<checkout> {
       showSnackBar('Order placed!', context, Colors.green);
       getMyOrders();
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => intermediate(res,"61a9b1c56a629f43c19616c0")));
+          MaterialPageRoute(builder: (context) => intermediate(res,selectedBranch['_id'])));
       //TODO: clear User cart from Database;
     } else {
       showSnackBar('Failed to place Order', context, Colors.red);

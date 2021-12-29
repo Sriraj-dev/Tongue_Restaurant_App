@@ -1,3 +1,5 @@
+import 'package:delivery_app/Services/apiservices.dart';
+import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -88,9 +90,7 @@ class NotificationService extends ChangeNotifier {
 
     var android = AndroidNotificationDetails("id", "channel",
         styleInformation: bigPicture);
-
     var platform = new NotificationDetails(android: android);
-
     await _flutterLocalNotificationsPlugin.periodicallyShow(
         0,
         "Demo Sheduled notification",
