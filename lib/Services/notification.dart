@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService extends ChangeNotifier {
@@ -104,5 +107,34 @@ class NotificationService extends ChangeNotifier {
 
   Future cancelNotification() async {
     await _flutterLocalNotificationsPlugin.cancelAll();
+  }
+  static Future sendEmail({
+  required String message,
+})async{
+    final serviceId ='service_gk0rtuq';
+    final templateId = 'template_35zk14m';
+    final userrId ='user_VqQ90gwCvwNoS3t2ArTiw';
+    final url =Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response =await http.post(
+      url,
+      headers: {
+        'origin':'http://localhost',
+        'Content-Type':'application/json',
+      },
+      body: json.encode(
+          {
+            'service_id':serviceId,
+            'template_id':templateId,
+            'user_id':userrId,
+            'template_params':{
+              'user_name':username,
+              'message':message,
+              'reply_to':userEmail,
+            }
+          }
+      ),
+
+    );
+    print(response.body);
   }
 }
