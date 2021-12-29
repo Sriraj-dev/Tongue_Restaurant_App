@@ -13,6 +13,7 @@ String username = '';
 String userEmail = '';
 String userPhone = '';
 String homeAddress = '';
+int numberOfOrdersPlaced=0;
 late Position homeLocation;
 late Position userLocation;
 late double homeLatitude;
@@ -56,6 +57,7 @@ getUserInfo() async {
   username = userInfo['username'];
   userEmail = userInfo['email'];
   userPhone = userInfo['phone'];
+  numberOfOrdersPlaced = userInfo['numberOfOrdersPlaced']??0;
  // myOrders = userInfo['myOrders'];
  }
 }
@@ -223,6 +225,9 @@ getMyOffers()async{
   "branchId": selectedBranch['_id']
  };
  offers = await ApiServices().getOffers(data);
+ offers.removeWhere((element) {
+  return element['maximumOrdersPlaced']<numberOfOrdersPlaced;
+ });
  gotOffers = true;
  initialisedOffers.sink.add(true);
 }
