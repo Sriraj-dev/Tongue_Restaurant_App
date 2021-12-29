@@ -115,7 +115,7 @@ class _checkoutState extends State<checkout> {
       showSnackBar('Order placed!', context, Colors.green);
       getMyOrders();
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => intermediate(res,selectedBranch['_id'])));
+          MaterialPageRoute(builder: (context) => intermediate(res,selectedBranch['_id'],false)));
       //TODO: clear User cart from Database;
     } else {
       showSnackBar('Failed to place Order', context, Colors.red);

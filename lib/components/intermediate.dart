@@ -21,22 +21,24 @@ import 'package:geolocator/geolocator.dart';
 class intermediate extends StatefulWidget {
   String orderId;
   String branchId;
+  bool fromMyOrders;
   //const intermediate({Key? key}) : super(key: key);
-intermediate(this.orderId,this.branchId);
+intermediate(this.orderId,this.branchId,this.fromMyOrders);
   @override
-  _intermediateState createState() => _intermediateState(orderId,branchId);
+  _intermediateState createState() => _intermediateState(orderId,branchId,fromMyOrders);
 }
 
 class _intermediateState extends State<intermediate> {
   String orderId;
   String branchId;
-  _intermediateState(this.orderId, this.branchId);
+  bool fromMyOrders;
+  _intermediateState(this.orderId, this.branchId,this.fromMyOrders);
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
         child: MaterialApp(
           theme: ThemeData(fontFamily: 'Monteserat'),
-          home:TrackingPage(orderId,branchId,false),
+          home:TrackingPage(orderId,branchId,fromMyOrders),
           debugShowCheckedModeBanner: false,
         ),
         providers: [
