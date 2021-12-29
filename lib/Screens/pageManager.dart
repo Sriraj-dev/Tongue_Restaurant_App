@@ -45,6 +45,7 @@ class _PageManagerState extends State<PageManager> {
   void initState() {
     super.initState();
     getMyOrders();
+    getMyOffers();
     checkServiceAvailability();
   }
 
