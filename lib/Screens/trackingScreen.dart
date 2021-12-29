@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'package:delivery_app/Services/notification.dart';
-import 'package:provider/provider.dart';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:delivery_app/Screens/MapPage.dart';
 import 'package:delivery_app/Screens/help_support.dart';
 import 'package:delivery_app/Services/apiservices.dart';
+import 'package:delivery_app/Services/notification.dart';
 import 'package:delivery_app/constants.dart';
 import 'package:delivery_app/restaurantModel.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:lottie/lottie.dart';
 import 'package:progress_indicators/progress_indicators.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TrackingPage extends StatefulWidget {
@@ -21,10 +22,11 @@ class TrackingPage extends StatefulWidget {
   String branchId;
   bool fromMyOrders;
 
-  TrackingPage(this.orderId, this.branchId,this.fromMyOrders);
+  TrackingPage(this.orderId, this.branchId, this.fromMyOrders);
 
   @override
-  _TrackingPageState createState() => _TrackingPageState(orderId, branchId,fromMyOrders);
+  _TrackingPageState createState() =>
+      _TrackingPageState(orderId, branchId, fromMyOrders);
 }
 
 class _TrackingPageState extends State<TrackingPage> {
@@ -38,7 +40,7 @@ class _TrackingPageState extends State<TrackingPage> {
   String branchId;
   bool fromMyOrders;
 
-  _TrackingPageState(this.orderId, this.branchId,this.fromMyOrders);
+  _TrackingPageState(this.orderId, this.branchId, this.fromMyOrders);
 
   bool accepted = false;
   bool assigned = false;
@@ -49,6 +51,7 @@ class _TrackingPageState extends State<TrackingPage> {
   StreamController<bool> isAssigned = new StreamController();
   double partnerRating = 0;
   bool ratingGiven = false;
+  int currentStep = 2;
 
   generateYourOrder(var orderItems) {
     String yourOrder = '';
@@ -76,18 +79,12 @@ class _TrackingPageState extends State<TrackingPage> {
       appBar: AppBar(
         backgroundColor: Background_Color,
         elevation: 0,
-        leading: (fromMyOrders)?IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          color: kTextColor,
-        ):Container(),
+
         title: Text(
           'Order details',
           style: GoogleFonts.lato(color: kTextColor),
         ),
-        centerTitle: !fromMyOrders,
+        centerTitle: true,
       ),
       backgroundColor: Background_Color,
       body: Consumer<NotificationService>(
@@ -100,13 +97,13 @@ class _TrackingPageState extends State<TrackingPage> {
                 default:
                   if (snapshot.hasError) {
                     return errorScreen(context,
-                        'An error Occurred while fetching OrderDetails');
+                        'An error Occurred while fetching OrderDetails','');
                   } else {
                     if (snapshot.hasData) {
                       Map<String, dynamic> orderDetails =
                           snapshot.data as Map<String, dynamic>;
                       if (orderDetails['customerName'] == "") {
-                        return errorScreen(context, orderDetails['msg']);
+                        return errorScreen(context, orderDetails['msg'],'');
                       } else {
                         accepted = orderDetails['accepted'];
                         assigned = orderDetails['assigned'];
@@ -120,7 +117,11 @@ class _TrackingPageState extends State<TrackingPage> {
                                 ? 2
                                 : 1
                             : 0;
-                        return Padding(
+                        return (orderDetails['rejected'])?
+                        errorScreen(context,
+                          'Your Order is Rejected by Tongue',
+                          'Any amount paid will be refunded soon!'
+                        ):Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
@@ -253,8 +254,10 @@ class _TrackingPageState extends State<TrackingPage> {
                                           child: GestureDetector(
                                             onTap: () {
                                               //TODO make the below function call automatically
-                                            //  model.instantNofitication();
-                                              model.stylishNotification('Awaiting for Order conformation','we will assign the delivery partner soon');
+                                              //  model.instantNofitication();
+                                              model.stylishNotification(
+                                                  'Awaiting for Order conformation',
+                                                  'we will assign the delivery partner soon');
                                               //model.imageNotification();
                                             },
                                             child: Container(
@@ -524,7 +527,6 @@ class _TrackingPageState extends State<TrackingPage> {
                 SizedBox(
                   width: 20,
                 ),
-
                 Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -560,7 +562,7 @@ class _TrackingPageState extends State<TrackingPage> {
                       Row(
                         children: [
                           Text(
-                            partnerDetails['rating'].toString(),
+                            partnerDetails['rating'].toStringAsFixed(1),
                             style: GoogleFonts.lato(
                                 fontSize: 16, color: Colors.white),
                           ),
@@ -576,27 +578,54 @@ class _TrackingPageState extends State<TrackingPage> {
                     ],
                   ),
                 )
-
               ],
             ),
           );
   }
 
   Stream<Map<String, dynamic>> getOrderDetails(model) =>
-      Stream.periodic(Duration(seconds: 10)).asyncMap((_) => getDetails(model));
+      Stream.periodic(Duration(seconds: 5)).asyncMap((_) => getDetails(model));
 
   Future<Map<String, dynamic>> getDetails(model) async {
     print("orderId is $orderId");
     print("branchId is $branchId");
     Map<String, dynamic> orderData = {'orderId': orderId, 'branchId': branchId};
     var result = await ApiServices().getOrderDetails(orderData);
-    //model.stylishNotification('Awaiting for Order conformation','we will assign the delivery partner soon');
     print("result is - ${result}");
     if (result['status']) {
+      if(!fromMyOrders){
+        notifyUser(result, model);
+      }
       return result['order'];
     } else {
       Map<String, dynamic> data = {"msg": result['msg'], "customerName": ""};
       return data;
+    }
+  }
+
+  void notifyUser(result, model) {
+    int tempStep = (result['order']['accepted'])
+        ? (result['order']['outForDelivery'])
+            ? 2
+            : 1
+        : 0;
+    if (currentStep != tempStep) {
+      currentStep = tempStep;
+      String title = (tempStep == 0)
+          ? 'Order placed successfully!'
+          : (tempStep == 1)
+              ? 'Your food is being prepared!'
+              : (tempStep == 2)
+                  ? 'Your Order is out for delivery!'
+                  : '';
+      String description = (tempStep == 0)
+          ? 'Waiting for confirmation from Tongue'
+          : (tempStep == 1)
+              ? 'We will assign a delivery partner soon!'
+              : (tempStep == 2)
+                  ? ''
+                  : '';
+      model.stylishNotification(title, description);
     }
   }
 
@@ -629,7 +658,7 @@ class _TrackingPageState extends State<TrackingPage> {
     );
   }
 
-  Center errorScreen(BuildContext context, String error) {
+  Center errorScreen(BuildContext context, String error,String subTitle) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -643,6 +672,11 @@ class _TrackingPageState extends State<TrackingPage> {
           SizedBox(
             height: 15,
           ),
+          (subTitle.length!=0)?Text(
+            subTitle,
+            style: GoogleFonts.lato(fontSize: 16, color: kPrimaryColor),
+          ):Container(),
+          (subTitle.length!=0)?SizedBox(height: 15,):Container(),
           Text(
             'orderId:$orderId',
             style: GoogleFonts.lato(fontSize: 17, color: ksecondaryColor),
