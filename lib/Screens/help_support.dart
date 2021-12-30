@@ -133,13 +133,15 @@ class _help_and_supportState extends State<help_and_support> {
                             });},
                             child: Container(
                               decoration:BoxDecoration(
-                              color: kPrimaryColor,
+
+                                  color: kPrimaryColor,
                                   borderRadius: BorderRadius.all(Radius.circular(20))
                               ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top:8.0,left: 8,right: 6,bottom: 8),
-                                  child: Icon(Icons.send_rounded,color: Colors.white,size: 30,),
-                                ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top:8.0,left: 8,right: 6,bottom: 8),
+                                child: Icon(Icons.send_rounded,color: Colors.white,size: 30,),
+                              ),
+
                             ),
                           )
                               :Container(),

@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
 
 class NotificationService extends ChangeNotifier {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
@@ -109,8 +110,10 @@ class NotificationService extends ChangeNotifier {
     await _flutterLocalNotificationsPlugin.cancelAll();
   }
   static Future sendEmail({
-  required String message,
-})async{
+
+    required String message,
+  })async{
+
     final serviceId ='service_gk0rtuq';
     final templateId = 'template_35zk14m';
     final userrId ='user_VqQ90gwCvwNoS3t2ArTiw';
