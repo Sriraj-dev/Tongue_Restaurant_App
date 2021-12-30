@@ -71,6 +71,7 @@ class _checkoutState extends State<checkout> {
       "name":username,
       "description":"Tongue order",
       "prefill":{
+        "name":username,
         "contact":userPhone,
         "email":userEmail,
       },
