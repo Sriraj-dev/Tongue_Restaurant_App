@@ -154,6 +154,6 @@ class _help_and_supportState extends State<help_and_support> {
           ),
         ],
       ),
-    );
+    ); 
   }
 }
