@@ -1,10 +1,10 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:delivery_app/Services/notification.dart';
+import 'package:delivery_app/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:delivery_app/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:delivery_app/Services/notification.dart';
 
 class help_and_support extends StatefulWidget {
   const help_and_support({Key? key}) : super(key: key);
@@ -16,8 +16,9 @@ class help_and_support extends StatefulWidget {
 class _help_and_supportState extends State<help_and_support> {
   @override
   TextEditingController msg = new TextEditingController();
-  bool sent=false;
+  bool sent = false;
   final number = 6281437985;
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
@@ -25,7 +26,7 @@ class _help_and_supportState extends State<help_and_support> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top:40,left: 12),
+            padding: const EdgeInsets.only(top: 40, left: 12),
             child: Container(
               width: 40,
               height: 40,
@@ -45,15 +46,16 @@ class _help_and_supportState extends State<help_and_support> {
               ),
             ),
           ),
-
           Expanded(child: Lottie.asset('assets/support.json', repeat: false)),
           SizedBox(
             height: 25,
           ),
-          Center(child: Text(
-            'Welcome to Support ',
-            style: TextStyle(fontSize: 24),
-          ),),
+          Center(
+            child: Text(
+              'Welcome to Support ',
+              style: TextStyle(fontSize: 24),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
             child: GestureDetector(
@@ -110,41 +112,71 @@ class _help_and_supportState extends State<help_and_support> {
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   child: Column(
                     children: [
-                      (sent==false)?
-                      TextField(
-                        maxLines: 8,
-                        controller: msg,
-                        decoration: InputDecoration(
-                          hintText: " Enter your query here ",
-                          hintStyle: TextStyle(color: kPrimaryLightColor.withOpacity(0.4)),
-                          border: InputBorder.none,
-                        ),
-
-
-                      ):
-                      Lottie.asset('assets/tick.json',height: 200,repeat: false),
-
-                      Row(mainAxisAlignment: MainAxisAlignment.end,
+                      (sent == false)
+                          ? TextField(
+                              maxLines: 8,
+                              controller: msg,
+                              decoration: InputDecoration(
+                                hintText: " Enter your query here ",
+                                hintStyle: TextStyle(
+                                    color: kPrimaryLightColor.withOpacity(0.4)),
+                                border: InputBorder.none,
+                              ),
+                            )
+                          : Lottie.asset('assets/tick.json',
+                              height: 200, repeat: false),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          (sent==false)?
-                          GestureDetector(
-                            onTap:(){NotificationService.sendEmail(message:msg.text); msg.text='';setState(() {
-                              sent=true;
-                            });},
-                            child: Container(
-                              decoration:BoxDecoration(
+                          (sent == false)
+                              ? GestureDetector(
+                                  onTap: () async {
+                                    String notified =
+                                        await NotificationService.sendEmail(
+                                            message: msg.text);
+                                    if (notified == 'OK') {
+                                      msg.text = '';
+                                      setState(() {
+                                        sent = true;
+                                      });
+                                    }else{
+                                      msg.text = '';
+                                      AwesomeDialog(
+                                        context: context,
+                                        showCloseIcon: false,
+                                        dismissOnBackKeyPress: false,
+                                        dismissOnTouchOutside: false,
+                                        dialogType: DialogType.ERROR,
+                                        btnOkOnPress: (){
+                                          setState(() {
 
-                                  color: kPrimaryColor,
-                                  borderRadius: BorderRadius.all(Radius.circular(20))
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(top:8.0,left: 8,right: 6,bottom: 8),
-                                child: Icon(Icons.send_rounded,color: Colors.white,size: 30,),
-                              ),
-
-                            ),
-                          )
-                              :Container(),
+                                          });
+                                        },
+                                        title: "An error Occurred",
+                                        desc: "Email services are disabled currently!"
+                                      )..show();
+                                    }
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: kPrimaryColor,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 8.0,
+                                          left: 8,
+                                          right: 6,
+                                          bottom: 8),
+                                      child: Icon(
+                                        Icons.send_rounded,
+                                        color: Colors.white,
+                                        size: 30,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                         ],
                       ),
                     ],
@@ -152,10 +184,10 @@ class _help_and_supportState extends State<help_and_support> {
             ),
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context).size.height * 0.02,
           ),
         ],
       ),
-    ); 
+    );
   }
 }
