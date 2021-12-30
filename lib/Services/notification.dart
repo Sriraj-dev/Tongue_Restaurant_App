@@ -4,6 +4,7 @@ import 'package:delivery_app/Services/apiservices.dart';
 import 'package:delivery_app/userModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 
@@ -82,6 +83,7 @@ class NotificationService extends ChangeNotifier {
   //Sheduled Notification
 
   Future sheduledNotification() async {
+    var scheduledTime = DateTime.now().add(Duration(days: 1));
     var interval = RepeatInterval.everyMinute;
     var bigPicture = BigPictureStyleInformation(
         DrawableResourceAndroidBitmap("ic_launcher"),
@@ -94,11 +96,11 @@ class NotificationService extends ChangeNotifier {
     var android = AndroidNotificationDetails("id", "channel",
         styleInformation: bigPicture);
     var platform = new NotificationDetails(android: android);
-    await _flutterLocalNotificationsPlugin.periodicallyShow(
+    await _flutterLocalNotificationsPlugin.schedule(
         0,
         "Demo Sheduled notification",
         "Tap to do something",
-        interval,
+        scheduledTime,
         platform);
   }
 
@@ -108,8 +110,10 @@ class NotificationService extends ChangeNotifier {
     await _flutterLocalNotificationsPlugin.cancelAll();
   }
   static Future sendEmail({
+
     required String message,
   })async{
+
     final serviceId ='service_gk0rtuq';
     final templateId = 'template_35zk14m';
     final userrId ='user_VqQ90gwCvwNoS3t2ArTiw';
@@ -137,3 +141,4 @@ class NotificationService extends ChangeNotifier {
     print(response.body);
   }
 }
+

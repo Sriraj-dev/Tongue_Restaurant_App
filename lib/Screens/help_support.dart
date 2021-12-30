@@ -133,6 +133,7 @@ class _help_and_supportState extends State<help_and_support> {
                             });},
                             child: Container(
                               decoration:BoxDecoration(
+
                                   color: kPrimaryColor,
                                   borderRadius: BorderRadius.all(Radius.circular(20))
                               ),
@@ -140,6 +141,7 @@ class _help_and_supportState extends State<help_and_support> {
                                 padding: const EdgeInsets.only(top:8.0,left: 8,right: 6,bottom: 8),
                                 child: Icon(Icons.send_rounded,color: Colors.white,size: 30,),
                               ),
+
                             ),
                           )
                               :Container(),
@@ -154,6 +156,6 @@ class _help_and_supportState extends State<help_and_support> {
           ),
         ],
       ),
-    );
+    ); 
   }
 }
